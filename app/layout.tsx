@@ -1,3 +1,4 @@
+import { ThemeProvider } from '@/chadcn/components/ui/theme-provider';
 import type { Metadata } from 'next';
 import { Open_Sans } from 'next/font/google';
 import { ReactNode } from 'react';
@@ -18,8 +19,18 @@ type Props = {
 
 export default function RootLayout({ children }: Props) {
   return (
-    <html lang="en">
-      <body className={open_sans.className}>{children}</body>
+    <html lang="en" suppressHydrationWarning>
+      <head />
+      <body className={open_sans.className}>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {children}
+        </ThemeProvider>
+      </body>
     </html>
   );
 }
