@@ -18,7 +18,7 @@ type Props = {
 
 export default function RootLayout({ children }: Props) {
   return (
-    <html lang='en'>
+    <html lang="en">
       <body className={open_sans.className}>{children}</body>
     </html>
   );
