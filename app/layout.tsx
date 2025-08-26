@@ -1,8 +1,11 @@
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
+import { Open_Sans } from 'next/font/google';
 import { ReactNode } from 'react';
+import './globals.css';
 
-const inter = Inter({});
+const open_sans = Open_Sans({
+  subsets: [],
+});
 
 export const metadata: Metadata = {
   title: 'Triply',
@@ -16,7 +19,7 @@ type Props = {
 export default function RootLayout({ children }: Props) {
   return (
     <html lang='en'>
-      <body className={inter.className}>{children}</body>
+      <body className={open_sans.className}>{children}</body>
     </html>
   );
 }
