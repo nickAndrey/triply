@@ -1,8 +1,8 @@
-import { Header } from './components/header';
+import { Header } from './_components/header/header';
 
 export default function HomePage() {
   return (
-    <main className="flex min-h-screen flex-col px-3 py-5">
+    <main className="min-h-[100dvh] px-3 py-5">
       <Header />
     </main>
   );

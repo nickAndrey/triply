@@ -30,11 +30,11 @@ export function UserMenu() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="default" className="bg-accent text-black hover:bg-accent-hover">
+        <Button variant="outline" className="rounded-full" size="icon">
           <User />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent>
+      <DropdownMenuContent side="bottom" align="end">
         <DropdownMenuLabel className="text-muted-foreground">
           {supabase.auth.getUser().then((it) => it.data.user?.email)}
         </DropdownMenuLabel>
