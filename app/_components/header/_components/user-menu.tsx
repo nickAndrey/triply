@@ -1,6 +1,7 @@
 'use client';
 
-import { Button } from '@/chadcn/components/ui/button';
+import { createClient } from '@/utils/supabase/client';
+import { Button } from '@chadcn/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -8,8 +9,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/chadcn/components/ui/dropdown-menu';
-import { createClient } from '@/utils/supabase/client';
+} from '@chadcn/components/ui/dropdown-menu';
 import { User } from 'lucide-react';
 import { redirect } from 'next/navigation';
 import { toast } from 'sonner';

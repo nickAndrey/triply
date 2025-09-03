@@ -1,6 +1,6 @@
-import { Button } from '@/chadcn/components/ui/button';
-import { Input } from '@/chadcn/components/ui/input';
-import { Label } from '@/chadcn/components/ui/label';
+import { Button } from '@chadcn/components/ui/button';
+import { Input } from '@chadcn/components/ui/input';
+import { Label } from '@chadcn/components/ui/label';
 import { login } from '../actions';
 
 export default function LoginPage() {

@@ -1,6 +1,6 @@
 'use client';
 
-import { Button } from '@/chadcn/components/ui/button';
+import { Button } from '@chadcn/components/ui/button';
 import {
   Drawer,
   DrawerContent,
@@ -8,7 +8,7 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-} from '@/chadcn/components/ui/drawer';
+} from '@chadcn/components/ui/drawer';
 import { PanelRight } from 'lucide-react';
 import { ReactNode, useState } from 'react';
 

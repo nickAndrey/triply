@@ -1,9 +1,9 @@
-import { Toaster } from '@/chadcn/components/ui/sonner';
-import { ThemeProvider } from '@/chadcn/components/ui/theme-provider';
+import { Toaster } from '@chadcn/components/ui/sonner';
+import { ThemeProvider } from '@chadcn/components/ui/theme-provider';
 import type { Metadata } from 'next';
 import { Open_Sans } from 'next/font/google';
 import { ReactNode } from 'react';
-import './globals.css';
+import './_styles/globals.css';
 
 const open_sans = Open_Sans({
   subsets: [],
