@@ -1,7 +1,9 @@
-export default function Page() {
+import { Header } from './components/header';
+
+export default function HomePage() {
   return (
-    <main className="flex min-h-screen flex-col">
-      <h1 className="text-4xl font-bold">Welcome to Next.js!</h1>
+    <main className="flex min-h-screen flex-col px-3 py-5">
+      <Header />
     </main>
   );
 }
