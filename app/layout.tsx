@@ -1,5 +1,6 @@
 import { Toaster } from '@chadcn/components/ui/sonner';
 import { ThemeProvider } from '@chadcn/components/ui/theme-provider';
+import { Header } from '@components/header/header';
 import type { Metadata } from 'next';
 import { Open_Sans } from 'next/font/google';
 import { ReactNode } from 'react';
@@ -30,6 +31,7 @@ export default function RootLayout({ children }: Props) {
           disableTransitionOnChange
         >
           {children}
+          <Header />
           <Toaster />
         </ThemeProvider>
       </body>
