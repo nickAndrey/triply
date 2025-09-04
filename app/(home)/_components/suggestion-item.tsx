@@ -27,7 +27,13 @@ export function SuggestionItem({ imgSrc, title, description }: SuggestionItemPro
       <CardContent className="px-2">
         {imgSrc && (
           <div className="relative aspect-[2/1] rounded-xl overflow-hidden">
-            <Image src={imgSrc} alt="suggestion image background" priority fill />
+            <Image
+              src={imgSrc}
+              alt="suggestion image background"
+              priority
+              fill
+              sizes="(max-width: 768px) 300px, (max-width: 1200px) 300px"
+            />
           </div>
         )}
 

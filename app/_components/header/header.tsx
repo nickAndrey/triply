@@ -1,6 +1,6 @@
 import { createClient } from '@/utils/supabase/server';
 import { NavBar } from './_components/nav-bar';
-import { ModeToggle } from './_components/theme-switcher';
+import { ThemeSwitcher } from './_components/theme-switcher';
 import { UserMenu } from './_components/user-menu';
 
 export async function Header() {
@@ -18,7 +18,7 @@ export async function Header() {
           <UserMenu />
         </>
       )}
-      <ModeToggle />
+      <ThemeSwitcher />
     </header>
   );
 }
