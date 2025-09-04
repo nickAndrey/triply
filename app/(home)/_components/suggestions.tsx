@@ -18,12 +18,14 @@ export function Suggestions({ suggestions }: SuggestionsProps) {
         align: 'start',
         loop: true,
       }}
-      className="m-auto max-w-[65%]"
     >
       <CarouselContent>
         {suggestions.length > 0 ? (
           suggestions.map((suggestion) => (
-            <CarouselItem key={suggestion.id} className="sm:basis-1/2 md:basis-1/3 xl:basis-1/4">
+            <CarouselItem
+              key={suggestion.id}
+              className="basis-1/1 sm:basis-1/2 lg:basis-1/3 xl:basis-1/4"
+            >
               <SuggestionItem
                 imgSrc={suggestion.imgSrc}
                 title={suggestion.title}
@@ -37,8 +39,11 @@ export function Suggestions({ suggestions }: SuggestionsProps) {
           </CarouselItem>
         )}
       </CarouselContent>
-      <CarouselPrevious className="" />
-      <CarouselNext />
+
+      <div className="flex gap-4 mt-4 max-w-max ml-auto">
+        <CarouselPrevious className="hidden md:flex static translate-0" />
+        <CarouselNext className="hidden md:flex static translate-0" />
+      </div>
     </Carousel>
   );
 }

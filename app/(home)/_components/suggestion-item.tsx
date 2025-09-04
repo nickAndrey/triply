@@ -24,7 +24,7 @@ export function SuggestionItem({ imgSrc, title, description }: SuggestionItemPro
       </CardContent>
       <CardHeader className="px-2">
         <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
+        <CardDescription className="line-clamp-3">{description}</CardDescription>
       </CardHeader>
     </Card>
   );

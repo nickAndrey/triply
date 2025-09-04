@@ -2,7 +2,7 @@ import { Suggestions } from './_components/suggestions';
 
 export default function HomePage() {
   return (
-    <main className="min-h-[100dvh] px-3 py-5">
+    <main className="min-h-[100dvh] max-w-5xl m-auto px-4 py-5">
       <Suggestions
         suggestions={[
           {
