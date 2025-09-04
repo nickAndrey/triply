@@ -15,29 +15,23 @@ export function Suggestions({ suggestions }: SuggestionsProps) {
   return (
     <Carousel
       opts={{
-        align: 'start',
+        align: suggestions.length > 0 ? 'start' : 'center',
         loop: true,
       }}
     >
       <CarouselContent>
-        {suggestions.length > 0 ? (
-          suggestions.map((suggestion) => (
-            <CarouselItem
-              key={suggestion.id}
-              className="basis-1/1 sm:basis-1/2 lg:basis-1/3 xl:basis-1/4"
-            >
-              <SuggestionItem
-                imgSrc={suggestion.imgSrc}
-                title={suggestion.title}
-                description={suggestion.description}
-              />
-            </CarouselItem>
-          ))
-        ) : (
-          <CarouselItem className="sm:basis-1/2 md:basis-1/3 xl:basis-1/4">
-            <p>No items to show</p>
+        {suggestions.map((suggestion) => (
+          <CarouselItem
+            key={suggestion.id}
+            className="basis-1/1 sm:basis-1/2 lg:basis-1/3 xl:basis-1/4"
+          >
+            <SuggestionItem
+              imgSrc={suggestion.imgSrc}
+              title={suggestion.title}
+              description={suggestion.description}
+            />
           </CarouselItem>
-        )}
+        ))}
       </CarouselContent>
 
       <div className="flex gap-4 mt-4 max-w-max ml-auto">

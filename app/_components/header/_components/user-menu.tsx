@@ -1,5 +1,6 @@
 'use client';
 
+import { logout } from '@/app/(auth)/actions';
 import { createClient } from '@/utils/supabase/client';
 import { Button } from '@chadcn/components/ui/button';
 import {
@@ -11,21 +12,18 @@ import {
   DropdownMenuTrigger,
 } from '@chadcn/components/ui/dropdown-menu';
 import { User } from 'lucide-react';
-import { redirect } from 'next/navigation';
-import { toast } from 'sonner';
+import { useEffect, useState } from 'react';
 
 export function UserMenu() {
   const supabase = createClient();
 
-  const handleLogout = async () => {
-    const { error } = await supabase.auth.signOut();
+  const [email, setEmail] = useState<string | null>(null);
 
-    if (error) {
-      toast.error(error.message);
-    }
-
-    redirect('/');
-  };
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => {
+      setEmail(data.user?.email ?? null);
+    });
+  }, [supabase]);
 
   return (
     <DropdownMenu>
@@ -36,10 +34,10 @@ export function UserMenu() {
       </DropdownMenuTrigger>
       <DropdownMenuContent side="bottom" align="end">
         <DropdownMenuLabel className="text-muted-foreground">
-          {supabase.auth.getUser().then((it) => it.data.user?.email)}
+          {email ?? 'Anonymous'}
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={handleLogout}>Logout</DropdownMenuItem>
+        <DropdownMenuItem onClick={() => logout()}>Logout</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
