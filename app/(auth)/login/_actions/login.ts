@@ -6,7 +6,7 @@ import { redirect } from 'next/navigation';
 import { z } from 'zod';
 
 const loginSchema = z.object({
-  email: z.email(),
+  email: z.email('Email is required'),
   password: z.string().min(8, 'Password must be at least 8 characters'),
 });
 
