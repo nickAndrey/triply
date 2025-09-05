@@ -1,3 +1,4 @@
+import { GenerateSuggestionsCard } from './_components/generate-suggestions-form/generate-suggestions-card';
 import { SuggestionItem } from './_components/suggestion-item';
 import { Suggestions } from './_components/suggestions';
 
@@ -46,14 +47,14 @@ const suggestions = [
 
 export default function HomePage() {
   return (
-    <main className="min-h-[100dvh] max-w-5xl m-auto px-4 py-5">
+    <main className="flex flex-col gap-6 min-h-[100dvh] max-w-5xl m-auto px-4 py-5">
       {suggestions.length > 0 ? (
         <Suggestions suggestions={suggestions} />
       ) : (
         <SuggestionItem imgSrc={null} />
       )}
 
-      <div>form</div>
+      <GenerateSuggestionsCard />
     </main>
   );
 }

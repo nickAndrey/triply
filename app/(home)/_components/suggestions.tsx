@@ -35,8 +35,8 @@ export function Suggestions({ suggestions }: SuggestionsProps) {
       </CarouselContent>
 
       <div className="flex gap-4 mt-4 max-w-max ml-auto">
-        <CarouselPrevious className="hidden md:flex static translate-0" />
-        <CarouselNext className="hidden md:flex static translate-0" />
+        <CarouselPrevious variant="default" className="hidden md:flex static translate-0" />
+        <CarouselNext variant="default" className="hidden md:flex static translate-0" />
       </div>
     </Carousel>
   );
