@@ -1,3 +1,4 @@
+import { Suggestion } from '@/app/_types/suggestion';
 import {
   Carousel,
   CarouselContent,
@@ -5,10 +6,10 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '@chadcn/components/ui/carousel';
-import { SuggestionItem, SuggestionItemProps } from './suggestion-item';
+import { SuggestionItem } from './suggestion-item';
 
 type SuggestionsProps = {
-  suggestions: (SuggestionItemProps & { id: string })[];
+  suggestions: Suggestion[];
 };
 
 export function Suggestions({ suggestions }: SuggestionsProps) {
@@ -21,15 +22,8 @@ export function Suggestions({ suggestions }: SuggestionsProps) {
     >
       <CarouselContent>
         {suggestions.map((suggestion) => (
-          <CarouselItem
-            key={suggestion.id}
-            className="basis-1/1 sm:basis-1/2 lg:basis-1/3 xl:basis-1/4"
-          >
-            <SuggestionItem
-              imgSrc={suggestion.imgSrc}
-              title={suggestion.title}
-              description={suggestion.description}
-            />
+          <CarouselItem key={suggestion.id} className="basis-1/1 sm:basis-1/2 lg:basis-1/3">
+            <SuggestionItem suggestion={suggestion} />
           </CarouselItem>
         ))}
       </CarouselContent>

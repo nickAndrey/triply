@@ -61,8 +61,8 @@ export function GenerateSuggestionsForm() {
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
 
-    const isValid = form.trigger();
-    if (!isValid) return false;
+    const isValid = await form.trigger();
+    if (!isValid) return;
 
     await startTransition(action);
   };
