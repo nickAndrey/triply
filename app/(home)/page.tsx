@@ -1,19 +1,14 @@
-import { getSuggestions } from './_actions/get-suggestions';
+import { Suspense } from 'react';
 import { GenerateSuggestionsCard } from './_components/generate-suggestions-form/generate-suggestions-card';
-import { SuggestionItem } from './_components/suggestion-item';
-import { Suggestions } from './_components/suggestions';
+import { SuggestionSkeleton } from './_components/suggestions-carousel/suggestion-skeleton';
+import { SuggestionsCarousel } from './_components/suggestions-carousel/suggestions-carousel';
 
-export default async function HomePage() {
-  const suggestions = await getSuggestions();
-
+export default function HomePage() {
   return (
     <main className="flex flex-col gap-6 min-h-[100dvh] max-w-6xl m-auto px-4 py-5">
-      {suggestions.length > 0 ? (
-        <Suggestions suggestions={suggestions} />
-      ) : (
-        <SuggestionItem suggestion={null} />
-      )}
-
+      <Suspense fallback={<SuggestionSkeleton />}>
+        <SuggestionsCarousel />
+      </Suspense>
       <GenerateSuggestionsCard />
     </main>
   );

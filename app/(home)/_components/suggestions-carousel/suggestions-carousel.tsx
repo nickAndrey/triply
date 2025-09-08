@@ -1,4 +1,3 @@
-import { Suggestion } from '@/app/_types/suggestion';
 import {
   Carousel,
   CarouselContent,
@@ -6,13 +5,16 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '@chadcn/components/ui/carousel';
+import { getSuggestions } from '../../_actions/get-suggestions';
 import { SuggestionItem } from './suggestion-item';
 
-type SuggestionsProps = {
-  suggestions: Suggestion[];
-};
+export async function SuggestionsCarousel() {
+  const suggestions = await getSuggestions();
 
-export function Suggestions({ suggestions }: SuggestionsProps) {
+  if (suggestions.length === 0) {
+    return <SuggestionItem suggestion={null} />;
+  }
+
   return (
     <Carousel
       opts={{
@@ -29,8 +31,12 @@ export function Suggestions({ suggestions }: SuggestionsProps) {
       </CarouselContent>
 
       <div className="flex gap-4 mt-4 max-w-max ml-auto">
-        <CarouselPrevious variant="default" className="hidden md:flex static translate-0" />
-        <CarouselNext variant="default" className="hidden md:flex static translate-0" />
+        <CarouselPrevious
+          variant="default"
+          size="icon"
+          className="hidden md:flex static translate-0"
+        />
+        <CarouselNext variant="default" size="icon" className="hidden md:flex static translate-0" />
       </div>
     </Carousel>
   );

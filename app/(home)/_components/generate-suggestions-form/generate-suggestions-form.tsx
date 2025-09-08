@@ -21,6 +21,7 @@ import { CalendarIcon, CircleQuestionMark, LoaderCircle } from 'lucide-react';
 import { FormEventHandler, startTransition, useActionState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+import { getPersonalSuggestion } from '../../_actions/get-personal-suggestion';
 
 const schema = z.object({
   destination: z.string().min(1, 'Field is required'),
@@ -43,9 +44,7 @@ const preferences: Option[] = [
 type FormFields = z.infer<typeof schema>;
 
 export function GenerateSuggestionsForm() {
-  const [state, action, isPending] = useActionState(async () => {
-    return new Promise((res) => setTimeout(res, 2000));
-  }, null);
+  const [state, action, isPending] = useActionState(getPersonalSuggestion, null);
 
   const form = useForm<FormFields>({
     resolver: zodResolver(schema),

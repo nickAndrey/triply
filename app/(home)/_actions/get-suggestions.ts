@@ -35,11 +35,11 @@ async function generateTravelSuggestions(country: string) {
     5. Return results in JSON array format.  
 
     ### Example  
-    [{
+    {suggestions: [{
       "city": "Rome",
       "title": "Rome, Italy",
       "description": "Step into the Eternal City — explore ancient ruins, vibrant piazzas, and world-famous cuisine. From the Colosseum to hidden trattorias, Rome is where history and modern life meet."
-    }]
+    }]}
   `;
 
   const requestData = {
@@ -88,12 +88,11 @@ async function setSuggestionsImages(
         orientation: 'landscape',
       });
 
-      const searchRes = await fetch(
+      const { data } = await axios.get(
         `https://api.unsplash.com/search/photos?${searchParams.toString()}`
       );
 
-      const searchJson = await searchRes.json();
-      const photo = searchJson.results?.[0];
+      const photo = data.results?.[0];
 
       if (!photo) {
         throw new Error(`No Unsplash images found for ${item.city}`);
@@ -118,38 +117,54 @@ async function setSuggestionsImages(
   );
 }
 
+async function storeSuggestionsInDatabase(country: string, suggestions: Suggestion[]) {
+  try {
+    const supabase = await createClient();
+    await supabase.from('suggestions').insert({
+      id: crypto.randomUUID(),
+      country: country,
+      records: suggestions,
+    });
+  } catch (error) {
+    console.error('Error storing suggestions:', error);
+  }
+}
+
+const cache = new Map();
+
 export async function getSuggestions(): Promise<Suggestion[]> {
   const supabase = await createClient();
 
-  // 1. Detect user location (IP → country/region).
-  // 2. Query DB for cached suggestions for that region/country.
-  // 3. If none → trigger AI to generate new suggestions.
-  // 4. For each suggestion → fetch Unsplash image + attribution → insert into DB.
-  // 5. Return cached/new suggestions.
-
+  // 1. Detect user location
   const ipInfo = await getIpInfo();
 
+  // Check memory cache first
+  const cacheKey = `suggestions-${ipInfo.country}`;
+  if (cache.has(cacheKey)) {
+    return cache.get(cacheKey);
+  }
+
+  // 2. Query DB for cached suggestions
   const { data: dbSuggestions } = await supabase
     .from('suggestions')
     .select('*')
     .ilike('country', ipInfo.country);
 
-  if (dbSuggestions.length === 0) {
-    const { suggestions } = await generateTravelSuggestions(ipInfo.country);
-    const suggestionsWithPhotos = await setSuggestionsImages(suggestions);
-
-    const { error: insertionError } = await supabase.from('suggestions').insert({
-      id: crypto.randomUUID(),
-      country: ipInfo.country,
-      records: suggestionsWithPhotos,
-    });
-
-    insertionError
-      ? console.error('Error inserting suggestions:', insertionError)
-      : console.log('Suggestions saved.');
-
-    return suggestionsWithPhotos;
+  // 3. If we have cached suggestions, return them
+  if (dbSuggestions && dbSuggestions.length > 0) {
+    cache.set(cacheKey, dbSuggestions[0].records);
+    return dbSuggestions[0].records;
   }
 
-  return dbSuggestions[0].records;
+  // 4. If none, generate new suggestions (this will take time)
+  const { suggestions } = await generateTravelSuggestions(ipInfo.country);
+  const suggestionsWithPhotos = await setSuggestionsImages(suggestions);
+
+  // 5. Store in database for future requests
+  storeSuggestionsInDatabase(ipInfo.country, suggestionsWithPhotos);
+
+  // 6. Cache in memory
+  cache.set(cacheKey, suggestionsWithPhotos);
+
+  return suggestionsWithPhotos;
 }
