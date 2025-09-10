@@ -3,6 +3,7 @@
 import { Suggestion } from '@/app/_types/suggestion';
 import { createClient } from '@/utils/supabase/server';
 import axios from 'axios';
+import { createCountrySuggestionPrompt } from './prompts/create-country-suggestion-prompt';
 
 async function getIpInfo() {
   const ipInfo = await fetch('https://ipinfo.io/json');
@@ -20,31 +21,11 @@ async function generateTravelSuggestions(country: string) {
   const DEEPSEEK_API_KEY = process.env.NEXT_DEEPSEEK_API_KEY;
   const API_URL = 'https://api.deepseek.com/chat/completions';
 
-  const userPrompt = `
-    You are an AI travel planner. Generate **travel suggestion cards** for a given country: ${country}. Each suggestion must include:  
-
-    - **city**: \`"City"\` format (e.g., \`"Rome"\`).  
-    - **title**: \`"City, Country"\` format (e.g., \`"Rome, Italy"\`).  
-    - **description**: A short, engaging one-liner (max 2 sentences) that captures the essence of the destination — vibe, highlights, or unique appeal.
-
-    ### Requirements
-    1. The length of results must be 5.
-    2. Suggestions should be **diverse**: mix cultural hubs, nature escapes, and popular icons.  
-    3. Focus on **internationally recognizable cities/regions** rather than small towns.  
-    4. Tone should be **inspiring but concise**, like a travel magazine teaser.  
-    5. Return results in JSON array format.  
-
-    ### Example  
-    {suggestions: [{
-      "city": "Rome",
-      "title": "Rome, Italy",
-      "description": "Step into the Eternal City — explore ancient ruins, vibrant piazzas, and world-famous cuisine. From the Colosseum to hidden trattorias, Rome is where history and modern life meet."
-    }]}
-  `;
+  const prompt = createCountrySuggestionPrompt(country);
 
   const requestData = {
     model: 'deepseek-chat',
-    messages: [{ role: 'user', content: userPrompt }],
+    messages: [{ role: 'user', content: prompt }],
     temperature: 0.8,
     max_tokens: 500,
     response_format: { type: 'json_object' },

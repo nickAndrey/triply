@@ -28,12 +28,23 @@ export function NavBar({ children }: NavBarProps) {
       </DrawerTrigger>
 
       <DrawerContent className="left-2! top-2! bottom-2! rounded-2xl after:content-none!">
-        {children || (
-          <DrawerHeader>
-            <DrawerTitle>There is no any items to show at that moment.</DrawerTitle>
-            <DrawerDescription>Add place you want to visit</DrawerDescription>
-          </DrawerHeader>
-        )}
+        <DrawerHeader>
+          {children ? (
+            <>
+              <DrawerTitle>
+                Here is a history of your travels or suggestions of your travels
+              </DrawerTitle>
+              <DrawerDescription>Click on an item to visit the page</DrawerDescription>
+            </>
+          ) : (
+            <>
+              <DrawerTitle>There is no any items to show at that moment.</DrawerTitle>
+              <DrawerDescription>Add places you want to visit</DrawerDescription>
+            </>
+          )}
+        </DrawerHeader>
+
+        {children}
       </DrawerContent>
     </Drawer>
   );

@@ -63,7 +63,7 @@ export function GenerateSuggestionsForm() {
     const isValid = await form.trigger();
     if (!isValid) return;
 
-    await startTransition(action);
+    startTransition(() => action(form.getValues()));
   };
 
   return (
