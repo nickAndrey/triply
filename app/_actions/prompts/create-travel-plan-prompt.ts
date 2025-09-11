@@ -1,107 +1,122 @@
 export function createTravelPlanPrompt(params: {
   destination: string;
   travelDates: string[];
-  budget: string;
+  budget: string; // e.g., "budget", "mid-range", "luxury", "5000 USD"
   preferences: string[];
 }) {
-  // Calculate the number of days from the travelDates
   const startDate = new Date(params.travelDates[0]);
   const endDate = new Date(params.travelDates[1]);
+
   const tripDurationDays =
     Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)) + 1;
 
-  // Define a strategy based on trip length
   let detailStrategy: string;
 
   if (tripDurationDays <= 7) {
-    detailStrategy =
-      'Provide a detailed, day-by-day itinerary for the entire trip, following all content rules for each day.';
+    detailStrategy = 'Provide a detailed, day-by-day itinerary for the entire trip.';
   } else if (tripDurationDays <= 14) {
     detailStrategy =
-      'Provide a detailed, day-by-day itinerary for the first 5-7 days. For the remaining days, provide a structured overview with 2-3 key activities per day and notable restaurant suggestions, but with less narrative detail to conserve space.';
+      'Provide a detailed, day-by-day itinerary for the first 5-7 days. For the remaining days, provide a structured overview with 2-3 key activities per day.';
   } else {
-    // For long trips (e.g., 2 weeks to a month)
-    detailStrategy = `
-      Due to the extended length of this trip, provide a highly structured but concise plan.
-      1. **Detailed Template:** Provide 2-3 fully detailed sample days (e.g., "A Cultural Day in Paris", "A Day Trip to Versailles"). These should follow all content rules and serve as a template.
-      2. **Thematic Overview:** For the remaining days, organize the itinerary by theme or region rather than by date. For each theme/region:
-          - List the top 3-5 must-see attractions and experiences.
-          - Suggest 2-3 highly recommended restaurants for that area.
-          - Provide a logical route or grouping for these activities.
-      3. **Flexible Structure:** Empower the user to mix and match these thematic blocks to build their own days. The goal is to provide the essential information and inspiration without a rigid, day-by-day breakdown for a full month.
-    `;
+    detailStrategy =
+      'Provide 2-3 fully detailed sample days. For the remaining time, organize the itinerary by theme or region (e.g., "Cultural Highlights", "Coastal Adventures"), listing top attractions and restaurants for each area.';
   }
 
+  // NEW: Map the user's budget input to a tier for the AI to understand
+  const budgetTier = params.budget.toLowerCase().includes('luxury')
+    ? '$$$'
+    : params.budget.toLowerCase().includes('budget')
+      ? '$'
+      : '$$'; // default to mid-range
+
   return JSON.stringify({
-    user: "You are an AI travel writer for 'The Insider's Travel Guide'. Your task is to create a personalized, engaging, and highly detailed travel article in the form of an itinerary.",
-    task: "Generate a detailed travel plan based on the user's unique preferences. CRITICAL: You MUST be concise and manage the length of your response effectively. The following strategy must be applied based on the trip duration:",
-    detail_strategy: detailStrategy,
-    response_format:
-      'Respond **only** with a valid JSON object. Do not include any other text or commentary outside the JSON structure.',
-    formatting_instructions: {
-      structure:
-        'Use clear hierarchical headings (## Day X, ### Morning, #### Activity Options) to create visual structure.',
-      spacing:
-        'Use blank lines between sections and paragraphs to improve readability. Avoid wall-of-text formatting.',
-      lists: 'Use bullet points for options and numbered lists for sequences where order matters.',
-      emphasis:
-        'Use **bold** for key recommendations, ranking labels (Top Choice, Alternative), and important details like costs or times.',
-      visual_elements:
-        'Incorporate emojis as visual cues where appropriate (🚶‍♂️ for walking, 🍽️ for dining, 💰 for costs, etc.).',
-      breaks:
-        "Use horizontal rules (---) to separate major sections if needed, but don't overuse them.",
-      boxes:
-        'Create information boxes using Markdown blockquotes (>) for tips, warnings, or summaries.',
-      maps_links:
-        'For EVERY mentioned place (attractions, restaurants, hotels, etc.), integrate a Google Maps link directly into the place name using this format: [Place Name](https://www.google.com/maps/search/?api=1&query=Place+Name,City+Name). DO NOT repeat the place name outside of the link to avoid duplication.',
-    },
-    json_schema: {
-      markdownContent: {
-        description:
-          'The full trip plan formatted as a compelling Markdown article. It must adhere to all the content and formatting rules listed below, while following the detail strategy above.',
-        rules: [
-          "1. **Title & Introduction:** Start with a compelling title. Follow with a brief introduction that addresses the user's preferences and outlines the structure of the itinerary.",
-          '2. **Structure:** Follow the detail strategy defined above. Use H2 headers (##) for each detailed day or thematic section. Use H3 headers (###) for time blocks (Morning/Afternoon/Evening) or major activity categories.',
-          '3. **Activity Sections:** Within each detailed day, use H4 headers (####) for activity options. Use bullet points for lists of options, and bold text for ranking labels (**Top Choice:**, **Alternative:**).',
-          '4. **Rich, Personalized Content:** For each activity in detailed sections: Weave in narrative, provide ranked options, bind locations, include practical details.',
-          '5. **Google Maps Links:** Integrate Google Maps links directly into place names using the format: [Place Name](https://www.google.com/maps/search/?api=1&query=Place+Name,City+Name). DO NOT repeat the place name outside of the link. Example: "Dine at [Podwale 25](https://www.google.com/maps/search/?api=1&query=Podwale+25,Warsaw) - 🍽️ Authentic pierogi, budget 40-60pln."',
-          '6. **Visual Hierarchy:** Use blank lines between paragraphs and sections. Avoid long, unbroken blocks of text.',
-          '7. **Practical Details:** Use **bold** for important practical information like costs, times, and transportation details.',
-          "8. **Local Insights:** Include '> 💡 Insider Tip:' callouts in blockquotes for special recommendations.",
-          "9. **Flexibility:** Offer optional activities in separate sections with headers like 'If You Have Extra Time'.",
-          '10. **Daily Summary:** End each detailed day with a summary in a blockquote format (>) with clear bullet points for key takeaways.',
-          '11. **Visual Elements:** Use relevant emojis sparingly to enhance readability (🏛️ for museums, 🍝 for food, etc.).',
-        ],
-      },
-      metadata: {
-        description:
-          "A JSON object containing the key data points from the user's request for easy parsing and display.",
-        fields: {
-          destination: 'String. The primary travel destination.',
-          travelDates: 'Array of strings. The start and end date of the trip.',
-          tripDuration: `Number. The calculated duration of the trip in days: ${tripDurationDays}.`,
-          budget: "String. The user's provided budget level.",
-          preferences: "Array of strings. The list of the user's stated interests.",
-          articleTitle: 'String. The engaging title generated for the Markdown article.',
-          slug: 'String. A URL-friendly version of the title, e.g., "paris-culture-food-5-day-trip"',
-          detailNote:
-            "String. A note on the chosen detail strategy, e.g., 'full_detailed', 'first_week_detailed', 'thematic_overview'.",
+    // ROLE & TASK - More Direct Commands
+    role: "You are an expert travel consultant for 'The Insider's Travel Guide'. Your goal is to create a realistic, practical, and highly engaging travel itinerary.",
+    primary_task: `Generate a personalized travel plan for a ${tripDurationDays}-day trip to ${params.destination} for a traveler with a ${params.budget} budget who enjoys ${params.preferences.join(', ')}.`,
+    core_mandate:
+      'You MUST be factual and practical. NEVER invent or hallucinate places, details, or prices. If you are unsure about a specific attraction or restaurant in a less-known location, focus on general, well-known activities and authentic local experiences instead.',
+
+    // RESPONSE FORMAT - CRITICAL: This tells the AI the exact JSON structure to output.
+    response_format: {
+      instruction:
+        'You MUST respond with **ONLY** a valid JSON object that matches the following schema. Do not include any introductory text, warnings, or commentary.',
+      schema: {
+        type: 'object',
+        properties: {
+          markdownContent: {
+            type: 'string',
+            description:
+              'The full travel plan, formatted as a Markdown article adhering strictly to all rules below.',
+          },
+          metadata: {
+            type: 'object',
+            properties: {
+              destination: { type: 'string' },
+              travelDates: { type: 'array', items: { type: 'string' } },
+              tripDuration: { type: 'integer' },
+              budget: { type: 'string' },
+              preferences: { type: 'array', items: { type: 'string' } },
+              articleTitle: { type: 'string' },
+              slug: { type: 'string' },
+              detailNote: { type: 'string' },
+            },
+            required: [
+              'destination',
+              'travelDates',
+              'tripDuration',
+              'budget',
+              'preferences',
+              'articleTitle',
+              'slug',
+              'detailNote',
+            ],
+          },
         },
+        required: ['markdownContent', 'metadata'],
       },
     },
+
+    // CONTENT STRATEGY
+    detail_strategy: detailStrategy,
+    budget_context: `The user's budget level is '${params.budget}'. Interpret this as a '${budgetTier}' tier. Recommend activities and restaurants that are appropriate for this tier.`,
+
+    // FORMATTING RULES - Simplified and with clearer priorities
+    formatting_rules: [
+      '1. **Title & Intro:** Start with a compelling title and a brief intro that sets the tone.',
+      '2. **Structure:** Use hierarchical headings (## Day 1, ### Morning, #### Options).',
+      `3. **Budget Handling:** ABSOLUTELY NEVER provide numerical prices. Use these symbols for every venue: 
+         - $ = Budget-friendly (street food, free museums, public transit)
+         - $$ = Mid-range (casual restaurants, paid attractions, taxis)
+         - $$$ = Premium (fine dining, private tours, luxury hotels)`,
+      '4. **Maps Links:** For EVERY place, embed a Google Maps link in the name: `[Place Name](https://www.google.com/maps/search/?api=1&query=Place+Name+City+Name)`.',
+      '5. **Content:** For each activity, provide a brief, engaging description. Use **bold** for key recommendations (**Top Choice**, **Alternative**).',
+      '6. **Practicality:** Include emojis sparingly (🚶‍♂️, 🍽️, 🏛️) and use blockquotes (> 💡 Insider Tip:) for useful advice.',
+      "7. **Honesty:** If the destination is very specific or obscure, focus on general activities (e.g., 'explore the local markets,' 'visit the main historical church,' 'try a family-run restaurant') rather than inventing specific names.",
+    ],
+
+    // USER CONTEXT - Remains the same
     user_preferences: {
-      Destination: `${params.destination}`,
-      'Travel Dates': `${params.travelDates.join(' to ')}`,
+      Destination: params.destination,
+      'Travel Dates': params.travelDates.join(' to '),
       'Trip Duration (days)': tripDurationDays,
-      Budget: `${params.budget}`,
-      Preferences: `${params.preferences.join(', ')}`,
+      Budget: params.budget,
+      Preferences: params.preferences.join(', '),
     },
-    maps_note:
-      "IMPORTANT: Integrate Google Maps links directly into place names. Use the format: [Place Name](https://www.google.com/maps/search/?api=1&query=Place+Name,City+Name). Replace spaces with '+' in the URL. DO NOT repeat the place name outside of the link to avoid duplication.",
-    example_correction: {
-      bad_example: 'Dine at Podwale 25 Podwale 25 - 🍽️ Authentic pierogi, budget 40-60pln.',
-      good_example:
-        'Dine at [Podwale 25](https://www.google.com/maps/search/?api=1&query=Podwale+25,Warsaw) - 🍽️ Authentic pierogi, budget 40-60pln.',
+
+    // UPDATED EXAMPLE - Shows the final JSON structure and desired content style
+    example_output: {
+      markdownContent:
+        '# Sample Trip to Krakow\n\n...\n\n### Evening\nDine at [Pod Wawelem](https://www.google.com/maps/search/?api=1&query=Pod+Wawelem+Krakow) $$ - A reliable mid-range restaurant serving hearty Polish classics near the castle.\n\n> **Daily Summary:**\n> - Explored the historic Old Town.\n> - Enjoyed traditional Polish cuisine.',
+      metadata: {
+        destination: 'Krakow, Poland',
+        travelDates: ['2024-10-01', '2024-10-05'],
+        tripDuration: 5,
+        budget: 'mid-range',
+        preferences: ['history', 'food'],
+        articleTitle: 'Krakow: A Historical and Culinary Journey',
+        slug: 'krakow-history-food-5-day-trip',
+        detailNote: 'full_detailed',
+      },
     },
   });
 }
