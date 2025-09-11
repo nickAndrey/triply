@@ -53,7 +53,7 @@ export function createTravelPlanPrompt(params: {
       boxes:
         'Create information boxes using Markdown blockquotes (>) for tips, warnings, or summaries.',
       maps_links:
-        'For EVERY mentioned place (attractions, restaurants, hotels, etc.), include a Google Maps link using this format: [Place Name](https://www.google.com/maps/search/?api=1&query=Place+Name,City+Name). Use the exact place name and city name for accurate results.',
+        'For EVERY mentioned place (attractions, restaurants, hotels, etc.), integrate a Google Maps link directly into the place name using this format: [Place Name](https://www.google.com/maps/search/?api=1&query=Place+Name,City+Name). DO NOT repeat the place name outside of the link to avoid duplication.',
     },
     json_schema: {
       markdownContent: {
@@ -64,7 +64,7 @@ export function createTravelPlanPrompt(params: {
           '2. **Structure:** Follow the detail strategy defined above. Use H2 headers (##) for each detailed day or thematic section. Use H3 headers (###) for time blocks (Morning/Afternoon/Evening) or major activity categories.',
           '3. **Activity Sections:** Within each detailed day, use H4 headers (####) for activity options. Use bullet points for lists of options, and bold text for ranking labels (**Top Choice:**, **Alternative:**).',
           '4. **Rich, Personalized Content:** For each activity in detailed sections: Weave in narrative, provide ranked options, bind locations, include practical details.',
-          '5. **Google Maps Links:** For EVERY mentioned place (attractions, restaurants, hotels, etc.), include a Google Maps link using this format: [Place Name](https://www.google.com/maps/search/?api=1&query=Place+Name,City+Name). Use the exact place name and city name for accurate results.',
+          '5. **Google Maps Links:** Integrate Google Maps links directly into place names using the format: [Place Name](https://www.google.com/maps/search/?api=1&query=Place+Name,City+Name). DO NOT repeat the place name outside of the link. Example: "Dine at [Podwale 25](https://www.google.com/maps/search/?api=1&query=Podwale+25,Warsaw) - 🍽️ Authentic pierogi, budget 40-60pln."',
           '6. **Visual Hierarchy:** Use blank lines between paragraphs and sections. Avoid long, unbroken blocks of text.',
           '7. **Practical Details:** Use **bold** for important practical information like costs, times, and transportation details.',
           "8. **Local Insights:** Include '> 💡 Insider Tip:' callouts in blockquotes for special recommendations.",
@@ -97,6 +97,11 @@ export function createTravelPlanPrompt(params: {
       Preferences: `${params.preferences.join(', ')}`,
     },
     maps_note:
-      "IMPORTANT: Include Google Maps links for all places using the format: [Place Name](https://www.google.com/maps/search/?api=1&query=Place+Name,City+Name). Replace spaces with '+' in the URL.",
+      "IMPORTANT: Integrate Google Maps links directly into place names. Use the format: [Place Name](https://www.google.com/maps/search/?api=1&query=Place+Name,City+Name). Replace spaces with '+' in the URL. DO NOT repeat the place name outside of the link to avoid duplication.",
+    example_correction: {
+      bad_example: 'Dine at Podwale 25 Podwale 25 - 🍽️ Authentic pierogi, budget 40-60pln.',
+      good_example:
+        'Dine at [Podwale 25](https://www.google.com/maps/search/?api=1&query=Podwale+25,Warsaw) - 🍽️ Authentic pierogi, budget 40-60pln.',
+    },
   });
 }

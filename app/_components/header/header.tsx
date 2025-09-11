@@ -18,21 +18,6 @@ export async function Header() {
     .select('id,destination,travel_dates,article_title,slug')
     .eq('user_id', user.id);
 
-  let links = null;
-
-  if (suggestionFields) {
-    links = suggestionFields.map((item) => {
-      return (
-        <li key={item.id}>
-          <Link
-            href={item.slug}
-            className="flex px-4 py-2 bg-primary/60 rounded-md"
-          >{`${item.destination} — ${new Date(item.travel_dates[0]).getFullYear()}`}</Link>
-        </li>
-      );
-    });
-  }
-
   return (
     <header className="flex flex-col max-w-max gap-2 items-center justify-between bg-secondary rounded-2xl p-2 fixed right-4 top-1/2 translate-y-[-1/2] z-10 shadow-xl/20">
       {user && (
@@ -42,9 +27,7 @@ export async function Header() {
               <Home />
             </Button>
           </Link>
-          <NavBar>
-            {links && <ul className="flex flex-col gap-2 px-4 py-4 w-full">{links}</ul>}
-          </NavBar>
+          <NavBar suggestions={suggestionFields}/>
           <UserMenu />
         </>
       )}

@@ -21,7 +21,7 @@ import { CalendarIcon, CircleQuestionMark, LoaderCircle } from 'lucide-react';
 import { FormEventHandler, startTransition, useActionState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { getPersonalSuggestion } from '../../_actions/get-personal-suggestion';
+import { getPersonalSuggestion } from '../../../_actions/get-personal-suggestion';
 
 const schema = z.object({
   destination: z.string().min(1, 'Field is required'),

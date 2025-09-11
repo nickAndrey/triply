@@ -10,13 +10,20 @@ import {
   DrawerTrigger,
 } from '@chadcn/components/ui/drawer';
 import { PanelRight } from 'lucide-react';
-import { ReactNode, useState } from 'react';
+import { useState } from 'react';
+import { NavLink } from './nav-link';
 
 type NavBarProps = {
-  children?: ReactNode;
+  suggestions: {
+    id: string;
+    destination: string;
+    travel_dates: string;
+    article_title: string;
+    slug: string;
+  }[];
 };
 
-export function NavBar({ children }: NavBarProps) {
+export function NavBar({ suggestions }: NavBarProps) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -29,7 +36,7 @@ export function NavBar({ children }: NavBarProps) {
 
       <DrawerContent className="left-2! top-2! bottom-2! rounded-2xl after:content-none!">
         <DrawerHeader>
-          {children ? (
+          {suggestions ? (
             <>
               <DrawerTitle>
                 Here is a history of your travels or suggestions of your travels
@@ -44,7 +51,18 @@ export function NavBar({ children }: NavBarProps) {
           )}
         </DrawerHeader>
 
-        {children}
+        <ul className="flex flex-col gap-2 px-4 py-4 w-full">
+          {suggestions.map((item) => {
+            return (
+              <li key={item.id}>
+                <NavLink
+                  href={item.slug}
+                  onNavigate={() => setOpen(false)}
+                >{`${item.destination} — ${new Date(item.travel_dates[0]).getFullYear()}`}</NavLink>
+              </li>
+            );
+          })}
+        </ul>
       </DrawerContent>
     </Drawer>
   );

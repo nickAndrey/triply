@@ -1,4 +1,5 @@
 import { createClient } from '@/utils/supabase/server';
+import { notFound } from 'next/navigation';
 import Markdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 
@@ -19,6 +20,10 @@ export default async function TravelSuggestionPage({
     .select('*')
     .eq('user_id', user.id)
     .eq('slug', slug);
+
+  if (!suggestion || !suggestion.length) {
+    return notFound();
+  }
 
   return (
     <main className="flex flex-col gap-6 min-h-[100dvh] max-w-4xl m-auto px-4 py-5">
