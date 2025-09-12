@@ -3,9 +3,9 @@ import { Button } from '@/chadcn/components/ui/button';
 import { createClient } from '@/utils/supabase/server';
 import { Home } from 'lucide-react';
 import Link from 'next/link';
-import { NavBar } from './_components/nav-bar';
-import { ThemeSwitcher } from './_components/theme-switcher';
-import { UserMenu } from './_components/user-menu';
+import { NavBar } from './nav-bar/nav-bar';
+import { ThemeSwitcher } from './theme-switcher';
+import { UserMenu } from './user-menu';
 
 export async function Header() {
   const supabase = await createClient();

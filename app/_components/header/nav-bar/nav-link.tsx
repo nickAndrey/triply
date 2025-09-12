@@ -1,9 +1,9 @@
 'use client';
 
+import { cn } from '@/chadcn/lib/utils';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { ReactNode } from 'react';
-import { cn } from '../../../../chadcn/lib/utils';
 
 type NavLinkProps = {
   href: string;

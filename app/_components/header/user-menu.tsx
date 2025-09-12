@@ -25,6 +25,8 @@ export function UserMenu() {
     });
   }, [supabase]);
 
+  const handleLogOut = () => logout();
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -37,7 +39,7 @@ export function UserMenu() {
           {email ?? 'Anonymous'}
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => logout()}>Logout</DropdownMenuItem>
+        <DropdownMenuItem onClick={handleLogOut}>Logout</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
