@@ -5,13 +5,14 @@ import { Badge } from '@/chadcn/components/ui/badge';
 import { Button } from '@chadcn/components/ui/button';
 import {
   Drawer,
+  DrawerClose,
   DrawerContent,
   DrawerDescription,
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
 } from '@chadcn/components/ui/drawer';
-import { PanelRight } from 'lucide-react';
+import { PanelRight, X } from 'lucide-react';
 import { useState } from 'react';
 import { NavLink } from './nav-link';
 
@@ -49,6 +50,15 @@ export function NavBar({ suggestions }: NavBarProps) {
 
       <DrawerContent className="left-2! top-2! bottom-2! rounded-2xl after:content-none!">
         <DrawerHeader>
+          <DrawerClose
+            autoFocus
+            asChild
+            className="absolute right-2 top-2"
+          >
+            <Button variant="ghost" size="icon" className="rounded-full">
+              <X />
+            </Button>
+          </DrawerClose>
           {suggestions ? (
             <>
               <DrawerTitle>
