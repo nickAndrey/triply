@@ -1,8 +1,14 @@
 import { DB_TABLES } from '@/app/_constants/db-tables';
 import { createClient } from '@/utils/supabase/server';
+import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Markdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+
+export const metadata: Metadata = {
+  title: 'Triply | Suggestions',
+  description: 'Triply — AI-Powered Travel Planner',
+};
 
 export default async function TravelSuggestionPage({
   params,

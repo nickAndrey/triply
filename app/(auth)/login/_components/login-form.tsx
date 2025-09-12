@@ -1,5 +1,6 @@
 'use client';
 
+import { login } from '@/app/_actions/login';
 import { Button } from '@/chadcn/components/ui/button';
 import {
   Card,
@@ -12,7 +13,6 @@ import { Input } from '@/chadcn/components/ui/input';
 import clsx from 'clsx';
 import { LoaderCircle } from 'lucide-react';
 import { useActionState } from 'react';
-import { login } from '../_actions/login';
 
 export function LoginForm() {
   const [state, formAction, isPending] = useActionState(login, {

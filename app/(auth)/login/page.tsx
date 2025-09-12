@@ -1,4 +1,10 @@
+import { Metadata } from 'next';
 import { LoginForm } from './_components/login-form';
+
+export const metadata: Metadata = {
+  title: 'Triply | Login',
+  description: 'Triply — AI-Powered Travel Planner',
+};
 
 export default function LoginPage() {
   return (

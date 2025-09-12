@@ -3,19 +3,13 @@ import { RequestProvider } from '@/app/_providers/request-context';
 import { Toaster } from '@chadcn/components/ui/sonner';
 import { ThemeProvider } from '@chadcn/components/ui/theme-provider';
 import { Header } from '@components/header/header';
-import type { Metadata } from 'next';
-import { Open_Sans } from 'next/font/google';
+import { Nunito } from 'next/font/google';
 import { ReactNode } from 'react';
 import './_styles/globals.css';
 
-const open_sans = Open_Sans({
+const nunito = Nunito({
   subsets: [],
 });
-
-export const metadata: Metadata = {
-  title: 'Triply',
-  description: 'Triply — AI-Powered Travel Planner',
-};
 
 type Props = {
   children: ReactNode;
@@ -25,7 +19,7 @@ export default function RootLayout({ children }: Props) {
   return (
     <html lang="en" suppressHydrationWarning>
       <head />
-      <body className={open_sans.className}>
+      <body className={nunito.className}>
         <RequestProvider>
           <ThemeProvider
             attribute="class"

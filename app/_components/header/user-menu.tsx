@@ -1,6 +1,6 @@
 'use client';
 
-import { logout } from '@/app/(auth)/actions';
+import { logout } from '@/app/_actions/logout';
 import { createClient } from '@/utils/supabase/client';
 import { Button } from '@chadcn/components/ui/button';
 import {
@@ -30,7 +30,12 @@ export function UserMenu() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" className="rounded-full" size="icon">
+        <Button
+          variant="outline"
+          className="rounded-full"
+          size="icon"
+          aria-label="open user menu"
+        >
           <User />
         </Button>
       </DropdownMenuTrigger>

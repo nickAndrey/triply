@@ -37,6 +37,7 @@ export function NavBar({ suggestions }: NavBarProps) {
           variant="outline"
           className="rounded-full relative"
           size="icon"
+          aria-label="open nav bar"
         >
           <PanelRight />
           {isPending && (
@@ -88,6 +89,7 @@ export function NavBar({ suggestions }: NavBarProps) {
                 <NavLink
                   href={item.slug}
                   onNavigate={() => setOpen(false)}
+                  label={item.article_title}
                 >{`${item.destination} — ${new Date(item.travel_dates[0]).getFullYear()}`}</NavLink>
               </li>
             );
