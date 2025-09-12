@@ -27,7 +27,9 @@ export function LoginForm() {
     <Card className="w-md">
       <CardHeader>
         <CardTitle>Welcome back</CardTitle>
-        <CardDescription>Use your registered email and password to continue.</CardDescription>
+        <CardDescription>
+          Use your registered email and password to continue.
+        </CardDescription>
       </CardHeader>
 
       <CardContent>
@@ -46,7 +48,9 @@ export function LoginForm() {
               autoComplete="username"
             />
             {state?.errors?.email && (
-              <p className="text-sm text-destructive">{state.errors.email.errors[0]}</p>
+              <p className="text-sm text-destructive">
+                {state.errors.email.errors[0]}
+              </p>
             )}
           </div>
 
@@ -64,13 +68,21 @@ export function LoginForm() {
               autoComplete="new-password"
             />
             {state?.errors?.password && (
-              <p className="text-sm text-destructive">{state.errors.password.errors[0]}</p>
+              <p className="text-sm text-destructive">
+                {state.errors.password.errors[0]}
+              </p>
             )}
           </div>
 
-          {state?.apiError && <p className="text-sm text-destructive">{state.apiError}</p>}
+          {state?.apiError && (
+            <p className="text-sm text-destructive">{state.apiError}</p>
+          )}
 
-          <Button type="submit" className="py-5 flex items-center gap-3" disabled={isPending}>
+          <Button
+            type="submit"
+            className="py-5 flex items-center gap-3"
+            disabled={isPending}
+          >
             {isPending ? (
               <>
                 <LoaderCircle className="animate-spin" />

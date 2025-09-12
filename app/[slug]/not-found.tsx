@@ -13,7 +13,9 @@ export default function NotFound() {
       <Card className="w-md">
         <CardHeader>
           <CardTitle>404 Page Not Found</CardTitle>
-          <CardDescription>Could not find requested resource.</CardDescription>
+          <CardDescription>
+            Could not find requested resource.
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <Link href="/" className="text-link underline">

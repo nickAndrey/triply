@@ -54,7 +54,10 @@ export function SupabaseJobSubscriber() {
             request.finish();
 
             try {
-              await supabase.from(DB_TABLES.suggestion_jobs).delete().eq('id', payload.new.id);
+              await supabase
+                .from(DB_TABLES.suggestion_jobs)
+                .delete()
+                .eq('id', payload.new.id);
             } catch (e) {
               console.warn('Job delete failed', e);
             } finally {
@@ -63,7 +66,9 @@ export function SupabaseJobSubscriber() {
             }
           }
           if (payload.new.status === 'error') {
-            request.fail(payload.new.error_message || 'Something went wrong');
+            request.fail(
+              payload.new.error_message || 'Something went wrong'
+            );
             setJobId(null);
           }
         }

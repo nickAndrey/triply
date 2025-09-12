@@ -24,7 +24,10 @@ export async function SuggestionsCarousel() {
     >
       <CarouselContent>
         {suggestions.map((suggestion) => (
-          <CarouselItem key={suggestion.id} className="basis-1/1 sm:basis-1/2 lg:basis-1/3">
+          <CarouselItem
+            key={suggestion.id}
+            className="basis-1/1 sm:basis-1/2 lg:basis-1/3"
+          >
             <SuggestionItem suggestion={suggestion} />
           </CarouselItem>
         ))}
@@ -36,7 +39,11 @@ export async function SuggestionsCarousel() {
           size="icon"
           className="hidden md:flex static translate-0"
         />
-        <CarouselNext variant="default" size="icon" className="hidden md:flex static translate-0" />
+        <CarouselNext
+          variant="default"
+          size="icon"
+          className="hidden md:flex static translate-0"
+        />
       </div>
     </Carousel>
   );

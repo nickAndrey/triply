@@ -4,7 +4,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "format": "prettier --write 'app/**/*.{ts,tsx,css}' 'chadcn/**/*.{ts,tsx,css}'",
+    "format": "prettier --write 'app/**/*.{ts,tsx,css}'",
     "prepare": "husky"
   },
   "dependencies": {

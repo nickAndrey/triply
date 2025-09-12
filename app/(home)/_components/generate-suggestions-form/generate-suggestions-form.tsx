@@ -13,13 +13,27 @@ import {
   FormMessage,
 } from '@/chadcn/components/ui/form';
 import { Input } from '@/chadcn/components/ui/input';
-import MultipleSelector, { Option } from '@/chadcn/components/ui/multi-selector';
-import { Popover, PopoverContent, PopoverTrigger } from '@/chadcn/components/ui/popover';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/chadcn/components/ui/tooltip';
+import MultipleSelector, {
+  Option,
+} from '@/chadcn/components/ui/multi-selector';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/chadcn/components/ui/popover';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/chadcn/components/ui/tooltip';
 import { cn } from '@/chadcn/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { format } from 'date-fns';
-import { CalendarIcon, CircleQuestionMark, LoaderCircle } from 'lucide-react';
+import {
+  CalendarIcon,
+  CircleQuestionMark,
+  LoaderCircle,
+} from 'lucide-react';
 import { FormEventHandler, startTransition } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -89,13 +103,17 @@ export function GenerateSuggestionsForm() {
                   </TooltipTrigger>
                   <TooltipContent className="max-w-xs">
                     <p>
-                      Where do you want to go? Type a city or select from suggested destinations.
+                      Where do you want to go? Type a city or select from
+                      suggested destinations.
                     </p>
                   </TooltipContent>
                 </Tooltip>
               </FormLabel>
               <FormControl>
-                <Input placeholder="Enter your dream city or country" {...field} />
+                <Input
+                  placeholder="Enter your dream city or country"
+                  {...field}
+                />
               </FormControl>
 
               <FormMessage />
@@ -213,14 +231,17 @@ export function GenerateSuggestionsForm() {
                   </TooltipTrigger>
                   <TooltipContent className="max-w-xs">
                     <p>
-                      Enter your budget as an amount or range. The AI will interpret your input to
-                      suggest a suitable plan.
+                      Enter your budget as an amount or range. The AI will
+                      interpret your input to suggest a suitable plan.
                     </p>
                   </TooltipContent>
                 </Tooltip>
               </FormLabel>
               <FormControl>
-                <Input placeholder="e.g., 1000 USD or 200-450 USD or 100$" {...field} />
+                <Input
+                  placeholder="e.g., 1000 USD or 200-450 USD or 100$"
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -239,16 +260,21 @@ export function GenerateSuggestionsForm() {
                   </TooltipTrigger>
                   <TooltipContent className="max-w-xs">
                     <p>
-                      Select one or more preferences to guide your trip plan. For example:
-                      Culture,Beaches, Food, Nightlife, Family, Solo.
+                      Select one or more preferences to guide your trip
+                      plan. For example: Culture,Beaches, Food, Nightlife,
+                      Family, Solo.
                     </p>
                   </TooltipContent>
                 </Tooltip>
               </FormLabel>
               <FormControl>
                 <MultipleSelector
-                  className={cn(fieldState.error ? 'border-destructive' : '')}
-                  value={preferences.filter((item) => field.value.includes(item.value))}
+                  className={cn(
+                    fieldState.error ? 'border-destructive' : ''
+                  )}
+                  value={preferences.filter((item) =>
+                    field.value.includes(item.value)
+                  )}
                   defaultOptions={preferences}
                   onChange={(options) =>
                     form.setValue(

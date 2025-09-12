@@ -32,10 +32,17 @@ export function NavBar({ suggestions }: NavBarProps) {
   return (
     <Drawer direction="left" open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>
-        <Button variant="outline" className="rounded-full relative" size="icon">
+        <Button
+          variant="outline"
+          className="rounded-full relative"
+          size="icon"
+        >
           <PanelRight />
           {isPending && (
-            <Badge variant="default" className="p-0 size-2 absolute top-[-2px] right-[-2px]" />
+            <Badge
+              variant="default"
+              className="p-0 size-2 absolute top-[-2px] right-[-2px]"
+            />
           )}
         </Button>
       </DrawerTrigger>
@@ -45,14 +52,21 @@ export function NavBar({ suggestions }: NavBarProps) {
           {suggestions ? (
             <>
               <DrawerTitle>
-                Here is a history of your travels or suggestions of your travels
+                Here is a history of your travels or suggestions of your
+                travels
               </DrawerTitle>
-              <DrawerDescription>Click on an item to visit the page</DrawerDescription>
+              <DrawerDescription>
+                Click on an item to visit the page
+              </DrawerDescription>
             </>
           ) : (
             <>
-              <DrawerTitle>There is no any items to show at that moment.</DrawerTitle>
-              <DrawerDescription>Add places you want to visit</DrawerDescription>
+              <DrawerTitle>
+                There is no any items to show at that moment.
+              </DrawerTitle>
+              <DrawerDescription>
+                Add places you want to visit
+              </DrawerDescription>
             </>
           )}
         </DrawerHeader>

@@ -23,7 +23,10 @@ type FormState = {
   };
 };
 
-export async function login(_: FormState, formData: FormData): Promise<FormState> {
+export async function login(
+  _: FormState,
+  formData: FormData
+): Promise<FormState> {
   const supabase = await createClient();
 
   const fields = {

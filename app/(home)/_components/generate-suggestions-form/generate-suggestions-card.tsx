@@ -13,7 +13,8 @@ export function GenerateSuggestionsCard() {
       <CardHeader>
         <CardTitle>Plan Your Next Adventure</CardTitle>
         <CardDescription>
-          Tell us what you’re looking for and we’ll suggest trips tailored for you.
+          Tell us what you’re looking for and we’ll suggest trips tailored
+          for you.
         </CardDescription>
       </CardHeader>
 

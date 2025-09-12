@@ -8,12 +8,15 @@ export function createTravelPlanPrompt(params: {
   const endDate = new Date(params.travelDates[1]);
 
   const tripDurationDays =
-    Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)) + 1;
+    Math.ceil(
+      (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)
+    ) + 1;
 
   let detailStrategy: string;
 
   if (tripDurationDays <= 7) {
-    detailStrategy = 'Provide a detailed, day-by-day itinerary for the entire trip.';
+    detailStrategy =
+      'Provide a detailed, day-by-day itinerary for the entire trip.';
   } else if (tripDurationDays <= 14) {
     detailStrategy =
       'Provide a detailed, day-by-day itinerary for the first 5-7 days. For the remaining days, provide a structured overview with 2-3 key activities per day.';

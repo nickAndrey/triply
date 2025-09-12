@@ -99,7 +99,10 @@ async function setSuggestionsImages(
   );
 }
 
-async function storeSuggestionsInDatabase(country: string, suggestions: Suggestion[]) {
+async function storeSuggestionsInDatabase(
+  country: string,
+  suggestions: Suggestion[]
+) {
   try {
     const supabase = await createClient();
     await supabase.from(DB_TABLES.suggestions).insert({

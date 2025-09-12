@@ -1,5 +1,9 @@
 import { Suggestion } from '@/app/_types/suggestion';
-import { Avatar, AvatarFallback, AvatarImage } from '@/chadcn/components/ui/avatar';
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from '@/chadcn/components/ui/avatar';
 import {
   Card,
   CardContent,
@@ -30,7 +34,9 @@ export function SuggestionItem({ suggestion }: SuggestionItemProps) {
 
           <div className="w-full flex items-center gap-1 z-20 absolute bottom-0 left-0 px-2 py-1 bg-black/45">
             <Avatar>
-              <AvatarImage src={suggestion.photos[0].photographer_profile_image} />
+              <AvatarImage
+                src={suggestion.photos[0].photographer_profile_image}
+              />
               <AvatarFallback>CN</AvatarFallback>
             </Avatar>
             <a
@@ -61,7 +67,9 @@ export function SuggestionItem({ suggestion }: SuggestionItemProps) {
       {suggestion && (
         <CardHeader className="px-2">
           <CardTitle>{suggestion.title}</CardTitle>
-          <CardDescription className="line-clamp-3">{suggestion.description}</CardDescription>
+          <CardDescription className="line-clamp-3">
+            {suggestion.description}
+          </CardDescription>
         </CardHeader>
       )}
     </Card>

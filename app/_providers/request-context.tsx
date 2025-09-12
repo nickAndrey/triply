@@ -7,7 +7,11 @@ type RequestState = {
   isPending: boolean;
   status: 'idle' | 'pending' | 'success' | 'error';
   result?: unknown;
-  onSetMessage?: (params: { start?: ReactNode; finish?: ReactNode; fail?: ReactNode }) => void;
+  onSetMessage?: (params: {
+    start?: ReactNode;
+    finish?: ReactNode;
+    fail?: ReactNode;
+  }) => void;
   start: (message?: string) => void;
   finish: (params?: { res?: unknown; message?: string }) => void;
   fail: (message?: string) => void;
@@ -17,7 +21,9 @@ const RequestContext = createContext<RequestState | null>(null);
 
 export function RequestProvider({ children }: { children: ReactNode }) {
   const [isPending, setIsPending] = useState(false);
-  const [status, setStatus] = useState<'idle' | 'pending' | 'success' | 'error'>('idle');
+  const [status, setStatus] = useState<
+    'idle' | 'pending' | 'success' | 'error'
+  >('idle');
   const [result, setResult] = useState<unknown>(null);
   const [customMessage, setCustomMessage] = useState<{
     start?: ReactNode;
@@ -65,7 +71,8 @@ export function RequestProvider({ children }: { children: ReactNode }) {
         start,
         finish,
         fail,
-        onSetMessage: (params) => setCustomMessage((prev) => ({ ...prev, ...params })),
+        onSetMessage: (params) =>
+          setCustomMessage((prev) => ({ ...prev, ...params })),
       }}
     >
       {children}
@@ -75,6 +82,7 @@ export function RequestProvider({ children }: { children: ReactNode }) {
 
 export function useRequest() {
   const ctx = useContext(RequestContext);
-  if (!ctx) throw new Error('useRequest must be used within RequestProvider');
+  if (!ctx)
+    throw new Error('useRequest must be used within RequestProvider');
   return ctx;
 }
