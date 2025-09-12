@@ -1,3 +1,4 @@
+import { DB_TABLES } from '@/app/_constants/db-tables';
 import { Button } from '@/chadcn/components/ui/button';
 import { createClient } from '@/utils/supabase/server';
 import { Home } from 'lucide-react';
@@ -14,7 +15,7 @@ export async function Header() {
   } = await supabase.auth.getUser();
 
   const { data: suggestionFields } = await supabase
-    .from('personal_travel_suggestions')
+    .from(DB_TABLES.personal_travel_suggestions)
     .select('id,destination,travel_dates,article_title,slug')
     .eq('user_id', user.id);
 
@@ -27,7 +28,7 @@ export async function Header() {
               <Home />
             </Button>
           </Link>
-          <NavBar suggestions={suggestionFields}/>
+          <NavBar suggestions={suggestionFields} />
           <UserMenu />
         </>
       )}

@@ -1,5 +1,7 @@
 'use client';
 
+import { getPersonalSuggestion } from '@/app/_actions/get-personal-suggestion';
+import { useRequest } from '@/app/_providers/request-context';
 import { Button } from '@/chadcn/components/ui/button';
 import { Calendar } from '@/chadcn/components/ui/calendar';
 import {
@@ -18,10 +20,9 @@ import { cn } from '@/chadcn/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { format } from 'date-fns';
 import { CalendarIcon, CircleQuestionMark, LoaderCircle } from 'lucide-react';
-import { FormEventHandler, startTransition, useActionState } from 'react';
+import { FormEventHandler, startTransition } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { getPersonalSuggestion } from '../../../_actions/get-personal-suggestion';
 
 const schema = z.object({
   destination: z.string().min(1, 'Field is required'),
@@ -44,7 +45,7 @@ const preferences: Option[] = [
 type FormFields = z.infer<typeof schema>;
 
 export function GenerateSuggestionsForm() {
-  const [state, action, isPending] = useActionState(getPersonalSuggestion, null);
+  const { start, finish, fail, isPending } = useRequest();
 
   const form = useForm<FormFields>({
     resolver: zodResolver(schema),
@@ -60,10 +61,16 @@ export function GenerateSuggestionsForm() {
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
 
+    start(
+      'Please wait while we prepare your travel plan. We will notify you when plan will be prepared.'
+    );
+
     const isValid = await form.trigger();
     if (!isValid) return;
 
-    startTransition(() => action(form.getValues()));
+    startTransition(async () => {
+      await getPersonalSuggestion(form.getValues());
+    });
   };
 
   return (

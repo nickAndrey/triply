@@ -1,5 +1,6 @@
 'use server';
 
+import { DB_TABLES } from '@/app/_constants/db-tables';
 import { createClient } from '@/utils/supabase/server';
 import axios from 'axios';
 import { revalidatePath } from 'next/cache';
@@ -12,7 +13,7 @@ async function savePersonalSuggestion(suggestion: string) {
   const { data: userData } = await supabase.auth.getUser();
 
   const { data: existedSuggestions } = await supabase
-    .from('personal_travel_suggestions')
+    .from(DB_TABLES.personal_travel_suggestions)
     .select('destination,travel_dates')
     .match({
       destination: parsedSuggestion.metadata.destination,
@@ -21,7 +22,7 @@ async function savePersonalSuggestion(suggestion: string) {
     .eq('user_id', userData.user.id);
 
   if (!existedSuggestions) {
-    const { error } = await supabase.from('personal_travel_suggestions').insert([
+    const { error } = await supabase.from(DB_TABLES.personal_travel_suggestions).insert([
       {
         markdown_content: parsedSuggestion.markdownContent,
         destination: parsedSuggestion.metadata.destination,
@@ -39,8 +40,6 @@ async function savePersonalSuggestion(suggestion: string) {
     if (error) {
       throw new Error(error.message);
     }
-
-    revalidatePath('/');
   }
 }
 
@@ -64,31 +63,63 @@ async function generatePersonalSuggestion(prompt: string) {
 
   try {
     const response = await axios.post(API_URL, requestData, config);
-    await savePersonalSuggestion(response.data.choices[0].message.content);
+
+    return response.data.choices[0].message.content;
   } catch (error) {
     console.error('Error:', error.response?.data || error.message);
     throw new Error('Failed to generate travel suggestions');
   }
 }
 
-export async function getPersonalSuggestion(
-  formData: FormData,
-  payload: {
-    destination: string;
-    dateFrom: Date;
-    dateTo: Date;
-    budget: string;
-    preferences: string[];
+export async function getPersonalSuggestion(payload: {
+  destination: string;
+  dateFrom: Date;
+  dateTo: Date;
+  budget: string;
+  preferences: string[];
+}) {
+  const supabase = await createClient();
+  const { data: userData } = await supabase.auth.getUser();
+
+  // Insert pending job status (we will use it on the client to sync statuses)
+  const { data: job, error: insertError } = await supabase
+    .from(DB_TABLES.suggestion_jobs)
+    .insert([{ user_id: userData.user.id, status: 'pending' }])
+    .select()
+    .single();
+
+  if (insertError) throw new Error(insertError.message);
+
+  try {
+    // Call DeepSeek
+    const prompt = createTravelPlanPrompt({
+      destination: payload.destination,
+      travelDates: [payload.dateFrom.toISOString(), payload.dateTo.toISOString()],
+      budget: payload.budget,
+      preferences: payload.preferences,
+    });
+
+    const response = await generatePersonalSuggestion(prompt);
+    // ----
+
+    // Save real suggestion
+    await savePersonalSuggestion(response);
+    // ----
+
+    // Mark job as success, so client can read success state
+    await supabase.from(DB_TABLES.suggestion_jobs).update({ status: 'success' }).eq('id', job.id);
+    // ----
+
+    revalidatePath('/', 'layout');
+
+    return { success: true };
+  } catch (err) {
+    // Mark job as failed, so client can read error state
+    await supabase
+      .from(DB_TABLES.suggestion_jobs)
+      .update({ status: 'error', error_message: String(err) })
+      .eq('id', job.id);
+
+    throw err;
   }
-): Promise<FormData> {
-  const prompt = createTravelPlanPrompt({
-    destination: payload.destination,
-    travelDates: [payload.dateFrom.toISOString(), payload.dateTo.toISOString()],
-    budget: payload.budget,
-    preferences: payload.preferences,
-  });
-
-  await generatePersonalSuggestion(prompt);
-
-  return formData;
 }

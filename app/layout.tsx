@@ -1,3 +1,5 @@
+import { SupabaseJobSubscriber } from '@/app/_components/supabase-job-subscriber';
+import { RequestProvider } from '@/app/_providers/request-context';
 import { Toaster } from '@chadcn/components/ui/sonner';
 import { ThemeProvider } from '@chadcn/components/ui/theme-provider';
 import { Header } from '@components/header/header';
@@ -24,16 +26,19 @@ export default function RootLayout({ children }: Props) {
     <html lang="en" suppressHydrationWarning>
       <head />
       <body className={open_sans.className}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          {children}
-          <Header />
-          <Toaster />
-        </ThemeProvider>
+        <RequestProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            {children}
+            <Header />
+            <SupabaseJobSubscriber />
+            <Toaster position="top-right" />
+          </ThemeProvider>
+        </RequestProvider>
       </body>
     </html>
   );

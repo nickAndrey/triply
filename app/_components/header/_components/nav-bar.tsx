@@ -1,5 +1,7 @@
 'use client';
 
+import { useRequest } from '@/app/_providers/request-context';
+import { Badge } from '@/chadcn/components/ui/badge';
 import { Button } from '@chadcn/components/ui/button';
 import {
   Drawer,
@@ -25,12 +27,16 @@ type NavBarProps = {
 
 export function NavBar({ suggestions }: NavBarProps) {
   const [open, setOpen] = useState(false);
+  const { isPending } = useRequest();
 
   return (
     <Drawer direction="left" open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>
-        <Button variant="outline" className="rounded-full" size="icon">
+        <Button variant="outline" className="rounded-full relative" size="icon">
           <PanelRight />
+          {isPending && (
+            <Badge variant="default" className="p-0 size-2 absolute top-[-2px] right-[-2px]" />
+          )}
         </Button>
       </DrawerTrigger>
 

@@ -1,5 +1,6 @@
 'use server';
 
+import { DB_TABLES } from '@/app/_constants/db-tables';
 import { Suggestion } from '@/app/_types/suggestion';
 import { createClient } from '@/utils/supabase/server';
 import axios from 'axios';
@@ -101,7 +102,7 @@ async function setSuggestionsImages(
 async function storeSuggestionsInDatabase(country: string, suggestions: Suggestion[]) {
   try {
     const supabase = await createClient();
-    await supabase.from('suggestions').insert({
+    await supabase.from(DB_TABLES.suggestions).insert({
       id: crypto.randomUUID(),
       country: country,
       records: suggestions,
@@ -127,7 +128,7 @@ export async function getSuggestions(): Promise<Suggestion[]> {
 
   // 2. Query DB for cached suggestions
   const { data: dbSuggestions } = await supabase
-    .from('suggestions')
+    .from(DB_TABLES.suggestions)
     .select('*')
     .ilike('country', ipInfo.country);
 
