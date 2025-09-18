@@ -1,6 +1,6 @@
 'use client';
 
-import { useSetupForm } from '@/app/(auth)/signup/_components/signup-form/use-setup-form';
+import { useSignupForm } from '@/app/(auth)/signup/_components/signup-form/use-signup-form';
 import { InputPassword } from '@/app/_components/input-password';
 import { Button } from '@/chadcn/components/ui/button';
 import {
@@ -15,7 +15,7 @@ import { Input } from '@/chadcn/components/ui/input';
 import { LoaderCircle } from 'lucide-react';
 
 export function SignupForm() {
-  const { form, isPending, handleSubmit } = useSetupForm();
+  const { form, isPending, handleSubmit } = useSignupForm();
 
   return (
     <Form {...form}>

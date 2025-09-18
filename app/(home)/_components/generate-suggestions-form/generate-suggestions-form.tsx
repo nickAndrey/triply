@@ -34,7 +34,7 @@ import {
   CircleQuestionMark,
   LoaderCircle,
 } from 'lucide-react';
-import { FormEventHandler, startTransition } from 'react';
+import { FormEventHandler } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -82,9 +82,7 @@ export function GenerateSuggestionsForm() {
     const isValid = await form.trigger();
     if (!isValid) return;
 
-    startTransition(async () => {
-      await getPersonalSuggestion(form.getValues());
-    });
+    await getPersonalSuggestion(form.getValues());
   };
 
   return (
