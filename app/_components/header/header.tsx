@@ -43,7 +43,7 @@ export async function Header() {
       {user && (
         <>
           {homeLink}
-          <NavBar suggestions={suggestionFields} />
+          <NavBar suggestions={suggestionFields || []} />
           <UserMenu />
         </>
       )}

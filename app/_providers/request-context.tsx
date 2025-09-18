@@ -41,13 +41,13 @@ export function RequestProvider({ children }: { children: ReactNode }) {
     if (_msg) toast.info(_msg);
     // ---
   };
-  const finish = (params: { res?: unknown; message?: string }) => {
+  const finish = (params?: { res?: unknown; message?: string }) => {
     setIsPending(false);
     setStatus('success');
-    setResult(params.res);
+    setResult(params?.res);
 
     // Set [finish] message:
-    const _msg = customMessage.finish || params.message;
+    const _msg = customMessage.finish || params?.message;
     if (_msg) toast.success(_msg);
     // ---
   };

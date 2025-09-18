@@ -4,7 +4,7 @@ import {
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
-} from '@chadcn/components/ui/carousel';
+} from '@/chadcn/components/ui/carousel';
 import { getSuggestions } from '../../../_actions/get-suggestions';
 import { SuggestionItem } from './suggestion-item';
 

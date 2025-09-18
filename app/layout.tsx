@@ -1,8 +1,8 @@
+import { Header } from '@/app/_components/header/header';
 import { SupabaseJobSubscriber } from '@/app/_components/supabase-job-subscriber';
 import { RequestProvider } from '@/app/_providers/request-context';
-import { Toaster } from '@chadcn/components/ui/sonner';
-import { ThemeProvider } from '@chadcn/components/ui/theme-provider';
-import { Header } from '@components/header/header';
+import { Toaster } from '@/chadcn/components/ui/sonner';
+import { ThemeProvider } from '@/chadcn/components/ui/theme-provider';
 import { Nunito } from 'next/font/google';
 import { ReactNode } from 'react';
 import './_styles/globals.css';

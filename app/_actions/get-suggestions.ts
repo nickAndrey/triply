@@ -3,7 +3,7 @@
 import { DB_TABLES } from '@/app/_constants/db-tables';
 import { Suggestion } from '@/app/_types/suggestion';
 import { createClient } from '@/utils/supabase/server';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { createCountrySuggestionPrompt } from './prompts/create-country-suggestion-prompt';
 
 async function getIpInfo() {
@@ -48,7 +48,10 @@ async function generateTravelSuggestions(country: string) {
 
     return suggestionsArray;
   } catch (error) {
-    console.error('Error:', error.response?.data || error.message);
+    console.error(
+      'Error:',
+      (error as AxiosError).response?.data || (error as Error).message
+    );
     throw new Error('Failed to generate travel suggestions');
   }
 }
