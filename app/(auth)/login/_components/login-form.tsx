@@ -12,6 +12,7 @@ import {
 import { Input } from '@/chadcn/components/ui/input';
 import clsx from 'clsx';
 import { LoaderCircle } from 'lucide-react';
+import Link from 'next/link';
 import { useActionState } from 'react';
 
 export function LoginForm() {
@@ -72,6 +73,12 @@ export function LoginForm() {
                 {state.errors.password.errors[0]}
               </p>
             )}
+            <Link
+              href="/forgot-password"
+              className="text-sm hover:underline"
+            >
+              Forgot Password?
+            </Link>
           </div>
 
           {state?.apiError && (
@@ -92,6 +99,12 @@ export function LoginForm() {
               'Log in'
             )}
           </Button>
+          <p className="text-sm flex items-center gap-2 ml-auto">
+            Don&apos;t have an account?
+            <Link href="/signup" className="hover:underline font-bold">
+              Sign up now
+            </Link>
+          </p>
         </form>
       </CardContent>
     </Card>

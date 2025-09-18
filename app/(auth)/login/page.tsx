@@ -1,5 +1,5 @@
+import { LoginForm } from '@/app/(auth)/login/_components/login-form';
 import { Metadata } from 'next';
-import { LoginForm } from './_components/login-form';
 
 export const metadata: Metadata = {
   title: 'Triply | Login',
