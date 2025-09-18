@@ -59,7 +59,7 @@ const preferences: Option[] = [
 type FormFields = z.infer<typeof schema>;
 
 export function GenerateSuggestionsForm() {
-  const { start, finish, fail, isPending } = useRequest();
+  const { start, isPending } = useRequest();
 
   const form = useForm<FormFields>({
     resolver: zodResolver(schema),

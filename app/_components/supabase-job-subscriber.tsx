@@ -78,6 +78,8 @@ export function SupabaseJobSubscriber() {
     return () => {
       supabase.removeChannel(channel);
     };
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [jobId]);
 
   return null;
