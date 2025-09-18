@@ -2,7 +2,7 @@
 
 import { useRequest } from '@/app/_providers/request-context';
 import { Badge } from '@/chadcn/components/ui/badge';
-import { Button } from '@chadcn/components/ui/button';
+import { Button } from '@/chadcn/components/ui/button';
 import {
   Drawer,
   DrawerClose,
@@ -11,7 +11,7 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-} from '@chadcn/components/ui/drawer';
+} from '@/chadcn/components/ui/drawer';
 import { PanelRight, X } from 'lucide-react';
 import { useState } from 'react';
 import { NavLink } from './nav-link';
@@ -60,7 +60,7 @@ export function NavBar({ suggestions }: NavBarProps) {
               <X />
             </Button>
           </DrawerClose>
-          {suggestions ? (
+          {suggestions.length ? (
             <>
               <DrawerTitle>
                 Here is a history of your travels or suggestions of your

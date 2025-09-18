@@ -2,7 +2,7 @@
 
 import { DB_TABLES } from '@/app/_constants/db-tables';
 import { createClient } from '@/utils/supabase/server';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { revalidatePath } from 'next/cache';
 import { createTravelPlanPrompt } from './prompts/create-travel-plan-prompt';
 
@@ -11,6 +11,8 @@ async function savePersonalSuggestion(suggestion: string) {
   const parsedSuggestion = JSON.parse(suggestion);
 
   const { data: userData } = await supabase.auth.getUser();
+
+  if (!userData.user) throw new Error('Unauthorized, user was not found.');
 
   const { data: existedSuggestions } = await supabase
     .from(DB_TABLES.personal_travel_suggestions)
@@ -68,7 +70,10 @@ async function generatePersonalSuggestion(prompt: string) {
 
     return response.data.choices[0].message.content;
   } catch (error) {
-    console.error('Error:', error.response?.data || error.message);
+    console.error(
+      'Error:',
+      (error as AxiosError).response?.data || (error as Error).message
+    );
     throw new Error('Failed to generate travel suggestions');
   }
 }
@@ -82,6 +87,8 @@ export async function getPersonalSuggestion(payload: {
 }) {
   const supabase = await createClient();
   const { data: userData } = await supabase.auth.getUser();
+
+  if (!userData.user) throw new Error('Unauthorized, user was not found.');
 
   // Insert pending job status (we will use it on the client to sync statuses)
   const { data: job, error: insertError } = await supabase
