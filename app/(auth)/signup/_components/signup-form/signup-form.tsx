@@ -12,18 +12,14 @@ import {
   FormMessage,
 } from '@/chadcn/components/ui/form';
 import { Input } from '@/chadcn/components/ui/input';
+import { LoaderCircle } from 'lucide-react';
 
 export function SignupForm() {
-  const { form } = useSetupForm();
+  const { form, isPending, handleSubmit } = useSetupForm();
 
   return (
     <Form {...form}>
-      <form
-        className="flex flex-col gap-4"
-        onSubmit={form.handleSubmit((data) => {
-          console.log(data);
-        })}
-      >
+      <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
         <FormField
           control={form.control}
           name="username"
@@ -89,7 +85,16 @@ export function SignupForm() {
           )}
         />
 
-        <Button type="submit">Sign Up</Button>
+        <Button type="submit" disabled={isPending}>
+          {isPending ? (
+            <>
+              <LoaderCircle className="animate-spin" />
+              <span>Creating Account</span>
+            </>
+          ) : (
+            <span>Sign Up</span>
+          )}
+        </Button>
       </form>
     </Form>
   );

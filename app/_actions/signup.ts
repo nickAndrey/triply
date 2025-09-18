@@ -1,25 +1,54 @@
 'use server';
 
 import { createClient } from '@/utils/supabase/server';
-import { revalidatePath } from 'next/cache';
-import { redirect } from 'next/navigation';
+import { z } from 'zod';
 
-export async function signup(formData: FormData) {
+const schema = z.object({
+  username: z.string().min(1, 'Field is required'),
+  email: z.email('Email is invalid'),
+  password: z.string().min(1, 'Field is required'),
+});
+
+type FormFields = z.infer<typeof schema>;
+
+export async function signup(formData: FormFields) {
   const supabase = await createClient();
+  const validatedFields = schema.safeParse(formData);
 
-  // type-casting here for convenience
-  // in practice, you should validate your inputs
-  const data = {
-    email: formData.get('email') as string,
-    password: formData.get('password') as string,
-  };
-
-  const { error } = await supabase.auth.signUp(data);
-
-  if (error) {
-    redirect('/login');
+  if (!validatedFields.success) {
+    return {
+      success: false,
+      errors: z.treeifyError(validatedFields.error).properties,
+    };
   }
 
-  revalidatePath('/', 'layout');
-  redirect('/');
+  const {
+    error,
+    data: { user },
+  } = await supabase.auth.signUp({
+    ...validatedFields.data,
+    options: {
+      data: {
+        username: validatedFields.data.username,
+      },
+    },
+  });
+
+  if (error) {
+    switch (error.code) {
+      case 'user_already_exists':
+      case 'email_exists':
+        return {
+          success: false,
+          errors: { email: { errors: [error.message] } },
+        };
+      case 'weak_password':
+        return {
+          success: false,
+          errors: { password: { errors: [error.message] } },
+        };
+    }
+  }
+
+  return { success: true, user };
 }

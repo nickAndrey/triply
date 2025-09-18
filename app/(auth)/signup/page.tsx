@@ -34,10 +34,11 @@ export default function SignupPage() {
           <DividerWithText text="or" />
           <Button className="w-full" variant="outline">
             <Image
-              src={'/google-logo.png'}
-              alt="google logo"
-              width={20}
-              height={20}
+              src="/google-logo.png"
+              alt="Google logo"
+              width="0"
+              height="0"
+              className="w-5 h-5"
             />
             Sign up with Google
           </Button>
