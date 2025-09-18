@@ -10,6 +10,7 @@ import {
 } from '@/chadcn/components/ui/card';
 import { Metadata } from 'next';
 import Image from 'next/image';
+import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: 'Triply | Sign Up',
@@ -29,7 +30,7 @@ export default function SignupPage() {
           </CardDescription>
         </CardHeader>
 
-        <CardContent>
+        <CardContent className="flex flex-col">
           <SignupForm />
           <DividerWithText text="or" />
           <Button className="w-full" variant="outline">
@@ -42,6 +43,12 @@ export default function SignupPage() {
             />
             Sign up with Google
           </Button>
+          <p className="text-sm inline-flex items-center gap-2 mt-5">
+            Already have an account?
+            <Link href="/login" className="hover:underline font-bold">
+              Log in
+            </Link>
+          </p>
         </CardContent>
       </Card>
     </main>
