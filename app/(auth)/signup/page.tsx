@@ -29,7 +29,7 @@ export default function SignupPage() {
 
         <CardContent className="flex flex-col">
           <SignupForm />
-          <p className="text-sm inline-flex items-center gap-2 mt-5">
+          <p className="text-sm inline-flex items-center gap-2 mt-4 ml-auto">
             Already have an account?
             <Link href="/login" className="hover:underline font-bold">
               Log in

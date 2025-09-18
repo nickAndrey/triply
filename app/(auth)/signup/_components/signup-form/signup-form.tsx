@@ -1,7 +1,7 @@
 'use client';
 
-import { InputPassword } from '@/app/(auth)/signup/_components/signup-form/input-password';
 import { useSetupForm } from '@/app/(auth)/signup/_components/signup-form/use-setup-form';
+import { InputPassword } from '@/app/_components/input-password';
 import { Button } from '@/chadcn/components/ui/button';
 import {
   Form,

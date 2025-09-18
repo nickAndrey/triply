@@ -1,112 +1,97 @@
 'use client';
 
-import { login } from '@/app/_actions/login';
+import { useLoginForm } from '@/app/(auth)/login/_components/use-login-form';
+import { InputPassword } from '@/app/_components/input-password';
+import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
+} from '@/chadcn/components/ui/alert';
 import { Button } from '@/chadcn/components/ui/button';
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/chadcn/components/ui/card';
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/chadcn/components/ui/form';
 import { Input } from '@/chadcn/components/ui/input';
-import clsx from 'clsx';
-import { LoaderCircle } from 'lucide-react';
+import { AlertCircleIcon, LoaderCircle } from 'lucide-react';
 import Link from 'next/link';
-import { useActionState } from 'react';
 
 export function LoginForm() {
-  const [state, formAction, isPending] = useActionState(login, {
-    success: false,
-    fields: {
-      email: '',
-      password: '',
-    },
-  });
+  const { form, isPending, generalError, handleSubmit } = useLoginForm();
 
   return (
-    <Card className="w-md">
-      <CardHeader>
-        <CardTitle>Welcome back</CardTitle>
-        <CardDescription>
-          Use your registered email and password to continue.
-        </CardDescription>
-      </CardHeader>
-
-      <CardContent>
-        <form action={formAction} className="flex flex-col gap-4">
-          <div className="flex flex-col gap-2">
-            <label>Email:</label>
-            <Input
-              className={clsx(
-                'bg-background shadow',
-                state?.errors?.email ? 'border-destructive' : ''
-              )}
-              name="email"
-              placeholder="Provide an email..."
-              type="email"
-              defaultValue={state.fields.email}
-              autoComplete="username"
-            />
-            {state?.errors?.email && (
-              <p className="text-sm text-destructive">
-                {state.errors.email.errors[0]}
-              </p>
-            )}
-          </div>
-
-          <div className="flex flex-col gap-2">
-            <label>Password:</label>
-            <Input
-              className={clsx(
-                'bg-background shadow',
-                state?.errors?.password ? 'border-destructive' : ''
-              )}
-              name="password"
-              type="password"
-              placeholder="Provide a password..."
-              defaultValue={state.fields.password}
-              autoComplete="new-password"
-            />
-            {state?.errors?.password && (
-              <p className="text-sm text-destructive">
-                {state.errors.password.errors[0]}
-              </p>
-            )}
-            <Link
-              href="/forgot-password"
-              className="text-sm hover:underline"
-            >
-              Forgot Password?
-            </Link>
-          </div>
-
-          {state?.apiError && (
-            <p className="text-sm text-destructive">{state.apiError}</p>
+    <Form {...form}>
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Email</FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="Provide your email."
+                  autoComplete="email"
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
           )}
-
-          <Button
-            type="submit"
-            className="py-5 flex items-center gap-3"
-            disabled={isPending}
-          >
-            {isPending ? (
-              <>
-                <LoaderCircle className="animate-spin" />
-                <span>Logging in</span>
-              </>
-            ) : (
-              'Log in'
+        />
+        <fieldset className="flex flex-col gap-2">
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Password</FormLabel>
+                <FormControl>
+                  <InputPassword
+                    placeholder="Provide password."
+                    autoComplete="new-password"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
             )}
-          </Button>
-          <p className="text-sm flex items-center gap-2 ml-auto">
-            Don&apos;t have an account?
-            <Link href="/signup" className="hover:underline font-bold">
-              Sign up now
-            </Link>
-          </p>
-        </form>
-      </CardContent>
-    </Card>
+          />
+          <Link
+            href="/forgot-password"
+            className="text-sm hover:underline"
+          >
+            Forgot Password?
+          </Link>
+        </fieldset>
+        {generalError && (
+          <Alert variant="destructive">
+            <AlertCircleIcon />
+            <AlertTitle>{generalError}</AlertTitle>
+            <AlertDescription>
+              Please check your email and password and try again
+            </AlertDescription>
+          </Alert>
+        )}
+        <Button
+          type="submit"
+          className="py-5 flex items-center gap-3"
+          disabled={isPending}
+        >
+          {isPending ? (
+            <>
+              <LoaderCircle className="animate-spin" />
+              <span>Logging in</span>
+            </>
+          ) : (
+            'Log in'
+          )}
+        </Button>
+      </form>
+    </Form>
   );
 }

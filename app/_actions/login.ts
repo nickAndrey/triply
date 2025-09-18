@@ -1,64 +1,40 @@
 'use server';
 
 import { createClient } from '@/utils/supabase/server';
-import { revalidatePath } from 'next/cache';
-import { redirect } from 'next/navigation';
 import { z } from 'zod';
 
-const loginSchema = z.object({
+const schema = z.object({
   email: z.email('Email is required'),
-  password: z.string().min(8, 'Password must be at least 8 characters'),
+  password: z.string().min(1, 'Field is required'),
 });
 
-type FormState = {
-  fields: {
-    email: string;
-    password: string;
-  };
-  success: boolean;
-  apiError?: string;
-  errors?: {
-    email?: { errors: string[] };
-    password?: { errors: string[] };
-  };
-};
+type FormFields = z.infer<typeof schema>;
 
-export async function login(
-  _: FormState,
-  formData: FormData
-): Promise<FormState> {
+export async function login(formData: FormFields) {
   const supabase = await createClient();
+  const validatedFields = schema.safeParse(formData);
 
-  const fields = {
-    email: String(formData.get('email') ?? ''),
-    password: String(formData.get('password') ?? ''),
-  };
-
-  const parsed = loginSchema.safeParse(fields);
-
-  if (!parsed.success) {
+  if (!validatedFields.success) {
     return {
-      errors: z.treeifyError(parsed.error).properties,
       success: false,
-      fields,
+      errors: z.treeifyError(validatedFields.error).properties,
     };
   }
 
-  const { email, password } = parsed.data;
-
-  const { error } = await supabase.auth.signInWithPassword({
-    email,
-    password,
-  });
+  const {
+    error,
+    data: { user },
+  } = await supabase.auth.signInWithPassword(validatedFields.data);
 
   if (error) {
-    return {
-      apiError: error.message,
-      success: false,
-      fields,
-    };
+    switch (error.code) {
+      case 'invalid_credentials':
+        return {
+          success: false,
+          errors: { invalid_credentials: { errors: [error.message] } },
+        };
+    }
   }
 
-  revalidatePath('/');
-  redirect('/');
+  return { success: true, user };
 }
