@@ -38,7 +38,7 @@ export function RequestProvider({ children }: { children: ReactNode }) {
 
     // Set [start] message:
     const _msg = customMessage.start || message;
-    Boolean(_msg) && toast.info(_msg);
+    if (_msg) toast.info(_msg);
     // ---
   };
   const finish = (params: { res?: unknown; message?: string }) => {
@@ -48,7 +48,7 @@ export function RequestProvider({ children }: { children: ReactNode }) {
 
     // Set [finish] message:
     const _msg = customMessage.finish || params.message;
-    Boolean(_msg) && toast.success(_msg);
+    if (_msg) toast.success(_msg);
     // ---
   };
   const fail = (message?: string) => {
@@ -58,7 +58,7 @@ export function RequestProvider({ children }: { children: ReactNode }) {
 
     // Set [fail] message:
     const _msg = customMessage.fail || message;
-    Boolean(_msg) && toast.error(_msg);
+    if (_msg) toast.error(_msg);
     // ---
   };
 
