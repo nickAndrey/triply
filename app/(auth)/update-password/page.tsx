@@ -1,3 +1,4 @@
+import { UpdatePasswordForm } from '@/app/(auth)/update-password/_components/update-password-form';
 import {
   Alert,
   AlertDescription,
@@ -63,7 +64,7 @@ export default async function UpdatePasswordPage({
         </CardHeader>
 
         <CardContent className="flex flex-col">
-          Update password form
+          <UpdatePasswordForm />
         </CardContent>
       </Card>
     </main>
