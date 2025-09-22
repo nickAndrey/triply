@@ -118,41 +118,20 @@ async function storeSuggestionsInDatabase(
   }
 }
 
-const cache = new Map();
-
 export async function getSuggestions(): Promise<Suggestion[]> {
   const supabase = await createClient();
-
-  // 1. Detect user location
   const ipInfo = await getIpInfo();
 
-  // Check memory cache first
-  const cacheKey = `suggestions-${ipInfo.country}`;
-  if (cache.has(cacheKey)) {
-    return cache.get(cacheKey);
-  }
-
-  // 2. Query DB for cached suggestions
-  const { data: dbSuggestions } = await supabase
+  const { data } = await supabase
     .from(DB_TABLES.suggestions)
     .select('*')
     .ilike('country', ipInfo.country);
 
-  // 3. If we have cached suggestions, return them
-  if (dbSuggestions && dbSuggestions.length > 0) {
-    cache.set(cacheKey, dbSuggestions[0].records);
-    return dbSuggestions[0].records;
-  }
+  if (data && data.length > 0) return data[0].records;
 
-  // 4. If none, generate new suggestions (this will take time)
   const { suggestions } = await generateTravelSuggestions(ipInfo.country);
   const suggestionsWithPhotos = await setSuggestionsImages(suggestions);
-
-  // 5. Store in database for future requests
-  storeSuggestionsInDatabase(ipInfo.country, suggestionsWithPhotos);
-
-  // 6. Cache in memory
-  cache.set(cacheKey, suggestionsWithPhotos);
+  await storeSuggestionsInDatabase(ipInfo.country, suggestionsWithPhotos);
 
   return suggestionsWithPhotos;
 }
