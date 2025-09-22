@@ -8,7 +8,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 const schema = z.object({
-  email: z.email(),
+  email: z.email('Invalid email.'),
 });
 
 type FormFields = z.infer<typeof schema>;
@@ -35,8 +35,19 @@ export function useForgotPasswordForm() {
 
     if (result.success) {
       finish({ message: 'Password reset email sent' });
-    } else {
-      fail(result?.error?.message || 'Failed to send reset email.');
+    }
+
+    if (result.errors) {
+      fail(
+        result?.errors?.email?.errors[0] || 'Failed to send reset email.'
+      );
+
+      if ('email' in result.errors) {
+        form.setError('email', {
+          type: 'server',
+          message: result.errors.email?.errors[0],
+        });
+      }
     }
   };
 

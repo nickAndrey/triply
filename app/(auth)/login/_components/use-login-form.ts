@@ -62,7 +62,17 @@ export function useLoginForm() {
       }
 
       if ('invalid_credentials' in result.errors) {
-        setGeneralError(result.errors.invalid_credentials?.errors[0]);
+        setGeneralError(
+          result.errors.invalid_credentials?.errors[0] ||
+            'Invalid credentials was provided. Please check your email and password.'
+        );
+      }
+
+      if ('email_not_confirmed' in result.errors) {
+        setGeneralError(
+          result.errors.email_not_confirmed?.errors[0] ||
+            'Email was not confirmed. Please confirm an email and try login again.'
+        );
       }
     }
   };

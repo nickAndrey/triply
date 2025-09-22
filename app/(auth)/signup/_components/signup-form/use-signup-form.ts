@@ -3,7 +3,6 @@
 import { signup } from '@/app/_actions/signup';
 import { useRequest } from '@/app/_providers/request-context';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useRouter } from 'next/navigation';
 import { FormEventHandler } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -38,8 +37,7 @@ export function useSignupForm() {
     },
   });
 
-  const router = useRouter();
-  const { start, finish, fail, isPending } = useRequest();
+  const { start, fail, isPending } = useRequest();
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
@@ -50,14 +48,6 @@ export function useSignupForm() {
     start('Creating your account, please wait…');
 
     const result = await signup(form.getValues());
-
-    if (result.user) {
-      finish({
-        message: 'Account was successfully created. Redirecting ...',
-      });
-
-      setTimeout(() => router.push('/'), 2000);
-    }
 
     if (result.errors) {
       fail(

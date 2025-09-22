@@ -1,6 +1,7 @@
 'use server';
 
 import { createClient } from '@/utils/supabase/server';
+import { redirect } from 'next/navigation';
 import { z } from 'zod';
 
 const schema = z.object({
@@ -22,12 +23,10 @@ export async function signup(formData: FormFields) {
     };
   }
 
-  const {
-    error,
-    data: { user },
-  } = await supabase.auth.signUp({
+  const { error } = await supabase.auth.signUp({
     ...validatedFields.data,
     options: {
+      emailRedirectTo: '/login',
       data: {
         username: validatedFields.data.username,
       },
@@ -47,8 +46,13 @@ export async function signup(formData: FormFields) {
           success: false,
           errors: { password: { errors: [error.message] } },
         };
+      default:
+        return {
+          success: false,
+          errors: { general: { errors: [error.message] } },
+        };
     }
   }
 
-  return { success: true, user };
+  redirect('/signup?confirmation_sent=true');
 }

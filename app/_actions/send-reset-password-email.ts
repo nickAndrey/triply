@@ -10,7 +10,18 @@ export async function sendResetPasswordEmail(fields: { email: string }) {
   );
 
   if (error) {
-    return { success: false, error };
+    switch (error.code) {
+      case 'user_not_found':
+        return {
+          success: false,
+          errors: { email: { errors: [error.message] } },
+        };
+      default:
+        return {
+          success: false,
+          errors: { general: { errors: [error.message] } },
+        };
+    }
   }
 
   return { success: true, data };

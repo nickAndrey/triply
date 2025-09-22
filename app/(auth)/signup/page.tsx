@@ -1,11 +1,17 @@
 import { SignupForm } from '@/app/(auth)/signup/_components/signup-form/signup-form';
 import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
+} from '@/chadcn/components/ui/alert';
+import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
 } from '@/chadcn/components/ui/card';
+import { CheckCircle2Icon } from 'lucide-react';
 import { Metadata } from 'next';
 import Link from 'next/link';
 
@@ -15,7 +21,33 @@ export const metadata: Metadata = {
     'Create a new account on Triply — your AI-Powered Travel Planner',
 };
 
-export default function SignupPage() {
+type PageProps = {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+};
+
+export default async function SignupPage({ searchParams }: PageProps) {
+  const { confirmation_sent } = await searchParams;
+
+  if (Boolean(confirmation_sent)) {
+    return (
+      <main className="flex items-center px-4 justify-center min-h-screen">
+        <Alert className="w-md">
+          <CheckCircle2Icon />
+          <AlertTitle>Account created successfully</AlertTitle>
+          <AlertDescription>
+            <p>
+              We’ve sent you a confirmation link. Please check your{' '}
+              <span>
+                <strong>email</strong>
+              </span>{' '}
+              to verify your account before logging in.
+            </p>
+          </AlertDescription>
+        </Alert>
+      </main>
+    );
+  }
+
   return (
     <main className="flex items-center px-4 justify-center min-h-screen">
       <Card className="w-md">

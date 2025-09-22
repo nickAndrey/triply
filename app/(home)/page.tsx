@@ -1,4 +1,5 @@
 import { GenerateSuggestionsCard } from '@/app/(home)/_components/generate-suggestions-form/generate-suggestions-card';
+import { PendingSuggestionDialog } from '@/app/(home)/_components/pending-suggestion-dialog';
 import { SuggestionSkeleton } from '@/app/(home)/_components/suggestions-carousel/suggestion-skeleton';
 import { SuggestionsCarousel } from '@/app/(home)/_components/suggestions-carousel/suggestions-carousel';
 import { Metadata } from 'next';
@@ -16,6 +17,7 @@ export default function HomePage() {
         <SuggestionsCarousel />
       </Suspense>
       <GenerateSuggestionsCard />
+      <PendingSuggestionDialog />
     </main>
   );
 }

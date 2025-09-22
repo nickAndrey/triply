@@ -33,6 +33,16 @@ export async function login(formData: FormFields) {
           success: false,
           errors: { invalid_credentials: { errors: [error.message] } },
         };
+      case 'email_not_confirmed':
+        return {
+          success: false,
+          errors: { email_not_confirmed: { errors: [error.message] } },
+        };
+      default:
+        return {
+          success: false,
+          errors: { general: { errors: [error.message] } },
+        };
     }
   }
 
