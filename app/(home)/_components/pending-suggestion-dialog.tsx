@@ -1,6 +1,5 @@
 'use client';
 
-import { getCountryFacts } from '@/app/_actions/get-country-facts';
 import { useRequest } from '@/app/_providers/request-context';
 import {
   Dialog,
@@ -24,11 +23,11 @@ export function PendingSuggestionDialog() {
 
   useEffect(() => setIsOpen(isPending), [isPending]);
 
-  useEffect(() => {
-    getCountryFacts().then((data: { markdownContent: string }) => {
-      setFacts([{ markdownContent: data.markdownContent }]);
-    });
-  }, [isPending]);
+  // useEffect(() => {
+  //   getCountryFacts().then((data: { markdownContent: string }) => {
+  //     setFacts([{ markdownContent: data.markdownContent }]);
+  //   });
+  // }, [isPending]);
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => setIsOpen(open)}>
