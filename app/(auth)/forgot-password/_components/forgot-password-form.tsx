@@ -29,6 +29,7 @@ export function ForgotPasswordForm() {
                 <Input
                   placeholder="Provide your email."
                   autoComplete="email"
+                  type="email"
                   {...field}
                 />
               </FormControl>

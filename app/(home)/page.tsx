@@ -1,8 +1,8 @@
+import { GenerateSuggestionsCard } from '@/app/(home)/_components/generate-suggestions-form/generate-suggestions-card';
+import { SuggestionSkeleton } from '@/app/(home)/_components/suggestions-carousel/suggestion-skeleton';
+import { SuggestionsCarousel } from '@/app/(home)/_components/suggestions-carousel/suggestions-carousel';
 import { Metadata } from 'next';
 import { Suspense } from 'react';
-import { GenerateSuggestionsCard } from './_components/generate-suggestions-form/generate-suggestions-card';
-import { SuggestionSkeleton } from './_components/suggestions-carousel/suggestion-skeleton';
-import { SuggestionsCarousel } from './_components/suggestions-carousel/suggestions-carousel';
 
 export const metadata: Metadata = {
   title: 'Triply | Home',

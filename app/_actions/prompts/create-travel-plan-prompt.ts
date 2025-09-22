@@ -42,7 +42,7 @@ export function createTravelPlanPrompt(params: {
     // RESPONSE FORMAT - CRITICAL: This tells the AI the exact JSON structure to output.
     response_format: {
       instruction:
-        'You MUST respond with **ONLY** a valid JSON object that matches the following schema. Do not include any introductory text, warnings, or commentary.',
+        'Respond with ONLY a valid JSON object that matches the schema below. No extra commentary, no markdown outside JSON. If you output anything else, the response is invalid.',
       schema: {
         type: 'object',
         properties: {

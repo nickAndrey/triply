@@ -71,8 +71,9 @@ export function RequestProvider({ children }: { children: ReactNode }) {
         start,
         finish,
         fail,
-        onSetMessage: (params) =>
-          setCustomMessage((prev) => ({ ...prev, ...params })),
+        onSetMessage: (params) => {
+          return setCustomMessage((prev) => ({ ...prev, ...params }));
+        },
       }}
     >
       {children}

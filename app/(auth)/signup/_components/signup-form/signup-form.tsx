@@ -46,6 +46,7 @@ export function SignupForm() {
               <FormControl>
                 <Input
                   placeholder="Provide your email."
+                  type="email"
                   autoComplete="email"
                   {...field}
                 />

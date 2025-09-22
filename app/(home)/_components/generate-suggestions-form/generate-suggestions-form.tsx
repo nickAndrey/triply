@@ -118,7 +118,7 @@ export function GenerateSuggestionsForm() {
             </FormItem>
           )}
         />
-        <fieldset className="flex items-start gap-4 w-full">
+        <fieldset className="flex flex-col md:flex-row items-start gap-4 w-full">
           <FormField
             control={form.control}
             name="dateFrom"
