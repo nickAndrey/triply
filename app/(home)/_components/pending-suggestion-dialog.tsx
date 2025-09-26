@@ -1,13 +1,7 @@
 'use client';
 
 import { useRequest } from '@/app/_providers/request-context';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from '@/chadcn/components/ui/dialog';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/chadcn/components/ui/dialog';
 import { LoaderCircle } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import Markdown from 'react-markdown';
@@ -17,9 +11,7 @@ export function PendingSuggestionDialog() {
   const { isPending } = useRequest();
 
   const [isOpen, setIsOpen] = useState(false);
-  const [facts, setFacts] = useState<{ markdownContent: string }[] | null>(
-    null
-  );
+  const [facts, setFacts] = useState<{ markdownContent: string }[] | null>(null);
 
   useEffect(() => setIsOpen(isPending), [isPending]);
 
@@ -35,17 +27,10 @@ export function PendingSuggestionDialog() {
         <DialogHeader>
           <DialogTitle className="flex items-center gap-3">
             Generating your travel suggestion
-            {isPending && (
-              <LoaderCircle
-                className="animate-spin"
-                width={16}
-                height={16}
-              />
-            )}
+            {isPending && <LoaderCircle className="animate-spin" width={16} height={16} />}
           </DialogTitle>
           <DialogDescription>
-            This may take a moment. In the meantime, check out some travel
-            articles for tips and inspiration.
+            This may take a moment. In the meantime, check out some travel articles for tips and inspiration.
           </DialogDescription>
         </DialogHeader>
 

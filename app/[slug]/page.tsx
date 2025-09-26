@@ -10,11 +10,7 @@ export const metadata: Metadata = {
   description: 'Triply — AI-Powered Travel Planner',
 };
 
-export default async function TravelSuggestionPage({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
+export default async function TravelSuggestionPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const supabase = await createClient();
 
@@ -36,9 +32,7 @@ export default async function TravelSuggestionPage({
   return (
     <main className="flex flex-col gap-6 min-h-[100dvh] max-w-4xl m-auto px-4 py-5">
       <article className="prose dark:prose-invert max-w-none">
-        <Markdown remarkPlugins={[remarkGfm]}>
-          {suggestion.markdown_content}
-        </Markdown>
+        <Markdown remarkPlugins={[remarkGfm]}>{suggestion.markdown_content}</Markdown>
       </article>
     </main>
   );

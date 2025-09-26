@@ -3,14 +3,7 @@
 import { useUpdatePasswordForm } from '@/app/(auth)/update-password/_components/use-update-password-form';
 import { InputPassword } from '@/app/_components/input-password';
 import { Button } from '@/chadcn/components/ui/button';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/chadcn/components/ui/form';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/chadcn/components/ui/form';
 import { LoaderCircle } from 'lucide-react';
 
 export function UpdatePasswordForm() {
@@ -26,11 +19,7 @@ export function UpdatePasswordForm() {
             <FormItem>
               <FormLabel>Password</FormLabel>
               <FormControl>
-                <InputPassword
-                  placeholder="Provide password."
-                  autoComplete="new-password"
-                  {...field}
-                />
+                <InputPassword placeholder="Provide password." autoComplete="new-password" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -43,11 +32,7 @@ export function UpdatePasswordForm() {
             <FormItem>
               <FormLabel>Confirm Password</FormLabel>
               <FormControl>
-                <InputPassword
-                  placeholder="Repeat the password."
-                  autoComplete="new-password"
-                  {...field}
-                />
+                <InputPassword placeholder="Repeat the password." autoComplete="new-password" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

@@ -48,10 +48,7 @@ async function generateTravelSuggestions(country: string) {
 
     return suggestionsArray;
   } catch (error) {
-    console.error(
-      'Error:',
-      (error as AxiosError).response?.data || (error as Error).message
-    );
+    console.error('Error:', (error as AxiosError).response?.data || (error as Error).message);
     throw new Error('Failed to generate travel suggestions');
   }
 }
@@ -73,9 +70,7 @@ async function setSuggestionsImages(
         orientation: 'landscape',
       });
 
-      const { data } = await axios.get(
-        `https://api.unsplash.com/search/photos?${searchParams.toString()}`
-      );
+      const { data } = await axios.get(`https://api.unsplash.com/search/photos?${searchParams.toString()}`);
 
       const photo = data.results?.[0];
 
@@ -102,10 +97,7 @@ async function setSuggestionsImages(
   );
 }
 
-async function storeSuggestionsInDatabase(
-  country: string,
-  suggestions: Suggestion[]
-) {
+async function storeSuggestionsInDatabase(country: string, suggestions: Suggestion[]) {
   try {
     const supabase = await createClient();
     await supabase.from(DB_TABLES.suggestions).insert({
@@ -122,10 +114,7 @@ export async function getSuggestions(): Promise<Suggestion[]> {
   const supabase = await createClient();
   const ipInfo = await getIpInfo();
 
-  const { data } = await supabase
-    .from(DB_TABLES.suggestions)
-    .select('*')
-    .ilike('country', ipInfo.country);
+  const { data } = await supabase.from(DB_TABLES.suggestions).select('*').ilike('country', ipInfo.country);
 
   if (data && data.length > 0) return data[0].records;
 

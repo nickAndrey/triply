@@ -27,12 +27,7 @@ export async function Header() {
 
   const homeLink = (
     <Link href="/">
-      <Button
-        size="icon"
-        variant="outline"
-        className="rounded-full"
-        aria-label="home"
-      >
+      <Button size="icon" variant="outline" className="rounded-full" aria-label="home">
         <Home />
       </Button>
     </Link>

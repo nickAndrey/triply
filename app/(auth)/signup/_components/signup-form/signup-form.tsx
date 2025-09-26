@@ -3,14 +3,7 @@
 import { useSignupForm } from '@/app/(auth)/signup/_components/signup-form/use-signup-form';
 import { InputPassword } from '@/app/_components/input-password';
 import { Button } from '@/chadcn/components/ui/button';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/chadcn/components/ui/form';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/chadcn/components/ui/form';
 import { Input } from '@/chadcn/components/ui/input';
 import { LoaderCircle } from 'lucide-react';
 
@@ -27,11 +20,7 @@ export function SignupForm() {
             <FormItem>
               <FormLabel>Username</FormLabel>
               <FormControl>
-                <Input
-                  placeholder="Provide your public display name."
-                  autoComplete="username"
-                  {...field}
-                />
+                <Input placeholder="Provide your public display name." autoComplete="username" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -44,12 +33,7 @@ export function SignupForm() {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input
-                  placeholder="Provide your email."
-                  type="email"
-                  autoComplete="email"
-                  {...field}
-                />
+                <Input placeholder="Provide your email." type="email" autoComplete="email" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -62,11 +46,7 @@ export function SignupForm() {
             <FormItem>
               <FormLabel>Password</FormLabel>
               <FormControl>
-                <InputPassword
-                  placeholder="Provide password."
-                  autoComplete="new-password"
-                  {...field}
-                />
+                <InputPassword placeholder="Provide password." autoComplete="new-password" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -79,11 +59,7 @@ export function SignupForm() {
             <FormItem>
               <FormLabel>Confirm Password</FormLabel>
               <FormControl>
-                <InputPassword
-                  placeholder="Repeat the password."
-                  autoComplete="new-password"
-                  {...field}
-                />
+                <InputPassword placeholder="Repeat the password." autoComplete="new-password" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

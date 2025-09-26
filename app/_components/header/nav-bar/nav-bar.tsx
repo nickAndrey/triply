@@ -31,53 +31,30 @@ export function NavBar({ suggestions }: NavBarProps) {
   const { isPending } = useRequest();
 
   return (
-    <Drawer direction="left" open={open} onOpenChange={setOpen}>
+    <Drawer direction="right" open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>
-        <Button
-          variant="outline"
-          className="rounded-full relative"
-          size="icon"
-          aria-label="open nav bar"
-        >
+        <Button variant="outline" className="rounded-full relative" size="icon" aria-label="open nav bar">
           <PanelRight />
-          {isPending && (
-            <Badge
-              variant="default"
-              className="p-0 size-2 absolute top-[-2px] right-[-2px]"
-            />
-          )}
+          {isPending && <Badge variant="default" className="p-0 size-2 absolute top-[-2px] right-[-2px]" />}
         </Button>
       </DrawerTrigger>
 
-      <DrawerContent className="left-2! top-2! bottom-2! rounded-2xl after:content-none!">
+      <DrawerContent>
         <DrawerHeader>
-          <DrawerClose
-            autoFocus
-            asChild
-            className="absolute right-2 top-2"
-          >
+          <DrawerClose autoFocus asChild className="absolute right-2 top-2">
             <Button variant="ghost" size="icon" className="rounded-full">
               <X />
             </Button>
           </DrawerClose>
           {suggestions.length ? (
             <>
-              <DrawerTitle>
-                Here is a history of your travels or suggestions of your
-                travels
-              </DrawerTitle>
-              <DrawerDescription>
-                Click on an item to visit the page
-              </DrawerDescription>
+              <DrawerTitle>Here is a history of your travels or suggestions of your travels</DrawerTitle>
+              <DrawerDescription>Click on an item to visit the page</DrawerDescription>
             </>
           ) : (
             <>
-              <DrawerTitle>
-                There is no any items to show at that moment.
-              </DrawerTitle>
-              <DrawerDescription>
-                Add places you want to visit
-              </DrawerDescription>
+              <DrawerTitle>There is no any items to show at that moment.</DrawerTitle>
+              <DrawerDescription>Add places you want to visit</DrawerDescription>
             </>
           )}
         </DrawerHeader>

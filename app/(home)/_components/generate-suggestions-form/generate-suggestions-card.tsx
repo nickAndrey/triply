@@ -1,10 +1,4 @@
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/chadcn/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/chadcn/components/ui/card';
 import { GenerateSuggestionsForm } from './generate-suggestions-form';
 
 export function GenerateSuggestionsCard() {
@@ -12,10 +6,7 @@ export function GenerateSuggestionsCard() {
     <Card>
       <CardHeader>
         <CardTitle>Plan Your Next Adventure</CardTitle>
-        <CardDescription>
-          Tell us what you’re looking for and we’ll suggest trips tailored
-          for you.
-        </CardDescription>
+        <CardDescription>Tell us what you’re looking for and we’ll suggest trips tailored for you.</CardDescription>
       </CardHeader>
 
       <CardContent>

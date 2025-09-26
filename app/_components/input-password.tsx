@@ -6,10 +6,7 @@ import { Button } from '@/chadcn/components/ui/button';
 import { Input } from '@/chadcn/components/ui/input';
 import { Eye, EyeOff } from 'lucide-react';
 
-export function InputPassword({
-  className,
-  ...props
-}: React.ComponentProps<'input'>) {
+export function InputPassword({ className, ...props }: React.ComponentProps<'input'>) {
   const [show, setShow] = useState(false);
 
   return (

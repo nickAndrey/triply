@@ -1,24 +1,13 @@
 import { SignupForm } from '@/app/(auth)/signup/_components/signup-form/signup-form';
-import {
-  Alert,
-  AlertDescription,
-  AlertTitle,
-} from '@/chadcn/components/ui/alert';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/chadcn/components/ui/card';
+import { Alert, AlertDescription, AlertTitle } from '@/chadcn/components/ui/alert';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/chadcn/components/ui/card';
 import { CheckCircle2Icon } from 'lucide-react';
 import { Metadata } from 'next';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: 'Triply | Sign Up',
-  description:
-    'Create a new account on Triply — your AI-Powered Travel Planner',
+  description: 'Create a new account on Triply — your AI-Powered Travel Planner',
 };
 
 type PageProps = {
@@ -53,10 +42,7 @@ export default async function SignupPage({ searchParams }: PageProps) {
       <Card className="w-md">
         <CardHeader>
           <CardTitle>Get Started</CardTitle>
-          <CardDescription>
-            Create your account to start planning amazing trips with
-            Triply.
-          </CardDescription>
+          <CardDescription>Create your account to start planning amazing trips with Triply.</CardDescription>
         </CardHeader>
 
         <CardContent className="flex flex-col">

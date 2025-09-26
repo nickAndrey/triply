@@ -21,12 +21,7 @@ export default function RootLayout({ children }: Props) {
       <head />
       <body className={nunito.className}>
         <RequestProvider>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
             {children}
             <Header />
             <SupabaseJobSubscriber />

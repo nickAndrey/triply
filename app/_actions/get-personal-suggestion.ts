@@ -24,22 +24,20 @@ async function savePersonalSuggestion(suggestion: string) {
     .eq('user_id', userData.user.id);
 
   if (!existedSuggestions) {
-    const { error } = await supabase
-      .from(DB_TABLES.personal_travel_suggestions)
-      .insert([
-        {
-          markdown_content: parsedSuggestion.markdownContent,
-          destination: parsedSuggestion.metadata.destination,
-          travel_dates: parsedSuggestion.metadata.travelDates,
-          trip_duration: parsedSuggestion.metadata.tripDuration,
-          budget: parsedSuggestion.metadata.budget,
-          preferences: parsedSuggestion.metadata.preferences,
-          article_title: parsedSuggestion.metadata.articleTitle,
-          detail_note: parsedSuggestion.metadata.detailNote,
-          slug: parsedSuggestion.metadata.slug,
-          user_id: userData.user.id,
-        },
-      ]);
+    const { error } = await supabase.from(DB_TABLES.personal_travel_suggestions).insert([
+      {
+        markdown_content: parsedSuggestion.markdownContent,
+        destination: parsedSuggestion.metadata.destination,
+        travel_dates: parsedSuggestion.metadata.travelDates,
+        trip_duration: parsedSuggestion.metadata.tripDuration,
+        budget: parsedSuggestion.metadata.budget,
+        preferences: parsedSuggestion.metadata.preferences,
+        article_title: parsedSuggestion.metadata.articleTitle,
+        detail_note: parsedSuggestion.metadata.detailNote,
+        slug: parsedSuggestion.metadata.slug,
+        user_id: userData.user.id,
+      },
+    ]);
 
     if (error) {
       throw new Error(error.message);
@@ -70,10 +68,7 @@ async function generatePersonalSuggestion(prompt: string) {
 
     return response.data.choices[0].message.content;
   } catch (error) {
-    console.error(
-      'Error:',
-      (error as AxiosError).response?.data || (error as Error).message
-    );
+    console.error('Error:', (error as AxiosError).response?.data || (error as Error).message);
     throw new Error('Failed to generate travel suggestions');
   }
 }
@@ -103,10 +98,7 @@ export async function getPersonalSuggestion(payload: {
     // Call DeepSeek
     const prompt = createTravelPlanPrompt({
       destination: payload.destination,
-      travelDates: [
-        payload.dateFrom.toISOString(),
-        payload.dateTo.toISOString(),
-      ],
+      travelDates: [payload.dateFrom.toISOString(), payload.dateTo.toISOString()],
       budget: payload.budget,
       preferences: payload.preferences,
     });
@@ -119,10 +111,7 @@ export async function getPersonalSuggestion(payload: {
     // ----
 
     // Mark job as success, so client can read success state
-    await supabase
-      .from(DB_TABLES.suggestion_jobs)
-      .update({ status: 'success' })
-      .eq('id', job.id);
+    await supabase.from(DB_TABLES.suggestion_jobs).update({ status: 'success' }).eq('id', job.id);
     // ----
 
     revalidatePath('/', 'layout');

@@ -1,16 +1,6 @@
 import { UpdatePasswordForm } from '@/app/(auth)/update-password/_components/update-password-form';
-import {
-  Alert,
-  AlertDescription,
-  AlertTitle,
-} from '@/chadcn/components/ui/alert';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/chadcn/components/ui/card';
+import { Alert, AlertDescription, AlertTitle } from '@/chadcn/components/ui/alert';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/chadcn/components/ui/card';
 import { AlertCircleIcon, SquareArrowOutUpRight } from 'lucide-react';
 import { Metadata } from 'next';
 import Link from 'next/link';
@@ -24,15 +14,10 @@ type PageProps = {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
-export default async function UpdatePasswordPage({
-  searchParams,
-}: PageProps) {
+export default async function UpdatePasswordPage({ searchParams }: PageProps) {
   const params = await searchParams;
 
-  const isExpiredSession =
-    'error' in params &&
-    'error_code' in params &&
-    params.error_code === 'otp_expired';
+  const isExpiredSession = 'error' in params && 'error_code' in params && params.error_code === 'otp_expired';
 
   return (
     <main className="flex flex-col items-center px-4 justify-center min-h-screen">
@@ -41,12 +26,8 @@ export default async function UpdatePasswordPage({
           <AlertCircleIcon className="h-4 w-4" />
           <AlertTitle>Session expired</AlertTitle>
           <AlertDescription>
-            Your password reset link has expired. Please request a new one
-            to continue.
-            <Link
-              href="/forgot-password"
-              className="mt-2 underline flex items-center gap-2"
-            >
+            Your password reset link has expired. Please request a new one to continue.
+            <Link href="/forgot-password" className="mt-2 underline flex items-center gap-2">
               <span>Send recovery link</span>
               <SquareArrowOutUpRight width={16} height={16} />
             </Link>
@@ -58,8 +39,7 @@ export default async function UpdatePasswordPage({
         <CardHeader>
           <CardTitle>Set a new password</CardTitle>
           <CardDescription>
-            Choose a strong password for your Triply account. This will
-            replace your old one.
+            Choose a strong password for your Triply account. This will replace your old one.
           </CardDescription>
         </CardHeader>
 

@@ -4,36 +4,15 @@ import { getPersonalSuggestion } from '@/app/_actions/get-personal-suggestion';
 import { useRequest } from '@/app/_providers/request-context';
 import { Button } from '@/chadcn/components/ui/button';
 import { Calendar } from '@/chadcn/components/ui/calendar';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/chadcn/components/ui/form';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/chadcn/components/ui/form';
 import { Input } from '@/chadcn/components/ui/input';
-import MultipleSelector, {
-  Option,
-} from '@/chadcn/components/ui/multi-selector';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/chadcn/components/ui/popover';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '@/chadcn/components/ui/tooltip';
+import MultipleSelector, { Option } from '@/chadcn/components/ui/multi-selector';
+import { Popover, PopoverContent, PopoverTrigger } from '@/chadcn/components/ui/popover';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/chadcn/components/ui/tooltip';
 import { cn } from '@/chadcn/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { format } from 'date-fns';
-import {
-  CalendarIcon,
-  CircleQuestionMark,
-  LoaderCircle,
-} from 'lucide-react';
+import { CalendarIcon, CircleQuestionMark, LoaderCircle } from 'lucide-react';
 import { FormEventHandler } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -75,9 +54,7 @@ export function GenerateSuggestionsForm() {
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
 
-    start(
-      'Please wait while we prepare your travel plan. We will notify you when plan will be prepared.'
-    );
+    start('Please wait while we prepare your travel plan. We will notify you when plan will be prepared.');
 
     const isValid = await form.trigger();
     if (!isValid) return;
@@ -100,18 +77,12 @@ export function GenerateSuggestionsForm() {
                     <CircleQuestionMark className="size-4" />
                   </TooltipTrigger>
                   <TooltipContent className="max-w-xs">
-                    <p>
-                      Where do you want to go? Type a city or select from
-                      suggested destinations.
-                    </p>
+                    <p>Where do you want to go? Type a city or select from suggested destinations.</p>
                   </TooltipContent>
                 </Tooltip>
               </FormLabel>
               <FormControl>
-                <Input
-                  placeholder="Enter your dream city or country"
-                  {...field}
-                />
+                <Input placeholder="Enter your dream city or country" className="h-12" {...field} />
               </FormControl>
 
               <FormMessage />
@@ -145,22 +116,13 @@ export function GenerateSuggestionsForm() {
                           !field.value && 'text-muted-foreground'
                         )}
                       >
-                        {field.value ? (
-                          format(field.value, 'PPP')
-                        ) : (
-                          <span>Pick your arrival date</span>
-                        )}
+                        {field.value ? format(field.value, 'PPP') : <span>Pick your arrival date</span>}
                         <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                       </Button>
                     </FormControl>
                   </PopoverTrigger>
                   <PopoverContent className="w-auto p-0" align="start">
-                    <Calendar
-                      mode="single"
-                      selected={field.value}
-                      onSelect={field.onChange}
-                      captionLayout="dropdown"
-                    />
+                    <Calendar mode="single" selected={field.value} onSelect={field.onChange} captionLayout="dropdown" />
                   </PopoverContent>
                 </Popover>
                 <FormMessage />
@@ -193,22 +155,13 @@ export function GenerateSuggestionsForm() {
                           !field.value && 'text-muted-foreground'
                         )}
                       >
-                        {field.value ? (
-                          format(field.value, 'PPP')
-                        ) : (
-                          <span>Pick your departure date</span>
-                        )}
+                        {field.value ? format(field.value, 'PPP') : <span>Pick your departure date</span>}
                         <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                       </Button>
                     </FormControl>
                   </PopoverTrigger>
                   <PopoverContent className="w-auto p-0" align="start">
-                    <Calendar
-                      mode="single"
-                      selected={field.value}
-                      onSelect={field.onChange}
-                      captionLayout="dropdown"
-                    />
+                    <Calendar mode="single" selected={field.value} onSelect={field.onChange} captionLayout="dropdown" />
                   </PopoverContent>
                 </Popover>
                 <FormMessage />
@@ -229,17 +182,14 @@ export function GenerateSuggestionsForm() {
                   </TooltipTrigger>
                   <TooltipContent className="max-w-xs">
                     <p>
-                      Enter your budget as an amount or range. The AI will
-                      interpret your input to suggest a suitable plan.
+                      Enter your budget as an amount or range. The AI will interpret your input to suggest a suitable
+                      plan.
                     </p>
                   </TooltipContent>
                 </Tooltip>
               </FormLabel>
               <FormControl>
-                <Input
-                  placeholder="e.g., 1000 USD or 200-450 USD or 100$"
-                  {...field}
-                />
+                <Input placeholder="e.g., 1000 USD or 200-450 USD or 100$" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -258,21 +208,16 @@ export function GenerateSuggestionsForm() {
                   </TooltipTrigger>
                   <TooltipContent className="max-w-xs">
                     <p>
-                      Select one or more preferences to guide your trip
-                      plan. For example: Culture,Beaches, Food, Nightlife,
-                      Family, Solo.
+                      Select one or more preferences to guide your trip plan. For example: Culture,Beaches, Food,
+                      Nightlife, Family, Solo.
                     </p>
                   </TooltipContent>
                 </Tooltip>
               </FormLabel>
               <FormControl>
                 <MultipleSelector
-                  className={cn(
-                    fieldState.error ? 'border-destructive' : ''
-                  )}
-                  value={preferences.filter((item) =>
-                    field.value.includes(item.value)
-                  )}
+                  className={cn(fieldState.error ? 'border-destructive' : '')}
+                  value={preferences.filter((item) => field.value.includes(item.value))}
                   defaultOptions={preferences}
                   onChange={(options) =>
                     form.setValue(
@@ -283,9 +228,7 @@ export function GenerateSuggestionsForm() {
                   hidePlaceholderWhenSelected
                   placeholder="Select the preference"
                   emptyIndicator={
-                    <p className="text-center text-lg leading-10 text-gray-600 dark:text-gray-400">
-                      no results found.
-                    </p>
+                    <p className="text-center text-lg leading-10 text-gray-600 dark:text-gray-400">no results found.</p>
                   }
                 />
               </FormControl>

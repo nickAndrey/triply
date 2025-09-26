@@ -33,10 +33,7 @@ export async function getCountryFacts() {
 
     return suggestionsArray;
   } catch (error) {
-    console.error(
-      'Error:',
-      (error as AxiosError).response?.data || (error as Error).message
-    );
+    console.error('Error:', (error as AxiosError).response?.data || (error as Error).message);
     throw new Error('Failed to generate travel suggestions');
   }
 }

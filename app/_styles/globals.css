@@ -13,5 +13,6 @@
   body {
     @apply bg-background text-foreground;
     letter-spacing: var(--tracking-normal);
+    font-size: 16px;
   }
 }

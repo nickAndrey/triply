@@ -1,11 +1,5 @@
 import { LoginForm } from '@/app/(auth)/login/_components/login-form';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/chadcn/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/chadcn/components/ui/card';
 import { Metadata } from 'next';
 import Link from 'next/link';
 
@@ -20,9 +14,7 @@ export default function LoginPage() {
       <Card className="w-md">
         <CardHeader>
           <CardTitle>Welcome back</CardTitle>
-          <CardDescription>
-            Use your registered email and password to continue.
-          </CardDescription>
+          <CardDescription>Use your registered email and password to continue.</CardDescription>
         </CardHeader>
 
         <CardContent className="flex flex-col">
