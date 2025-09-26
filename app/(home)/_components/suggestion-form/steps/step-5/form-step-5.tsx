@@ -5,9 +5,8 @@ import {
   FoodPreferencesEnum,
   useFormStep5,
 } from '@/app/(home)/_components/suggestion-form/steps/step-5/use-form-step-5';
-import { RadioButtonCard } from '@/app/_components/radio-button-card';
+import { CheckboxButtonCard } from '@/app/_components/checkbox-button-card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/chadcn/components/ui/form';
-import { RadioGroup } from '@/chadcn/components/ui/radio-group';
 import { Textarea } from '@/chadcn/components/ui/textarea';
 
 type Props = ReturnType<typeof useFormStep5>['form'] & {};
@@ -43,31 +42,39 @@ export function FormStep5(formProps: Props) {
   return (
     <Form {...formProps}>
       <form className="flex flex-col gap-3 max-w-lg w-full">
-        <FormField
-          control={formProps.control}
-          name="foodPreferences"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Food Preferences:</FormLabel>
-              <FormControl>
-                <RadioGroup onValueChange={field.onChange} defaultValue={field.value} className="grid sm:grid-cols-2">
-                  {enums.foodPreferencesEnum.options.map((opt) => (
-                    <FormItem key={opt} className="w-full">
-                      <FormControl>
-                        <RadioButtonCard
-                          value={opt}
-                          title={foodPreferences[opt].title}
-                          description={foodPreferences[opt].description}
-                        />
-                      </FormControl>
-                    </FormItem>
-                  ))}
-                </RadioGroup>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        <FormLabel>Food Preferences:</FormLabel>
+        <div className="grid sm:grid-cols-[repeat(2,1fr)] gap-3">
+          {enums.foodPreferencesEnum.options.map((opt) => (
+            <FormField
+              key={opt}
+              control={formProps.control}
+              name="foodPreferences"
+              render={({ field }) => {
+                const isChecked = field.value?.includes(opt) ?? false;
+
+                return (
+                  <FormItem>
+                    <FormControl>
+                      <CheckboxButtonCard
+                        title={foodPreferences[opt].title}
+                        description={foodPreferences[opt].description}
+                        checked={isChecked}
+                        onCheckedChange={(checked) => {
+                          if (checked) {
+                            field.onChange([...(field.value ?? []), opt]);
+                          } else {
+                            field.onChange(field.value?.filter((v) => v !== opt) ?? []);
+                          }
+                        }}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                );
+              }}
+            />
+          ))}
+        </div>
 
         <FormField
           control={formProps.control}

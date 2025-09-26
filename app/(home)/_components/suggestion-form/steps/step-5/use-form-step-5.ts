@@ -16,7 +16,7 @@ export const enums = {
 };
 
 export const schema = z.object({
-  foodPreferences: enums.foodPreferencesEnum.optional(),
+  foodPreferences: z.array(enums.foodPreferencesEnum).optional(),
   foodRestrictions: z.string().optional(),
 });
 
