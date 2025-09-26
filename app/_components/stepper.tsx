@@ -6,14 +6,14 @@ import { ReactNode } from 'react';
 import { useStep } from 'usehooks-ts';
 
 type Props = {
-  steps: { step: number; element: ReactNode }[];
+  steps: { element: ReactNode }[];
   renderNavigationButtons?: (params: { helpers: ReturnType<typeof useStep>['1']; currentStep: number }) => ReactNode;
 };
 
 export function Stepper({ steps, renderNavigationButtons }: Props) {
   const [currentStep, helpers] = useStep(steps.length);
 
-  const stepToRender = steps.find((item) => item.step === currentStep)?.element;
+  const stepToRender = steps[currentStep - 1]?.element;
 
   return (
     <div className="flex flex-col gap-10 justify-center items-center">

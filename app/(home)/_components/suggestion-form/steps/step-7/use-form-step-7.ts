@@ -4,7 +4,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import z from 'zod';
 
-export const schema = z.object({});
+export const schema = z.object({
+  tripSuccessDefinition: z.string().optional(),
+  perfectDay: z.string().optional(),
+});
 
 export type FormFields = z.infer<typeof schema>;
 

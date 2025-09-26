@@ -7,7 +7,6 @@ import { useFormStep4 } from '@/app/(home)/_components/suggestion-form/steps/ste
 import { useFormStep5 } from '@/app/(home)/_components/suggestion-form/steps/step-5/use-form-step-5';
 import { useFormStep6 } from '@/app/(home)/_components/suggestion-form/steps/step-6/use-form-step-6';
 import { useFormStep7 } from '@/app/(home)/_components/suggestion-form/steps/step-7/use-form-step-7';
-import { useFormStep8 } from '@/app/(home)/_components/suggestion-form/steps/step-8/use-form-step-8';
 
 export function useSuggestionForm() {
   const { form: formStep1 } = useFormStep1();
@@ -17,9 +16,8 @@ export function useSuggestionForm() {
   const { form: formStep5 } = useFormStep5();
   const { form: formStep6 } = useFormStep6();
   const { form: formStep7 } = useFormStep7();
-  const { form: formStep8 } = useFormStep8();
 
   return {
-    forms: [formStep1, formStep2, formStep3, formStep4, formStep5, formStep6, formStep7, formStep8] as const,
+    forms: [formStep1, formStep2, formStep3, formStep4, formStep5, formStep6, formStep7] as const,
   };
 }

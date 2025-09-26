@@ -41,7 +41,7 @@ export function FormStep5(formProps: Props) {
 
   return (
     <Form {...formProps}>
-      <form className="flex flex-col gap-3 max-w-lg w-full">
+      <form className="flex flex-col gap-6 max-w-lg w-full">
         <FormLabel>Food Preferences:</FormLabel>
         <div className="grid sm:grid-cols-[repeat(2,1fr)] gap-3">
           {enums.foodPreferencesEnum.options.map((opt) => (
