@@ -11,9 +11,8 @@ export function FormStep4(formProps: Props) {
   const descriptions = {
     tripVibe: {
       Beach: 'Relax on the coast, sun, sea, and sand.',
-      Mountain: 'Hikes, fresh air, and scenic peaks.',
       City: 'Culture, nightlife, and urban energy.',
-      Nature: 'Forests, lakes, and tranquil landscapes.',
+      Nature: 'Forests, hikes, fresh air, lakes, and tranquil landscapes.',
     },
     pace: {
       Slow: 'Take it easy, plenty of downtime.',
@@ -40,7 +39,7 @@ export function FormStep4(formProps: Props) {
           name="tripVibe"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Vibe?:</FormLabel>
+              <FormLabel>Vibe:</FormLabel>
               <FormControl>
                 <RadioGroup onValueChange={field.onChange} defaultValue={field.value} className="grid sm:grid-cols-2">
                   {schema.shape.tripVibe.options.map((opt) => (
@@ -62,7 +61,7 @@ export function FormStep4(formProps: Props) {
           name="pace"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Pace?:</FormLabel>
+              <FormLabel>Pace:</FormLabel>
               <FormControl>
                 <RadioGroup onValueChange={field.onChange} defaultValue={field.value} className="grid sm:grid-cols-2">
                   {schema.shape.pace.options.map((opt) => (
@@ -84,7 +83,7 @@ export function FormStep4(formProps: Props) {
           name="activityIntensity"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Activity Intensity?:</FormLabel>
+              <FormLabel>Activity Intensity:</FormLabel>
               <FormControl>
                 <RadioGroup onValueChange={field.onChange} defaultValue={field.value} className="grid sm:grid-cols-2">
                   {schema.shape.activityIntensity.options.map((opt) => (
@@ -106,7 +105,7 @@ export function FormStep4(formProps: Props) {
           name="planningStyle"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Planning Style?:</FormLabel>
+              <FormLabel>Planning Style:</FormLabel>
               <FormControl>
                 <RadioGroup onValueChange={field.onChange} defaultValue={field.value} className="grid sm:grid-cols-2">
                   {schema.shape.planningStyle.options.map((opt) => (

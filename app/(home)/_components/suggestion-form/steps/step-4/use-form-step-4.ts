@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import z from 'zod';
 
 export const schema = z.object({
-  tripVibe: z.enum(['Beach', 'Mountain', 'City', 'Nature']),
+  tripVibe: z.enum(['Beach', 'City', 'Nature']),
   pace: z.enum(['Slow', 'Balanced', 'Fast']),
   activityIntensity: z.enum(['Sedentary', 'Light', 'High']),
   planningStyle: z.enum(['Hour-by-Hour', 'Loose Outline', 'Go With the Flow']),
