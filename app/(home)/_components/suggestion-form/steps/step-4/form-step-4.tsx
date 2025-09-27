@@ -42,13 +42,18 @@ export function FormStep4({ form }: Props) {
           name="tripVibe"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{fields.tripVibe.label}</FormLabel>
+              <FormLabel htmlFor="tripVibe_0">{fields.tripVibe.label}</FormLabel>
               <FormControl>
                 <RadioGroup onValueChange={field.onChange} defaultValue={field.value} className="grid sm:grid-cols-3">
-                  {schema.shape.tripVibe.options.map((opt) => (
+                  {schema.shape.tripVibe.options.map((opt, idx) => (
                     <FormItem key={opt} className="w-full">
                       <FormControl>
-                        <RadioButtonCard value={opt} title={opt} description={descriptions.tripVibe[opt]} />
+                        <RadioButtonCard
+                          id={`tripVibe_${idx}`}
+                          value={opt}
+                          title={opt}
+                          description={descriptions.tripVibe[opt]}
+                        />
                       </FormControl>
                     </FormItem>
                   ))}
@@ -64,13 +69,18 @@ export function FormStep4({ form }: Props) {
           name="pace"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{fields.pace.label}</FormLabel>
+              <FormLabel htmlFor="pace_0">{fields.pace.label}</FormLabel>
               <FormControl>
                 <RadioGroup onValueChange={field.onChange} defaultValue={field.value} className="grid sm:grid-cols-3">
-                  {schema.shape.pace.options.map((opt) => (
+                  {schema.shape.pace.options.map((opt, idx) => (
                     <FormItem key={opt} className="w-full">
                       <FormControl>
-                        <RadioButtonCard value={opt} title={opt} description={descriptions.pace[opt]} />
+                        <RadioButtonCard
+                          id={`pace_${idx}`}
+                          value={opt}
+                          title={opt}
+                          description={descriptions.pace[opt]}
+                        />
                       </FormControl>
                     </FormItem>
                   ))}
@@ -86,13 +96,18 @@ export function FormStep4({ form }: Props) {
           name="activityIntensity"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{fields.activityIntensity.label}</FormLabel>
+              <FormLabel htmlFor="activityIntensity_0">{fields.activityIntensity.label}</FormLabel>
               <FormControl>
                 <RadioGroup onValueChange={field.onChange} defaultValue={field.value} className="grid sm:grid-cols-3">
-                  {schema.shape.activityIntensity.options.map((opt) => (
+                  {schema.shape.activityIntensity.options.map((opt, idx) => (
                     <FormItem key={opt} className="w-full">
                       <FormControl>
-                        <RadioButtonCard value={opt} title={opt} description={descriptions.activityIntensity[opt]} />
+                        <RadioButtonCard
+                          id={`activityIntensity_${idx}`}
+                          value={opt}
+                          title={opt}
+                          description={descriptions.activityIntensity[opt]}
+                        />
                       </FormControl>
                     </FormItem>
                   ))}
@@ -108,13 +123,18 @@ export function FormStep4({ form }: Props) {
           name="planningStyle"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{fields.planningStyle.label}</FormLabel>
+              <FormLabel htmlFor="planningStyle_0">{fields.planningStyle.label}</FormLabel>
               <FormControl>
                 <RadioGroup onValueChange={field.onChange} defaultValue={field.value} className="grid sm:grid-cols-3">
-                  {schema.shape.planningStyle.options.map((opt) => (
+                  {schema.shape.planningStyle.options.map((opt, idx) => (
                     <FormItem key={opt} className="w-full">
                       <FormControl>
-                        <RadioButtonCard value={opt} title={opt} description={descriptions.planningStyle[opt]} />
+                        <RadioButtonCard
+                          id={`planningStyle_${idx}`}
+                          value={opt}
+                          title={opt}
+                          description={descriptions.planningStyle[opt]}
+                        />
                       </FormControl>
                     </FormItem>
                   ))}

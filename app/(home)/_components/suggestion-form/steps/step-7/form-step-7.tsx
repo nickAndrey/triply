@@ -15,9 +15,10 @@ export function FormStep7({ form }: Props) {
           name="tripSuccessDefinition"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>This trip will be successful if…</FormLabel>
+              <FormLabel htmlFor="tripSuccessDefinition">This trip will be successful if…</FormLabel>
               <FormControl>
                 <Textarea
+                  id="tripSuccessDefinition"
                   rows={10}
                   placeholder="e.g. I get to relax without worrying about work, spend quality time with my kids, and try authentic local food."
                   {...field}
@@ -32,9 +33,10 @@ export function FormStep7({ form }: Props) {
           name="perfectDay"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Describe your perfect vacation day</FormLabel>
+              <FormLabel htmlFor="perfectDay">Describe your perfect vacation day</FormLabel>
               <FormControl>
                 <Textarea
+                  id="perfectDay"
                   rows={10}
                   placeholder="e.g. A slow morning with coffee by the beach, exploring a hidden town in the afternoon, and ending the day with sunset and live music"
                   {...field}

@@ -12,6 +12,7 @@ type Props = CheckboxProps & {
 export function CheckboxButtonCard({ icon, title, description, ...inputProps }: Props) {
   return (
     <Label
+      htmlFor={inputProps.id}
       className={`
         hover:bg-accent/50
         bg-secondary

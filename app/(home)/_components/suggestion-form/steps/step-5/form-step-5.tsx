@@ -2,8 +2,8 @@
 
 import {
   enums,
-  FoodPreferencesEnum,
   useFormStep5,
+  type FoodPreferencesEnum,
 } from '@/app/(home)/_components/suggestion-form/steps/step-5/use-form-step-5';
 import { CheckboxButtonCard } from '@/app/_components/checkbox-button-card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/chadcn/components/ui/form';
@@ -42,48 +42,47 @@ export function FormStep5({ form }: Props) {
   return (
     <Form {...form}>
       <form className="flex flex-col gap-6 max-w-lg w-full">
-        <FormLabel>Food Preferences:</FormLabel>
-        <div className="grid sm:grid-cols-[repeat(2,1fr)] gap-3">
-          {enums.foodPreferencesEnum.options.map((opt) => (
-            <FormField
-              key={opt}
-              control={form.control}
-              name="foodPreferences"
-              render={({ field }) => {
-                const isChecked = field.value?.includes(opt) ?? false;
-
-                return (
-                  <FormItem>
-                    <FormControl>
-                      <CheckboxButtonCard
-                        title={foodPreferences[opt].title}
-                        description={foodPreferences[opt].description}
-                        checked={isChecked}
-                        onCheckedChange={(checked) => {
-                          if (checked) {
-                            field.onChange([...(field.value ?? []), opt]);
-                          } else {
-                            field.onChange(field.value?.filter((v) => v !== opt) ?? []);
-                          }
-                        }}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                );
-              }}
-            />
-          ))}
-        </div>
+        <FormField
+          control={form.control}
+          name="foodPreferences"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel htmlFor="foodPreferences_0">Food Preferences:</FormLabel>
+              <div className="grid sm:grid-cols-[repeat(2,1fr)] gap-3">
+                {enums.foodPreferencesEnum.options.map((opt, idx) => (
+                  <FormControl key={opt}>
+                    <CheckboxButtonCard
+                      id={`foodPreferences_${idx}`}
+                      title={foodPreferences[opt].title}
+                      description={foodPreferences[opt].description}
+                      checked={field.value.includes(opt)}
+                      onCheckedChange={(checked) => {
+                        return checked
+                          ? field.onChange([...field.value, opt])
+                          : field.onChange(field.value?.filter((value) => value !== opt));
+                      }}
+                    />
+                  </FormControl>
+                ))}
+              </div>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
         <FormField
           control={form.control}
           name="foodRestrictions"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Food Restrictions:</FormLabel>
+              <FormLabel htmlFor="foodRestrictions">Food Restrictions:</FormLabel>
               <FormControl>
-                <Textarea rows={10} placeholder="Foods allergies, foods you don't like or want to avoid" {...field} />
+                <Textarea
+                  id="foodRestrictions"
+                  rows={10}
+                  placeholder="Foods allergies, foods you don't like or want to avoid"
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>

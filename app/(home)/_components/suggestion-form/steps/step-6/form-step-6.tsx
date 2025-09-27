@@ -23,13 +23,13 @@ export function FormStep6({ form }: Props) {
           name="budget"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Budget:</FormLabel>
+              <FormLabel htmlFor="budget_0">Budget:</FormLabel>
               <FormControl>
                 <RadioGroup onValueChange={field.onChange} defaultValue={field.value} className="grid sm:grid-cols-2">
-                  {schema.shape.budget.options.map((opt) => (
+                  {schema.shape.budget.options.map((opt, idx) => (
                     <FormItem key={opt} className="w-full">
                       <FormControl>
-                        <RadioButtonCard value={opt} title={opt} description={descriptions[opt]} />
+                        <RadioButtonCard id={`budget_${idx}`} value={opt} title={opt} description={descriptions[opt]} />
                       </FormControl>
                     </FormItem>
                   ))}
@@ -44,9 +44,10 @@ export function FormStep6({ form }: Props) {
           name="placesToSee"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Places You’d Love to Visit:</FormLabel>
+              <FormLabel htmlFor="placesToSee">Places You’d Love to Visit:</FormLabel>
               <FormControl>
                 <Textarea
+                  id="placesToSee"
                   rows={10}
                   placeholder="e.g. Eiffel Tower, Tokyo Skytree, local markets, hiking trails"
                   {...field}
@@ -61,9 +62,10 @@ export function FormStep6({ form }: Props) {
           name="placesAvoidToSee"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Places You’d Prefer to Skip:</FormLabel>
+              <FormLabel htmlFor="placesAvoidToSee">Places You’d Prefer to Skip:</FormLabel>
               <FormControl>
                 <Textarea
+                  id="placesAvoidToSee"
                   rows={10}
                   placeholder="e.g. crowded tourist traps, busy nightlife areas, museums, theme parks"
                   {...field}

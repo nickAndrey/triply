@@ -27,9 +27,9 @@ export function FormStep2({ form }: Props) {
           name="tripDurationDays"
           render={({ field }) => (
             <FormItem className="flex flex-col w-full">
-              <FormLabel>{fields.tripDurationDays.label}</FormLabel>
+              <FormLabel htmlFor="tripDurationDays">{fields.tripDurationDays.label}</FormLabel>
               <FormControl>
-                <Input placeholder={fields.tripDurationDays.placeholder} {...field} />
+                <Input id="tripDurationDays" placeholder={fields.tripDurationDays.placeholder} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -40,13 +40,18 @@ export function FormStep2({ form }: Props) {
           name="season"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{fields.season.label}</FormLabel>
+              <FormLabel htmlFor="season_0">{fields.season.label}</FormLabel>
               <FormControl>
                 <RadioGroup onValueChange={field.onChange} defaultValue={field.value} className="grid sm:grid-cols-2">
-                  {schema.shape.season.options.map((opt) => (
+                  {schema.shape.season.options.map((opt, idx) => (
                     <FormItem key={opt} className="w-full">
                       <FormControl>
-                        <RadioButtonCard value={opt} title={opt} description={seasonDescriptions[opt]} />
+                        <RadioButtonCard
+                          id={`season_${idx}`}
+                          value={opt}
+                          title={opt}
+                          description={seasonDescriptions[opt]}
+                        />
                       </FormControl>
                     </FormItem>
                   ))}

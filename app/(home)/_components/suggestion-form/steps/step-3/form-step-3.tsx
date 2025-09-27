@@ -27,13 +27,18 @@ export function FormStep3({ form, controls, counters }: Props) {
           name="companions"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{fields.companions.label}</FormLabel>
+              <FormLabel htmlFor="companions_0">{fields.companions.label}</FormLabel>
               <FormControl>
                 <RadioGroup onValueChange={field.onChange} defaultValue={field.value} className="grid sm:grid-cols-2">
-                  {schema.shape.companions.options.map((opt) => (
+                  {schema.shape.companions.options.map((opt, idx) => (
                     <FormItem key={opt} className="w-full">
                       <FormControl>
-                        <RadioButtonCard value={opt} title={opt} description={companionDescriptions[opt]} />
+                        <RadioButtonCard
+                          id={`companions_${idx}`}
+                          value={opt}
+                          title={opt}
+                          description={companionDescriptions[opt]}
+                        />
                       </FormControl>
                     </FormItem>
                   ))}
@@ -74,7 +79,7 @@ export function FormStep3({ form, controls, counters }: Props) {
                       name={`children.${idx}.group`}
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Age Group</FormLabel>
+                          <FormLabel htmlFor="children_0">Age Group</FormLabel>
                           <FormControl>
                             <RadioGroup
                               onValueChange={field.onChange}
@@ -89,6 +94,7 @@ export function FormStep3({ form, controls, counters }: Props) {
                                 <FormItem key={opt.value} className="w-full">
                                   <FormControl>
                                     <RadioButtonCard
+                                      id={`children_${idx}`}
                                       value={opt.value}
                                       title={opt.title}
                                       description={opt.description}
