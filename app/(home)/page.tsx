@@ -1,5 +1,6 @@
 import { SuggestionForm } from '@/app/(home)/_components/suggestion-form/suggestion-form';
 import { SuggestionSkeleton } from '@/app/(home)/_components/suggestions-carousel/suggestion-skeleton';
+import { SuggestionsCarousel } from '@/app/(home)/_components/suggestions-carousel/suggestions-carousel';
 import { Metadata } from 'next';
 import { Suspense } from 'react';
 
@@ -11,7 +12,9 @@ export const metadata: Metadata = {
 export default function HomePage() {
   return (
     <main className="flex flex-col gap-6 min-h-[100dvh] max-w-6xl m-auto px-4 py-5">
-      <Suspense fallback={<SuggestionSkeleton />}>{/* <SuggestionsCarousel /> */}</Suspense>
+      <Suspense fallback={<SuggestionSkeleton />}>
+        <SuggestionsCarousel />
+      </Suspense>
       <SuggestionForm />
     </main>
   );
