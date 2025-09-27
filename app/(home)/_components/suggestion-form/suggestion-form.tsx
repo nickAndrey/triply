@@ -41,7 +41,7 @@ export function SuggestionForm() {
             return (
               <div className="flex gap-3">
                 <Button disabled={!helpers.canGoToPrevStep} onClick={helpers.goToPrevStep}>
-                  Prev
+                  Back
                 </Button>
 
                 {helpers.canGoToNextStep ? (
@@ -54,17 +54,17 @@ export function SuggestionForm() {
                       helpers.goToNextStep();
                     }}
                   >
-                    Next
+                    Continue
                   </Button>
                 ) : (
                   <Button onClick={handleSubmit}>
                     {isPending ? (
                       <>
                         <LoaderCircle className="animate-spin" />
-                        <span>Generating Suggestion</span>
+                        <span>Preparing your trip...</span>
                       </>
                     ) : (
-                      <span>Generate Suggestion</span>
+                      <span>Get My Trip Plan</span>
                     )}
                   </Button>
                 )}

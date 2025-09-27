@@ -47,7 +47,7 @@ export function FormStep3({ form, controls, counters }: Props) {
         {form.watch('companions') === 'Friends' && (
           <div className="flex flex-col gap-6">
             <div className="flex flex-col gap-3">
-              <h4>Adults</h4>
+              <h4>Travel Buddies</h4>
               <GroupCounter {...counters.groupCounter_friends} />
             </div>
           </div>
@@ -56,18 +56,18 @@ export function FormStep3({ form, controls, counters }: Props) {
         {form.watch('companions') === 'Family' && (
           <div className="flex flex-col gap-6">
             <div className="flex flex-col gap-3">
-              <h4>Adults</h4>
+              <h4>Adults in your group</h4>
               <GroupCounter {...counters.groupCounter_adults} />
             </div>
 
             <div className="flex flex-col gap-3">
-              <h4>Children</h4>
+              <h4>Young Travelers</h4>
               <GroupCounter {...counters.groupCounter_children} />
 
               <ul className="flex flex-col gap-3">
                 {controls.childrenFormControl.fields.map((field, idx) => (
                   <li key={field.id} className="flex flex-col gap-3">
-                    <span>Child {idx + 1}:</span>
+                    <span>Young Traveler #{idx + 1}:</span>
 
                     <FormField
                       control={form.control}

@@ -31,13 +31,38 @@ export function useSuggestionForm() {
       ...formStep7.form.getValues(),
     };
 
-    start('starting generating process');
+    const processFormSteps = () => {
+      switch (mergedSteps.companions) {
+        case 'Solo':
+        case 'Couple':
+          mergedSteps.children = [];
+          mergedSteps.adults = [];
+          mergedSteps.friends = [];
+          break;
+        case 'Family':
+          mergedSteps.friends = [];
+          break;
+        case 'Friends':
+          mergedSteps.children = [];
+          mergedSteps.adults = [];
+          break;
+        default:
+          const _exhaustiveCheck: never = mergedSteps.companions;
+          return _exhaustiveCheck;
+      }
 
-    console.log(mergedSteps);
+      return mergedSteps;
+    };
+
+    start('Gathering the best suggestions...');
+
+    console.log(processFormSteps());
 
     await new Promise((res) => setTimeout(res, 3000));
 
-    finish({ message: 'finished generating process' });
+    finish({ message: 'Your trip is ready!' });
+
+    // fail('Something went wrong — please try again.')''
   };
 
   return {
