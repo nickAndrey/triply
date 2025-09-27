@@ -14,7 +14,10 @@ export type FormFields = z.infer<typeof schema>;
 export function useFormStep7() {
   const form = useForm<FormFields>({
     resolver: zodResolver(schema),
-    defaultValues: {},
+    defaultValues: {
+      tripSuccessDefinition: '',
+      perfectDay: '',
+    },
   });
 
   return {

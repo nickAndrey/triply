@@ -12,10 +12,11 @@ import { useSuggestionForm } from '@/app/(home)/_components/suggestion-form/use-
 import { Stepper } from '@/app/_components/stepper';
 import { Button } from '@/chadcn/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/chadcn/components/ui/card';
+import { LoaderCircle } from 'lucide-react';
 import { useState } from 'react';
 
 export function SuggestionForm() {
-  const { forms } = useSuggestionForm();
+  const { forms, isPending, handleSubmit } = useSuggestionForm();
   const [step, setStep] = useState(0);
 
   return (
@@ -46,7 +47,7 @@ export function SuggestionForm() {
                 {helpers.canGoToNextStep ? (
                   <Button
                     onClick={async () => {
-                      const isStepValid = await forms[currentStep - 1].trigger();
+                      const isStepValid = await forms[currentStep - 1].form.trigger();
                       if (!isStepValid) return;
 
                       setStep(currentStep);
@@ -56,7 +57,16 @@ export function SuggestionForm() {
                     Next
                   </Button>
                 ) : (
-                  <Button>Submit</Button>
+                  <Button onClick={handleSubmit}>
+                    {isPending ? (
+                      <>
+                        <LoaderCircle className="animate-spin" />
+                        <span>Generating Suggestion</span>
+                      </>
+                    ) : (
+                      <span>Generate Suggestion</span>
+                    )}
+                  </Button>
                 )}
               </div>
             );

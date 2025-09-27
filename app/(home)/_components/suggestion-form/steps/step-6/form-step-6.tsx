@@ -6,9 +6,9 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { RadioGroup } from '@/chadcn/components/ui/radio-group';
 import { Textarea } from '@/chadcn/components/ui/textarea';
 
-type Props = ReturnType<typeof useFormStep6>['form'] & {};
+type Props = ReturnType<typeof useFormStep6> & {};
 
-export function FormStep6(formProps: Props) {
+export function FormStep6({ form }: Props) {
   const descriptions = {
     $: 'Keeping things simple and affordable — focusing on basic stays, casual meals, and cost-conscious activities.',
     $$: 'A balanced approach — comfortable lodging, a mix of casual and nicer dining, and a variety of activities without overspending.',
@@ -16,10 +16,10 @@ export function FormStep6(formProps: Props) {
   };
 
   return (
-    <Form {...formProps}>
-      <form className="flex flex-col gap-6 max-w-lg w-full">
+    <Form {...form}>
+      <form className="flex flex-col gap-6 max-w-xl w-full">
         <FormField
-          control={formProps.control}
+          control={form.control}
           name="budget"
           render={({ field }) => (
             <FormItem>
@@ -40,7 +40,7 @@ export function FormStep6(formProps: Props) {
           )}
         />
         <FormField
-          control={formProps.control}
+          control={form.control}
           name="placesToSee"
           render={({ field }) => (
             <FormItem>
@@ -57,7 +57,7 @@ export function FormStep6(formProps: Props) {
           )}
         />
         <FormField
-          control={formProps.control}
+          control={form.control}
           name="placesAvoidToSee"
           render={({ field }) => (
             <FormItem>

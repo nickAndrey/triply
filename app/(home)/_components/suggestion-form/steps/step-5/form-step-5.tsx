@@ -9,9 +9,9 @@ import { CheckboxButtonCard } from '@/app/_components/checkbox-button-card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/chadcn/components/ui/form';
 import { Textarea } from '@/chadcn/components/ui/textarea';
 
-type Props = ReturnType<typeof useFormStep5>['form'] & {};
+type Props = ReturnType<typeof useFormStep5> & {};
 
-export function FormStep5(formProps: Props) {
+export function FormStep5({ form }: Props) {
   const foodPreferences: Record<FoodPreferencesEnum, { title: string; description: string }> = {
     LocalSpecialties: {
       title: 'Local Specialties',
@@ -40,14 +40,14 @@ export function FormStep5(formProps: Props) {
   };
 
   return (
-    <Form {...formProps}>
+    <Form {...form}>
       <form className="flex flex-col gap-6 max-w-lg w-full">
         <FormLabel>Food Preferences:</FormLabel>
         <div className="grid sm:grid-cols-[repeat(2,1fr)] gap-3">
           {enums.foodPreferencesEnum.options.map((opt) => (
             <FormField
               key={opt}
-              control={formProps.control}
+              control={form.control}
               name="foodPreferences"
               render={({ field }) => {
                 const isChecked = field.value?.includes(opt) ?? false;
@@ -77,7 +77,7 @@ export function FormStep5(formProps: Props) {
         </div>
 
         <FormField
-          control={formProps.control}
+          control={form.control}
           name="foodRestrictions"
           render={({ field }) => (
             <FormItem>

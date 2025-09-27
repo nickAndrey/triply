@@ -27,7 +27,10 @@ export type FoodPreferencesEnum = z.infer<typeof enums.foodPreferencesEnum>;
 export function useFormStep5() {
   const form = useForm<FormFields>({
     resolver: zodResolver(schema),
-    defaultValues: {},
+    defaultValues: {
+      foodPreferences: [],
+      foodRestrictions: '',
+    },
   });
 
   return {

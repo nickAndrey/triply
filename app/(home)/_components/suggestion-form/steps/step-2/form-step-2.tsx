@@ -7,9 +7,9 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/chadcn/components/ui/input';
 import { RadioGroup } from '@/chadcn/components/ui/radio-group';
 
-type Props = ReturnType<typeof useFormStep2>['form'] & {};
+type Props = ReturnType<typeof useFormStep2> & {};
 
-export function FormStep2(formProps: Props) {
+export function FormStep2({ form }: Props) {
   const { fields } = formStepsConfig[1];
 
   const seasonDescriptions = {
@@ -20,10 +20,10 @@ export function FormStep2(formProps: Props) {
   };
 
   return (
-    <Form {...formProps}>
+    <Form {...form}>
       <form className="flex flex-col gap-6 max-w-lg w-full">
         <FormField
-          control={formProps.control}
+          control={form.control}
           name="tripDurationDays"
           render={({ field }) => (
             <FormItem className="flex flex-col w-full">
@@ -36,7 +36,7 @@ export function FormStep2(formProps: Props) {
           )}
         />
         <FormField
-          control={formProps.control}
+          control={form.control}
           name="season"
           render={({ field }) => (
             <FormItem>

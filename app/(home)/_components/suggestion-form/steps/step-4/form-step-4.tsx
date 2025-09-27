@@ -6,9 +6,9 @@ import { RadioButtonCard } from '@/app/_components/radio-button-card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/chadcn/components/ui/form';
 import { RadioGroup } from '@/chadcn/components/ui/radio-group';
 
-type Props = ReturnType<typeof useFormStep4>['form'] & {};
+type Props = ReturnType<typeof useFormStep4> & {};
 
-export function FormStep4(formProps: Props) {
+export function FormStep4({ form }: Props) {
   const { fields } = formStepsConfig[3];
 
   const descriptions = {
@@ -35,16 +35,16 @@ export function FormStep4(formProps: Props) {
   };
 
   return (
-    <Form {...formProps}>
-      <form className="flex flex-col gap-6 max-w-lg w-full">
+    <Form {...form}>
+      <form className="flex flex-col gap-6 max-w-xl w-full">
         <FormField
-          control={formProps.control}
+          control={form.control}
           name="tripVibe"
           render={({ field }) => (
             <FormItem>
               <FormLabel>{fields.tripVibe.label}</FormLabel>
               <FormControl>
-                <RadioGroup onValueChange={field.onChange} defaultValue={field.value} className="grid sm:grid-cols-2">
+                <RadioGroup onValueChange={field.onChange} defaultValue={field.value} className="grid sm:grid-cols-3">
                   {schema.shape.tripVibe.options.map((opt) => (
                     <FormItem key={opt} className="w-full">
                       <FormControl>
@@ -60,13 +60,13 @@ export function FormStep4(formProps: Props) {
         />
 
         <FormField
-          control={formProps.control}
+          control={form.control}
           name="pace"
           render={({ field }) => (
             <FormItem>
               <FormLabel>{fields.pace.label}</FormLabel>
               <FormControl>
-                <RadioGroup onValueChange={field.onChange} defaultValue={field.value} className="grid sm:grid-cols-2">
+                <RadioGroup onValueChange={field.onChange} defaultValue={field.value} className="grid sm:grid-cols-3">
                   {schema.shape.pace.options.map((opt) => (
                     <FormItem key={opt} className="w-full">
                       <FormControl>
@@ -82,13 +82,13 @@ export function FormStep4(formProps: Props) {
         />
 
         <FormField
-          control={formProps.control}
+          control={form.control}
           name="activityIntensity"
           render={({ field }) => (
             <FormItem>
               <FormLabel>{fields.activityIntensity.label}</FormLabel>
               <FormControl>
-                <RadioGroup onValueChange={field.onChange} defaultValue={field.value} className="grid sm:grid-cols-2">
+                <RadioGroup onValueChange={field.onChange} defaultValue={field.value} className="grid sm:grid-cols-3">
                   {schema.shape.activityIntensity.options.map((opt) => (
                     <FormItem key={opt} className="w-full">
                       <FormControl>
@@ -104,13 +104,13 @@ export function FormStep4(formProps: Props) {
         />
 
         <FormField
-          control={formProps.control}
+          control={form.control}
           name="planningStyle"
           render={({ field }) => (
             <FormItem>
               <FormLabel>{fields.planningStyle.label}</FormLabel>
               <FormControl>
-                <RadioGroup onValueChange={field.onChange} defaultValue={field.value} className="grid sm:grid-cols-2">
+                <RadioGroup onValueChange={field.onChange} defaultValue={field.value} className="grid sm:grid-cols-3">
                   {schema.shape.planningStyle.options.map((opt) => (
                     <FormItem key={opt} className="w-full">
                       <FormControl>

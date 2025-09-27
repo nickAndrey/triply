@@ -8,16 +8,16 @@ import { Input } from '@/chadcn/components/ui/input';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/chadcn/components/ui/tooltip';
 import { cn } from '@/chadcn/lib/utils';
 
-type Props = ReturnType<typeof useFormStep1>['form'];
+type Props = ReturnType<typeof useFormStep1> & {};
 
-export function FormStep1(formProps: Props) {
+export function FormStep1({ form }: Props) {
   const { fields } = formStepsConfig[0];
 
   return (
-    <Form {...formProps}>
+    <Form {...form}>
       <form>
         <FormField
-          control={formProps.control}
+          control={form.control}
           name="destination"
           render={({ field, fieldState }) => (
             <FormItem>
@@ -28,7 +28,7 @@ export function FormStep1(formProps: Props) {
                   </FormLabel>
                   <p className="text-muted-foreground mb-6">{fields.destination.description}</p>
 
-                  <div className="relative w-full max-w-lg">
+                  <div className="relative w-full">
                     <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">✈️</span>
                     <Input
                       id="destination"

@@ -4,16 +4,14 @@ import { useFormStep7 } from '@/app/(home)/_components/suggestion-form/steps/ste
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/chadcn/components/ui/form';
 import { Textarea } from '@/chadcn/components/ui/textarea';
 
-type Props = ReturnType<typeof useFormStep7>['form'] & {};
+type Props = ReturnType<typeof useFormStep7> & {};
 
-export function FormStep7(formProps: Props) {
+export function FormStep7({ form }: Props) {
   return (
-    <Form {...formProps}>
-      <h2 className="text-xl font-semibold mb-4">✨ Personal Context — Make It Truly Yours</h2>
-
+    <Form {...form}>
       <form className="flex flex-col gap-6 max-w-lg w-full">
         <FormField
-          control={formProps.control}
+          control={form.control}
           name="tripSuccessDefinition"
           render={({ field }) => (
             <FormItem>
@@ -30,7 +28,7 @@ export function FormStep7(formProps: Props) {
           )}
         />
         <FormField
-          control={formProps.control}
+          control={form.control}
           name="perfectDay"
           render={({ field }) => (
             <FormItem>

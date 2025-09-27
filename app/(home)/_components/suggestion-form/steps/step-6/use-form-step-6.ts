@@ -15,7 +15,11 @@ export type FormFields = z.infer<typeof schema>;
 export function useFormStep6() {
   const form = useForm<FormFields>({
     resolver: zodResolver(schema),
-    defaultValues: {},
+    defaultValues: {
+      budget: '$$',
+      placesToSee: '',
+      placesAvoidToSee: '',
+    },
   });
 
   return {
