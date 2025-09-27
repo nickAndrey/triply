@@ -5,12 +5,11 @@ import { GroupCounter } from '@/app/(home)/_components/suggestion-form/steps/ste
 import { schema, useFormStep3 } from '@/app/(home)/_components/suggestion-form/steps/step-3/use-form-step-3';
 import { RadioButtonCard } from '@/app/_components/radio-button-card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/chadcn/components/ui/form';
-import { Input } from '@/chadcn/components/ui/input';
 import { RadioGroup } from '@/chadcn/components/ui/radio-group';
 
 type Props = ReturnType<typeof useFormStep3> & {};
 
-export function FormStep3({ form, counters, childrenFieldsArray }: Props) {
+export function FormStep3({ form, controls, counters }: Props) {
   const companionDescriptions = {
     Solo: 'It`s all about you — freedom to choose, explore at your own pace, and discover hidden gems without compromise.',
     Couple: 'A trip for two — cozy dinners, sunset walks, and experiences made to share.',
@@ -46,21 +45,12 @@ export function FormStep3({ form, counters, childrenFieldsArray }: Props) {
         />
 
         {form.watch('companions') === 'Friends' && (
-          <fieldset>
-            <FormField
-              control={form.control}
-              name="groupSize"
-              render={({ field }) => (
-                <FormItem className="flex flex-col w-full">
-                  <FormLabel>{fields.groupSize.label}</FormLabel>
-                  <FormControl>
-                    <Input placeholder={fields.groupSize.placeholder} {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </fieldset>
+          <div className="flex flex-col gap-6">
+            <div className="flex flex-col gap-3">
+              <h4>Adults</h4>
+              <GroupCounter {...counters.groupCounter_friends} />
+            </div>
+          </div>
         )}
 
         {form.watch('companions') === 'Family' && (
@@ -75,7 +65,7 @@ export function FormStep3({ form, counters, childrenFieldsArray }: Props) {
               <GroupCounter {...counters.groupCounter_children} />
 
               <ul className="flex flex-col gap-3">
-                {childrenFieldsArray.fields.map((field, idx) => (
+                {controls.childrenFormControl.fields.map((field, idx) => (
                   <li key={field.id} className="flex flex-col gap-3">
                     <span>Child {idx + 1}:</span>
 

@@ -40,6 +40,11 @@ export const schema = z.object({
       adult: z.number(),
     })
   ),
+  friends: z.array(
+    z.object({
+      friend: z.number(),
+    })
+  ),
 });
 
 export type FormFields = z.infer<typeof schema>;
@@ -51,41 +56,60 @@ export function useFormStep3() {
       companions: 'Solo',
       groupSize: '',
       children: [],
+      adults: [],
+      friends: [],
     },
   });
 
-  const childrenFieldsArray = useFieldArray({
+  const childrenFormControl = useFieldArray({
     control: form.control,
     name: 'children',
   });
 
-  const adultsFieldsArray = useFieldArray({
+  const adultsFormControl = useFieldArray({
     control: form.control,
     name: 'adults',
   });
 
+  const friendsFormControl = useFieldArray({
+    control: form.control,
+    name: 'friends',
+  });
+
   const groupCounter_children = useGroupCounter();
   const groupCounter_adults = useGroupCounter();
+  const groupCounter_friends = useGroupCounter();
 
   useEffect(() => {
-    syncArray(childrenFieldsArray, groupCounter_children.groupMembers, (i) => ({
+    syncArray(childrenFormControl, groupCounter_children.groupMembers, (i) => ({
       child: i + 1,
       group: '0-3' as const,
     }));
-  }, [groupCounter_children.groupMembers]);
+  }, [groupCounter_children.groupMembers, childrenFormControl]);
 
   useEffect(() => {
-    syncArray(adultsFieldsArray, groupCounter_adults.groupMembers, (i) => ({
+    syncArray(adultsFormControl, groupCounter_adults.groupMembers, (i) => ({
       adult: i + 1,
     }));
-  }, [groupCounter_adults.groupMembers]);
+  }, [groupCounter_adults.groupMembers, adultsFormControl]);
+
+  useEffect(() => {
+    syncArray(friendsFormControl, groupCounter_friends.groupMembers, (i) => ({
+      friend: i + 1,
+    }));
+  }, [groupCounter_friends.groupMembers, friendsFormControl]);
 
   return {
     form,
     counters: {
       groupCounter_children,
       groupCounter_adults,
+      groupCounter_friends,
     },
-    childrenFieldsArray,
+    controls: {
+      childrenFormControl,
+      adultsFormControl,
+      friendsFormControl,
+    },
   };
 }
