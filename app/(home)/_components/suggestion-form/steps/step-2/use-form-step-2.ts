@@ -31,7 +31,7 @@ export function useFormStep2() {
     if (tripDurationDaysCounter.groupMembers !== '') {
       form.setValue('tripDurationDays', tripDurationDaysCounter.groupMembers.toFixed(0));
     }
-  }, [tripDurationDaysCounter.groupMembers]);
+  }, [tripDurationDaysCounter.groupMembers, form]);
 
   return {
     form,
