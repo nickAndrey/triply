@@ -34,7 +34,7 @@ async function generateTravelSuggestions() {
 
   const config = {
     headers: {
-      Authorization: `Bearer ${DEEPSEEK_API_KEY}`,
+      'Authorization': `Bearer ${DEEPSEEK_API_KEY}`,
       'Content-Type': 'application/json',
     },
   };

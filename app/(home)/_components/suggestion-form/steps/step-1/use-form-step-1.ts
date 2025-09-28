@@ -1,9 +1,11 @@
 'use client';
 
-import { Place } from '@/app/_types/place';
+import { transformSearchSuggestions } from '@/app/(home)/_components/suggestion-form/steps/step-1/_utils/transform-search-suggestions';
+import { NominatimResult } from '@/app/_types/place';
+import { removeDuplicatesFromArray } from '@/app/_utils/remove-duplicates-from-array';
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import { useDebounceValue } from 'usehooks-ts';
 import z from 'zod';
@@ -27,19 +29,33 @@ export function useFormStep1() {
   const destinationSearch = useWatch({ control: form.control, name: 'destinationSearch' });
   const [debouncedSearchValue] = useDebounceValue(destinationSearch, 500);
 
-  const [suggestions, setSuggestions] = useState<Place[]>([]);
+  const [suggestions, setSuggestions] = useState<NominatimResult[]>([]);
+
+  const skipNextSearchRef = useRef(false);
 
   useEffect(() => {
     const source = axios.CancelToken.source();
 
     if (debouncedSearchValue === '') return;
 
+    if (skipNextSearchRef.current) {
+      skipNextSearchRef.current = false;
+      return;
+    }
+
+    const params = new URLSearchParams({
+      'q': debouncedSearchValue,
+      'format': 'json',
+      'accept-language': 'en',
+      'addressdetails': '1',
+    });
+
     axios
-      .get(
-        `${process.env.NEXT_PUBLIC_LOCATIONS_SEARCH_API}/search?q=${debouncedSearchValue}&format=json&accept-language=en`
-      )
-      .then((response) => {
-        setSuggestions(response.data);
+      .get<NominatimResult[]>(`${process.env.NEXT_PUBLIC_LOCATIONS_SEARCH_API}/search?${params}`)
+      .then(({ data }) => {
+        const transformedData = data.map(transformSearchSuggestions);
+        const cleanedData = removeDuplicatesFromArray(transformedData, 'display_name');
+        setSuggestions(cleanedData);
       })
       .catch((error) => {
         if (error.response) {
@@ -62,5 +78,6 @@ export function useFormStep1() {
   return {
     form,
     suggestions,
+    setSkipNextSearch: (val: boolean) => (skipNextSearchRef.current = val),
   };
 }

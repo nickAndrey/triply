@@ -94,11 +94,11 @@ export function createTravelPlanPrompt(params: {
 
     // USER CONTEXT - Remains the same
     user_preferences: {
-      Destination: params.destination,
+      'Destination': params.destination,
       'Travel Dates': params.travelDates.join(' to '),
       'Trip Duration (days)': tripDurationDays,
-      Budget: params.budget,
-      Preferences: params.preferences.join(', '),
+      'Budget': params.budget,
+      'Preferences': params.preferences.join(', '),
     },
 
     // UPDATED EXAMPLE - Shows the final JSON structure and desired content style

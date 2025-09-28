@@ -58,7 +58,7 @@ async function generatePersonalSuggestion(prompt: string) {
 
   const config = {
     headers: {
-      Authorization: `Bearer ${DEEPSEEK_API_KEY}`,
+      'Authorization': `Bearer ${DEEPSEEK_API_KEY}`,
       'Content-Type': 'application/json',
     },
   };

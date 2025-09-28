@@ -8,12 +8,12 @@ import { Input } from '@/chadcn/components/ui/input';
 import { Popover, PopoverContent, PopoverTrigger } from '@/chadcn/components/ui/popover';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/chadcn/components/ui/tooltip';
 import { cn } from '@/chadcn/lib/utils';
-import { X } from 'lucide-react';
+import { MapPin, X } from 'lucide-react';
 import { useRef, useState } from 'react';
 
 type Props = ReturnType<typeof useFormStep1> & {};
 
-export function FormStep1({ form, suggestions }: Props) {
+export function FormStep1({ form, suggestions, setSkipNextSearch }: Props) {
   const { fields } = formStepsConfig[0];
 
   const searchBtnContainerRef = useRef<HTMLDivElement | null>(null);
@@ -37,7 +37,7 @@ export function FormStep1({ form, suggestions }: Props) {
 
                   <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
                     <PopoverTrigger asChild>
-                      <div className="relative group max-w-lg w-full">
+                      <div className="relative group  w-full">
                         <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">✈️</span>
 
                         <Input
@@ -110,14 +110,16 @@ export function FormStep1({ form, suggestions }: Props) {
                           <Button
                             key={item.osm_id}
                             variant="ghost"
-                            className="justify-start text-ellipsis line-clamp-1"
+                            className="flex items-center justify-start gap-2"
                             onClick={() => {
                               form.setValue('destination', item.display_name);
                               field.onChange(item.display_name);
                               setIsPopoverOpen(false);
+                              setSkipNextSearch(true);
                             }}
                           >
-                            {item.display_name}
+                            <MapPin />
+                            <span className="text-ellipsis line-clamp-1">{item.display_name}</span>
                           </Button>
                         ))}
                       </div>
