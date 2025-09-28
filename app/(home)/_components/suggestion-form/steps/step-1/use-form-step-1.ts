@@ -32,7 +32,7 @@ export function useFormStep1() {
   useEffect(() => {
     const source = axios.CancelToken.source();
 
-    if (destinationSearch === '') return;
+    if (debouncedSearchValue === '') return;
 
     axios
       .get(
