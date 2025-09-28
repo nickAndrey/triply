@@ -5,7 +5,6 @@ import { schema, useFormStep2 } from '@/app/(home)/_components/suggestion-form/s
 import { Counter } from '@/app/_components/counter/counter';
 import { RadioButtonCard } from '@/app/_components/radio-button-card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/chadcn/components/ui/form';
-import { Input } from '@/chadcn/components/ui/input';
 import { RadioGroup } from '@/chadcn/components/ui/radio-group';
 
 type Props = ReturnType<typeof useFormStep2> & {};
@@ -28,23 +27,15 @@ export function FormStep2({ form, tripDurationDaysCounter }: Props) {
         <FormField
           control={form.control}
           name="tripDurationDays"
-          render={({ field }) => (
+          render={() => (
             <FormItem className="flex flex-col w-full">
               <FormLabel htmlFor="tripDurationDays">{fields.tripDurationDays.label}</FormLabel>
-              <FormControl>
-                <Input id="tripDurationDays" placeholder={fields.tripDurationDays.placeholder} {...field} />
-              </FormControl>
+              <Counter {...tripDurationDaysCounter} />
               <FormMessage />
             </FormItem>
           )}
         />
 
-        <div className="flex flex-col gap-6">
-          <div className="flex flex-col gap-3">
-            <h4>{fields.tripDurationDays.label}</h4>
-            <Counter {...tripDurationDaysCounter} />
-          </div>
-        </div>
         <FormField
           control={form.control}
           name="season"
