@@ -1,6 +1,7 @@
 import { SuggestionForm } from '@/app/(home)/_components/suggestion-form/suggestion-form';
 import { SuggestionSkeleton } from '@/app/(home)/_components/suggestions-carousel/suggestion-skeleton';
 import { SuggestionsCarousel } from '@/app/(home)/_components/suggestions-carousel/suggestions-carousel';
+
 import { Metadata } from 'next';
 import { Suspense } from 'react';
 

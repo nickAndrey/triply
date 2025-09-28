@@ -1,6 +1,6 @@
 'use client';
 
-import { useGroupCounter } from '@/app/(home)/_components/suggestion-form/steps/step-3/_components/group-counter/use-group-counter';
+import { useCounter } from '@/app/_components/counter/use-counter';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
@@ -76,9 +76,9 @@ export function useFormStep3() {
     name: 'friends',
   });
 
-  const groupCounter_children = useGroupCounter();
-  const groupCounter_adults = useGroupCounter();
-  const groupCounter_friends = useGroupCounter();
+  const groupCounter_children = useCounter();
+  const groupCounter_adults = useCounter();
+  const groupCounter_friends = useCounter();
 
   useEffect(() => {
     syncArray(childrenFormControl, groupCounter_children.groupMembers, (i) => ({

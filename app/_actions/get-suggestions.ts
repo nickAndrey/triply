@@ -6,29 +6,29 @@ import { createClient } from '@/utils/supabase/server';
 import axios, { AxiosError } from 'axios';
 import { createCountrySuggestionPrompt } from './prompts/create-country-suggestion-prompt';
 
-async function getIpInfo() {
-  const ipInfo = await fetch('https://ipinfo.io/json');
-
-  const info = (await ipInfo.json()) as {
-    region: string;
-    country: string;
-    city: string;
-  };
-
-  return info;
-}
-
-async function generateTravelSuggestions(country: string) {
+async function generateTravelSuggestions() {
   const DEEPSEEK_API_KEY = process.env.NEXT_DEEPSEEK_API_KEY;
   const API_URL = 'https://api.deepseek.com/chat/completions';
 
-  const prompt = createCountrySuggestionPrompt(country);
+  const prompt = createCountrySuggestionPrompt({
+    countries: [
+      'France',
+      'Spain',
+      'United States',
+      'Turkey',
+      'Italy',
+      'Mexico',
+      'Germany',
+      'Japan',
+      'Greece',
+      'Thailand',
+    ],
+  });
 
   const requestData = {
     model: 'deepseek-chat',
     messages: [{ role: 'user', content: prompt }],
     temperature: 0.8,
-    max_tokens: 500,
     response_format: { type: 'json_object' },
   };
 
@@ -55,6 +55,7 @@ async function generateTravelSuggestions(country: string) {
 
 async function setSuggestionsImages(
   rowSuggestions: {
+    country: string;
     city: string;
     title: string;
     description: string;
@@ -89,6 +90,8 @@ async function setSuggestionsImages(
 
       return {
         id: crypto.randomUUID(),
+        country: item.country,
+        city: item.city,
         title: item.title,
         description: item.description,
         photos: [transformedPhoto],
@@ -97,30 +100,42 @@ async function setSuggestionsImages(
   );
 }
 
-async function storeSuggestionsInDatabase(country: string, suggestions: Suggestion[]) {
+async function storeSuggestionsInDatabase(suggestions: Suggestion[]) {
   try {
     const supabase = await createClient();
-    await supabase.from(DB_TABLES.suggestions).insert({
-      id: crypto.randomUUID(),
-      country: country,
-      records: suggestions,
-    });
+    await supabase.from(DB_TABLES.suggestions).insert(suggestions);
   } catch (error) {
     console.error('Error storing suggestions:', error);
   }
 }
 
+const GENERATION_CACHE = new Map<string, boolean>();
+
 export async function getSuggestions(): Promise<Suggestion[]> {
   const supabase = await createClient();
-  const ipInfo = await getIpInfo();
 
-  const { data } = await supabase.from(DB_TABLES.suggestions).select('*').ilike('country', ipInfo.country);
+  const { count, error: countError } = await supabase
+    .from(DB_TABLES.suggestions)
+    .select('*', { count: 'exact', head: true });
 
-  if (data && data.length > 0) return data[0].records;
+  const noRecords = !countError && (!count || count === 0);
+  const noCache = !GENERATION_CACHE.get('suggestions');
 
-  const { suggestions } = await generateTravelSuggestions(ipInfo.country);
-  const suggestionsWithPhotos = await setSuggestionsImages(suggestions);
-  await storeSuggestionsInDatabase(ipInfo.country, suggestionsWithPhotos);
+  if (noRecords && noCache) {
+    GENERATION_CACHE.set('suggestions', true);
 
-  return suggestionsWithPhotos;
+    try {
+      const response = await generateTravelSuggestions();
+      const preparedSuggestions = await setSuggestionsImages(response.suggestions);
+      await storeSuggestionsInDatabase(preparedSuggestions);
+    } finally {
+      GENERATION_CACHE.delete('suggestions');
+    }
+  }
+
+  const { data, error: getSuggestionsError } = await supabase.from(DB_TABLES.suggestions).select('*');
+  if (getSuggestionsError) throw getSuggestionsError;
+
+  const randomItems = data.sort(() => Math.random() - 0.5).slice(0, 5);
+  return randomItems ?? [];
 }

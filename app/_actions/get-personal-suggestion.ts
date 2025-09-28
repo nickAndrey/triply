@@ -52,7 +52,7 @@ async function generatePersonalSuggestion(prompt: string) {
   const requestData = {
     model: 'deepseek-chat',
     messages: [{ role: 'user', content: prompt }],
-    temperature: 0.8,
+    temperature: 0.3,
     response_format: { type: 'json_object' },
   };
 

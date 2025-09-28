@@ -17,7 +17,7 @@ export const formStepsConfig = [
     description: 'Just tell us how many days and we’ll suggest the best windows.',
     fields: {
       tripDurationDays: {
-        label: 'Trip Duration',
+        label: 'Trip Duration (days)',
         placeholder: 'Set travel duration in days',
         description: 'How many days do you want your journey to last?',
       },

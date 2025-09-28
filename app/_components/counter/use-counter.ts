@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 
-export function useGroupCounter() {
+export function useCounter() {
   const [groupMembers, setGroupMembers] = useState<number | ''>(0);
   const [isInputActive, setIsInputActive] = useState(false);
 

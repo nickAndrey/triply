@@ -1,13 +1,13 @@
 'use client';
 
-import { useGroupCounter } from '@/app/(home)/_components/suggestion-form/steps/step-3/_components/group-counter/use-group-counter';
+import { useCounter } from '@/app/_components/counter/use-counter';
 import { Button } from '@/chadcn/components/ui/button';
 import { Input } from '@/chadcn/components/ui/input';
 import { Minus, Plus } from 'lucide-react';
 
-type Props = ReturnType<typeof useGroupCounter>;
+type Props = ReturnType<typeof useCounter>;
 
-export function GroupCounter({
+export function Counter({
   groupMembers,
   isInputActive,
   inputRef,

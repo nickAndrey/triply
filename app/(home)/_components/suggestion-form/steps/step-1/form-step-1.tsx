@@ -101,7 +101,7 @@ export function FormStep1({ form, suggestions }: Props) {
                     <PopoverContent
                       align="start"
                       sideOffset={10}
-                      className="w-[var(--radix-popover-trigger-width)] rounded-2xl"
+                      className="w-[var(--radix-popover-trigger-width)] rounded-4xl"
                       onOpenAutoFocus={(e) => e.preventDefault()}
                     >
                       <div className="flex flex-col w-full">

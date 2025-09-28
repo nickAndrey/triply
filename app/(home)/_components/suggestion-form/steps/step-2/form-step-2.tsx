@@ -2,6 +2,7 @@
 
 import { formStepsConfig } from '@/app/(home)/_components/suggestion-form/configs/form-steps-config';
 import { schema, useFormStep2 } from '@/app/(home)/_components/suggestion-form/steps/step-2/use-form-step-2';
+import { Counter } from '@/app/_components/counter/counter';
 import { RadioButtonCard } from '@/app/_components/radio-button-card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/chadcn/components/ui/form';
 import { Input } from '@/chadcn/components/ui/input';
@@ -9,7 +10,7 @@ import { RadioGroup } from '@/chadcn/components/ui/radio-group';
 
 type Props = ReturnType<typeof useFormStep2> & {};
 
-export function FormStep2({ form }: Props) {
+export function FormStep2({ form, tripDurationDaysCounter }: Props) {
   const { fields } = formStepsConfig[1];
 
   const seasonDescriptions = {
@@ -18,6 +19,8 @@ export function FormStep2({ form }: Props) {
     Autumn: 'Colorful foliage, cozy vibes, and cooler adventures.',
     Winter: 'Snowy escapes, festive markets, and crisp air.',
   };
+
+  form.subscribe({ name: 'tripDurationDays', callback: (data) => console.log(data) });
 
   return (
     <Form {...form}>
@@ -35,6 +38,13 @@ export function FormStep2({ form }: Props) {
             </FormItem>
           )}
         />
+
+        <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-3">
+            <h4>{fields.tripDurationDays.label}</h4>
+            <Counter {...tripDurationDaysCounter} />
+          </div>
+        </div>
         <FormField
           control={form.control}
           name="season"
