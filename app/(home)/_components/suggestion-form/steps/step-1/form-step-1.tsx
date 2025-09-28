@@ -5,20 +5,27 @@ import { useFormStep1 } from '@/app/(home)/_components/suggestion-form/steps/ste
 import { Button } from '@/chadcn/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/chadcn/components/ui/form';
 import { Input } from '@/chadcn/components/ui/input';
+import { Popover, PopoverContent, PopoverTrigger } from '@/chadcn/components/ui/popover';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/chadcn/components/ui/tooltip';
 import { cn } from '@/chadcn/lib/utils';
+import { X } from 'lucide-react';
+import { useRef, useState } from 'react';
 
 type Props = ReturnType<typeof useFormStep1> & {};
 
-export function FormStep1({ form }: Props) {
+export function FormStep1({ form, suggestions }: Props) {
   const { fields } = formStepsConfig[0];
+
+  const searchBtnContainerRef = useRef<HTMLDivElement | null>(null);
+
+  const [isPopoverOpen, setIsPopoverOpen] = useState(false);
 
   return (
     <Form {...form}>
       <form>
         <FormField
           control={form.control}
-          name="destination"
+          name="destinationSearch"
           render={({ field, fieldState }) => (
             <FormItem>
               <FormControl>
@@ -28,34 +35,94 @@ export function FormStep1({ form }: Props) {
                   </FormLabel>
                   <p className="text-muted-foreground mb-6">{fields.destination.description}</p>
 
-                  <div className="relative w-full">
-                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">✈️</span>
-                    <Input
-                      id="destination"
-                      placeholder={fields.destination.placeholder}
-                      className={cn(
-                        'w-full rounded-full border bg-background pl-10 pr-28 py-6 text-sm shadow-sm focus:ring-2 focus:ring-primary',
-                        fieldState.error && 'border-destructive'
-                      )}
-                      {...field}
-                    />
+                  <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
+                    <PopoverTrigger asChild>
+                      <div className="relative group max-w-lg w-full">
+                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">✈️</span>
 
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <span className="absolute right-2 top-1/2 -translate-y-1/2">
+                        <Input
+                          id="destination"
+                          placeholder={fields.destination.placeholder}
+                          className={cn(
+                            'transition-all w-full rounded-full border bg-background pl-10 py-6 text-sm shadow-sm focus:ring-2 focus:ring-primary truncate',
+                            fieldState.error && 'border-destructive'
+                          )}
+                          style={{
+                            paddingRight: searchBtnContainerRef?.current?.offsetWidth
+                              ? `${searchBtnContainerRef.current.offsetWidth + 8}px`
+                              : undefined,
+                          }}
+                          {...field}
+                        />
+
+                        <div
+                          className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-3"
+                          ref={searchBtnContainerRef}
+                        >
                           <Button
-                            disabled
-                            className="bg-primary text-primary-foreground px-3 py-1.5 rounded-full text-sm font-medium pointer-events-none"
+                            size="icon"
+                            type="button"
+                            variant="ghost"
+                            className={cn(
+                              'rounded-full w-6 h-6 transition-all duration-200 opacity-0 scale-0 pointer-events-none',
+                              form.watch('destinationSearch') !== '' &&
+                                isPopoverOpen &&
+                                'opacity-100 scale-100 pointer-events-auto'
+                            )}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              form.setValue('destination', '');
+                              form.setValue('destinationSearch', '');
+                            }}
                           >
-                            Surprise me 🎲
+                            <X className="!size-3" />
                           </Button>
-                        </span>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>Surprise ¯\_(ツ)_/¯</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </div>
+
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <span>
+                                <Button
+                                  disabled
+                                  hidden
+                                  className="bg-primary text-primary-foreground px-3 py-1.5 rounded-full text-sm font-medium pointer-events-none"
+                                >
+                                  <span>Surprise me</span> 🎲
+                                </Button>
+                              </span>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>Surprise ¯\_(ツ)_/¯</p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </div>
+                      </div>
+                    </PopoverTrigger>
+
+                    <PopoverContent
+                      align="start"
+                      sideOffset={10}
+                      className="w-[var(--radix-popover-trigger-width)] rounded-2xl"
+                      onOpenAutoFocus={(e) => e.preventDefault()}
+                    >
+                      <div className="flex flex-col w-full">
+                        {!suggestions.length && <p>No Suggestions.</p>}
+                        {suggestions.map((item) => (
+                          <Button
+                            key={item.osm_id}
+                            variant="ghost"
+                            className="justify-start text-ellipsis line-clamp-1"
+                            onClick={() => {
+                              form.setValue('destination', item.display_name);
+                              field.onChange(item.display_name);
+                              setIsPopoverOpen(false);
+                            }}
+                          >
+                            {item.display_name}
+                          </Button>
+                        ))}
+                      </div>
+                    </PopoverContent>
+                  </Popover>
                 </div>
               </FormControl>
               <FormMessage />

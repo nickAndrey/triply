@@ -40,9 +40,9 @@ export function NavBar({ suggestions }: NavBarProps) {
       </DrawerTrigger>
 
       <DrawerContent>
-        <DrawerHeader>
-          <DrawerClose autoFocus asChild className="absolute right-2 top-2">
-            <Button variant="ghost" size="icon" className="rounded-full">
+        <DrawerHeader className="mb-4">
+          <DrawerClose autoFocus asChild className="ml-auto mb-4">
+            <Button variant="secondary" size="icon" className="rounded-full">
               <X />
             </Button>
           </DrawerClose>
