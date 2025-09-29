@@ -1,10 +1,10 @@
 'use server';
 
+import { getPersonalPlan } from '@/app/_actions/prompts/get-personal-plan';
 import { DB_TABLES } from '@/app/_constants/db-tables';
 import { createClient } from '@/utils/supabase/server';
 import axios, { AxiosError } from 'axios';
 import { revalidatePath } from 'next/cache';
-import { createTravelPlanPrompt } from './prompts/create-travel-plan-prompt';
 
 async function savePersonalSuggestion(suggestion: string) {
   const supabase = await createClient();
@@ -14,27 +14,20 @@ async function savePersonalSuggestion(suggestion: string) {
 
   if (!userData.user) throw new Error('Unauthorized, user was not found.');
 
-  const { data: existedSuggestions } = await supabase
+  const { data: existedSuggestions, error: searchExistingError } = await supabase
     .from(DB_TABLES.personal_travel_suggestions)
-    .select('destination,travel_dates')
-    .match({
-      destination: parsedSuggestion.metadata.destination,
-      travel_dates: `[${parsedSuggestion.metadata.travelDates[0]},${parsedSuggestion.metadata.travelDates[1]}]`,
-    })
+    .select('metadata->>destination, metadata->>season')
+    .eq('metadata->>destination', parsedSuggestion.metadata.destination)
+    .eq('metadata->>season', parsedSuggestion.metadata.season)
     .eq('user_id', userData.user.id);
 
-  if (!existedSuggestions) {
+  console.log({ suggestion, existedSuggestions, searchExistingError });
+
+  if (!existedSuggestions?.length) {
     const { error } = await supabase.from(DB_TABLES.personal_travel_suggestions).insert([
       {
         markdown_content: parsedSuggestion.markdownContent,
-        destination: parsedSuggestion.metadata.destination,
-        travel_dates: parsedSuggestion.metadata.travelDates,
-        trip_duration: parsedSuggestion.metadata.tripDuration,
-        budget: parsedSuggestion.metadata.budget,
-        preferences: parsedSuggestion.metadata.preferences,
-        article_title: parsedSuggestion.metadata.articleTitle,
-        detail_note: parsedSuggestion.metadata.detailNote,
-        slug: parsedSuggestion.metadata.slug,
+        metadata: parsedSuggestion.metadata,
         user_id: userData.user.id,
       },
     ]);
@@ -45,14 +38,14 @@ async function savePersonalSuggestion(suggestion: string) {
   }
 }
 
-async function generatePersonalSuggestion(prompt: string) {
+export async function generatePersonalSuggestion(prompt: string) {
   const DEEPSEEK_API_KEY = process.env.NEXT_DEEPSEEK_API_KEY;
   const API_URL = 'https://api.deepseek.com/chat/completions';
 
   const requestData = {
     model: 'deepseek-chat',
     messages: [{ role: 'user', content: prompt }],
-    temperature: 0.3,
+    temperature: 0.7,
     response_format: { type: 'json_object' },
   };
 
@@ -65,20 +58,33 @@ async function generatePersonalSuggestion(prompt: string) {
 
   try {
     const response = await axios.post(API_URL, requestData, config);
-
     return response.data.choices[0].message.content;
   } catch (error) {
     console.error('Error:', (error as AxiosError).response?.data || (error as Error).message);
-    throw new Error('Failed to generate travel suggestions');
+    throw new Error(`Failed to generate travel suggestions\nDetails:\n${error}`);
   }
 }
 
 export async function getPersonalSuggestion(payload: {
   destination: string;
-  dateFrom: Date;
-  dateTo: Date;
-  budget: string;
-  preferences: string[];
+  tripDurationDays: string;
+  season: string;
+  companions: string;
+  groupSize?: string;
+  children?: { child: number; group: string }[];
+  adults?: { adult: number }[];
+  friends?: { friend: number }[];
+  tripVibe: string;
+  pace: string;
+  activityIntensity: string;
+  planningStyle: string;
+  foodPreferences: string[];
+  foodRestrictions?: string;
+  budget: '$' | '$$' | '$$$';
+  placesToSee?: string;
+  placesAvoidToSee?: string;
+  tripSuccessDefinition?: string;
+  perfectDay?: string;
 }) {
   const supabase = await createClient();
   const { data: userData } = await supabase.auth.getUser();
@@ -96,13 +102,7 @@ export async function getPersonalSuggestion(payload: {
 
   try {
     // Call DeepSeek
-    const prompt = createTravelPlanPrompt({
-      destination: payload.destination,
-      travelDates: [payload.dateFrom.toISOString(), payload.dateTo.toISOString()],
-      budget: payload.budget,
-      preferences: payload.preferences,
-    });
-
+    const prompt = getPersonalPlan(payload);
     const response = await generatePersonalSuggestion(prompt);
     // ----
 

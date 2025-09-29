@@ -22,9 +22,9 @@ export default async function TravelSuggestionPage({ params }: { params: Promise
 
   const { data: suggestion } = await supabase
     .from(DB_TABLES.personal_travel_suggestions)
-    .select('*')
+    .select('metadata->>destination, metadata->>season, metadata->>slug, created_at, id, markdown_content')
+    .eq('metadata->>slug', slug)
     .eq('user_id', user.id)
-    .eq('slug', slug)
     .single();
 
   if (!suggestion) return notFound();

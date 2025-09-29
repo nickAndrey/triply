@@ -54,7 +54,6 @@ export function useFormStep3() {
     resolver: zodResolver(schema),
     defaultValues: {
       companions: 'Solo',
-      groupSize: '',
       children: [],
       adults: [],
       friends: [],

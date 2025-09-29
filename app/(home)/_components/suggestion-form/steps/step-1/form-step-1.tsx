@@ -37,7 +37,7 @@ export function FormStep1({ form, suggestions, setSkipNextSearch }: Props) {
 
                   <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
                     <PopoverTrigger asChild>
-                      <div className="relative group  w-full">
+                      <div className="relative group w-full">
                         <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">✈️</span>
 
                         <Input

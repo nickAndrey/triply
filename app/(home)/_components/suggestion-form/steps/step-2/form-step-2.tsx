@@ -19,8 +19,6 @@ export function FormStep2({ form, tripDurationDaysCounter }: Props) {
     Winter: 'Snowy escapes, festive markets, and crisp air.',
   };
 
-  form.subscribe({ name: 'tripDurationDays', callback: (data) => console.log(data) });
-
   return (
     <Form {...form}>
       <form className="flex flex-col gap-6 max-w-lg w-full">

@@ -1,6 +1,7 @@
 import { DB_TABLES } from '@/app/_constants/db-tables';
 import { Button } from '@/chadcn/components/ui/button';
 import { createClient } from '@/utils/supabase/server';
+import { format } from 'date-fns';
 import { Home } from 'lucide-react';
 import Link from 'next/link';
 import { NavBar } from './nav-bar/nav-bar';
@@ -19,10 +20,10 @@ export async function Header() {
   if (user) {
     const { data } = await supabase
       .from(DB_TABLES.personal_travel_suggestions)
-      .select('id,destination,travel_dates,article_title,slug')
+      .select('metadata->>destination, metadata->>season, metadata->>slug, created_at, id')
       .eq('user_id', user.id);
 
-    suggestionFields = data;
+    suggestionFields = data?.map((item) => ({ ...item, created_at: format(item.created_at, 'yyyy') }));
   }
 
   const homeLink = (

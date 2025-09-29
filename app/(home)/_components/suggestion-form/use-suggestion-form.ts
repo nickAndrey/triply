@@ -7,6 +7,7 @@ import { useFormStep4 } from '@/app/(home)/_components/suggestion-form/steps/ste
 import { useFormStep5 } from '@/app/(home)/_components/suggestion-form/steps/step-5/use-form-step-5';
 import { useFormStep6 } from '@/app/(home)/_components/suggestion-form/steps/step-6/use-form-step-6';
 import { useFormStep7 } from '@/app/(home)/_components/suggestion-form/steps/step-7/use-form-step-7';
+import { getPersonalSuggestion } from '@/app/_actions/get-personal-suggestion';
 import { useRequest } from '@/app/_providers/request-context';
 
 export function useSuggestionForm() {
@@ -56,9 +57,8 @@ export function useSuggestionForm() {
 
     start('Gathering the best suggestions...');
 
-    console.log(processFormSteps());
-
-    await new Promise((res) => setTimeout(res, 3000));
+    const processedForm = processFormSteps();
+    await getPersonalSuggestion(processedForm);
 
     finish({ message: 'Your trip is ready!' });
 

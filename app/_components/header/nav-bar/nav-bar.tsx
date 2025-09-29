@@ -20,9 +20,9 @@ type NavBarProps = {
   suggestions: {
     id: string;
     destination: string;
-    travel_dates: string;
-    article_title: string;
+    season: string;
     slug: string;
+    created_at: string;
   }[];
 };
 
@@ -66,8 +66,8 @@ export function NavBar({ suggestions }: NavBarProps) {
                 <NavLink
                   href={item.slug}
                   onNavigate={() => setOpen(false)}
-                  label={item.article_title}
-                >{`${item.destination} — ${new Date(item.travel_dates[0]).getFullYear()}`}</NavLink>
+                  label={`${item.destination} — ${item.created_at}`}
+                >{`${item.destination} — ${item.created_at}`}</NavLink>
               </li>
             );
           })}

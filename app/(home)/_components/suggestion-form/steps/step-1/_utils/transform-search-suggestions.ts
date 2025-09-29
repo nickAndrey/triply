@@ -1,3 +1,5 @@
+'use client';
+
 import { NominatimResult } from '@/app/_types/place';
 
 export function transformSearchSuggestions(item: NominatimResult): NominatimResult {
