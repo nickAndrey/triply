@@ -1,7 +1,8 @@
-import { getSingleDayPrompt } from '@/app/_actions/personal-suggestion/_prompts/get-single-day-prompt';
+import { getSingleDayPrompt } from '@/app/_actions/personal-suggestion/_prompts/prompt_v2';
 import { SuggestionFormFields } from '@/app/_actions/personal-suggestion/_types/form';
 import { DB_TABLES } from '@/app/_constants/db-tables';
 import { TravelItineraryDay } from '@/app/_types/supabase-update-payload';
+import { safeJsonParse } from '@/app/_utils/safe-json-parse';
 import { createClient } from '@/utils/supabase/server';
 import axios, { AxiosError } from 'axios';
 
@@ -10,7 +11,7 @@ export class ProgressiveItineraryGenerator {
   private API_URL = 'https://api.deepseek.com/chat/completions';
   private currentDay = 1;
   private supabase;
-  private chunks: Record<string, unknown>[] = [];
+  private chunks: TravelItineraryDay[] = [];
 
   constructor(supabase: ReturnType<typeof createClient>) {
     this.supabase = supabase;
@@ -27,7 +28,7 @@ export class ProgressiveItineraryGenerator {
       };
 
       this.chunks.forEach((item) => {
-        const metadata = item.metadata as TravelItineraryDay['metadata'];
+        const metadata = item.metadata;
         if (!metadata) return;
 
         if (metadata.visitedPlaces) {
@@ -56,7 +57,6 @@ export class ProgressiveItineraryGenerator {
       model: 'deepseek-chat',
       messages: [{ role: 'user', content: prompt }],
       temperature: 0.7,
-      response_format: { type: 'json_object' },
     };
 
     const config = {
@@ -86,15 +86,20 @@ export class ProgressiveItineraryGenerator {
 
     while (this.currentDay <= totalDays) {
       const generatedSuggestion = await this.generateSingleDaySuggestion(form);
-      const parsedSuggestion = JSON.parse(generatedSuggestion);
+      const parsedSuggestion = safeJsonParse<TravelItineraryDay>(generatedSuggestion);
 
-      await db.rpc('append_day_to_itinerary', {
-        trip_id: trip.id,
-        new_day: parsedSuggestion,
-      });
+      if (parsedSuggestion) {
+        await db.rpc('append_day_to_itinerary', {
+          trip_id: trip.id,
+          new_day: parsedSuggestion,
+        });
 
-      this.chunks.push(parsedSuggestion);
-      this.currentDay++;
+        this.chunks.push(parsedSuggestion);
+        this.currentDay++;
+      } else {
+        console.error(`Failed to parse suggestion for day ${this.currentDay}`);
+        break;
+      }
     }
 
     await db.from(DB_TABLES.travel_itineraries).update({ status: 'completed' }).eq('id', tripId);
