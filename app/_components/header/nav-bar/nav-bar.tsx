@@ -1,6 +1,7 @@
 'use client';
 
 import { useRequest } from '@/app/_providers/request-context';
+import { TravelItineraryDay } from '@/app/_types/supabase-update-payload';
 import { Badge } from '@/chadcn/components/ui/badge';
 import { Button } from '@/chadcn/components/ui/button';
 import {
@@ -19,10 +20,7 @@ import { NavLink } from './nav-link';
 type NavBarProps = {
   suggestions: {
     id: string;
-    destination: string;
-    season: string;
-    slug: string;
-    created_at: string;
+    metadata: TravelItineraryDay['metadata'];
   }[];
 };
 
@@ -60,14 +58,14 @@ export function NavBar({ suggestions }: NavBarProps) {
         </DrawerHeader>
 
         <ul className="flex flex-col gap-2 px-4 py-4 w-full">
-          {suggestions.map((item) => {
+          {suggestions.map(({ id, metadata }) => {
             return (
-              <li key={item.id}>
+              <li key={id}>
                 <NavLink
-                  href={item.slug}
+                  href={metadata?.slug}
                   onNavigate={() => setOpen(false)}
-                  label={`${item.destination} — ${item.created_at}`}
-                >{`${item.destination} — ${item.created_at}`}</NavLink>
+                  label={`${metadata.destination}`}
+                >{`${metadata.destination} — ${metadata.season}`}</NavLink>
               </li>
             );
           })}

@@ -1,7 +1,7 @@
 import { DB_TABLES } from '@/app/_constants/db-tables';
 import { createClient } from '@/utils/supabase/server';
 import { Metadata } from 'next';
-import { notFound, unauthorized } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import Markdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 
@@ -18,21 +18,23 @@ export default async function TravelSuggestionPage({ params }: { params: Promise
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user) return unauthorized();
+  if (!user) return redirect('/login');
 
   const { data: suggestion } = await supabase
-    .from(DB_TABLES.personal_travel_suggestions)
-    .select('metadata->>destination, metadata->>season, metadata->>slug, created_at, id, markdown_content')
-    .eq('metadata->>slug', slug)
+    .from(DB_TABLES.travel_itineraries)
+    .select('days')
     .eq('user_id', user.id)
-    .single();
+    .filter('days->0->metadata->>slug', 'eq', slug)
+    .maybeSingle();
 
   if (!suggestion) return notFound();
+
+  const data = suggestion.days.map((d: { markdownContent: string }) => d.markdownContent).join('\n\n');
 
   return (
     <main className="flex flex-col gap-6 min-h-[100dvh] max-w-4xl m-auto px-4 py-5">
       <article className="prose dark:prose-invert max-w-none">
-        <Markdown remarkPlugins={[remarkGfm]}>{suggestion.markdown_content}</Markdown>
+        <Markdown remarkPlugins={[remarkGfm]}>{data}</Markdown>
       </article>
     </main>
   );

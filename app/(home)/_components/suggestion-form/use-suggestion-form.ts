@@ -7,8 +7,9 @@ import { useFormStep4 } from '@/app/(home)/_components/suggestion-form/steps/ste
 import { useFormStep5 } from '@/app/(home)/_components/suggestion-form/steps/step-5/use-form-step-5';
 import { useFormStep6 } from '@/app/(home)/_components/suggestion-form/steps/step-6/use-form-step-6';
 import { useFormStep7 } from '@/app/(home)/_components/suggestion-form/steps/step-7/use-form-step-7';
-import { getPersonalSuggestion } from '@/app/_actions/get-personal-suggestion';
+import { startItineraryGeneration } from '@/app/_actions/personal-suggestion/get-personal-suggestion';
 import { useRequest } from '@/app/_providers/request-context';
+import { useSupabaseSubscriptionContext } from '@/app/_providers/supabase-subscriptions-context';
 
 export function useSuggestionForm() {
   const formStep1 = useFormStep1();
@@ -19,7 +20,8 @@ export function useSuggestionForm() {
   const formStep6 = useFormStep6();
   const formStep7 = useFormStep7();
 
-  const { start, finish, isPending } = useRequest();
+  const { start, isPending } = useRequest();
+  const { setTripId } = useSupabaseSubscriptionContext();
 
   const handleSubmit = async () => {
     const mergedSteps = {
@@ -58,11 +60,8 @@ export function useSuggestionForm() {
     start('Gathering the best suggestions...');
 
     const processedForm = processFormSteps();
-    await getPersonalSuggestion(processedForm);
-
-    finish({ message: 'Your trip is ready!' });
-
-    // fail('Something went wrong — please try again.')''
+    const { tripId } = await startItineraryGeneration(processedForm);
+    setTripId(tripId);
   };
 
   return {
