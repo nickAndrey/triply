@@ -78,14 +78,15 @@ export function SupabaseSubscriptionProvider({ children }: { children: ReactNode
         async (payload: RealtimePostgresChangesPayload<TravelItineraryRow>) => {
           if (Object.keys(payload.new).length === 0) return;
 
-          const trip = payload.new as TravelItineraryRow;
+          const newPayload = payload.new as TravelItineraryRow;
+          const { trip_plan_details } = newPayload;
 
-          const days = trip.days ?? [];
-          const form = trip.form ?? { tripDurationDays: '1' };
+          const days = trip_plan_details.days ?? [];
+          const form = newPayload.form ?? { tripDurationDays: '1' };
 
           const progress = Math.round((days.length / parseInt(form.tripDurationDays || '1')) * 100);
 
-          const slug = days[0]?.metadata?.slug ?? '';
+          const slug = trip_plan_details.slug ?? '';
           const isFirstDay = days.length === 1;
 
           // Revalidate on the server

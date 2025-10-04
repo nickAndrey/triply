@@ -1,5 +1,5 @@
 import { DB_TABLES } from '@/app/_constants/db-tables';
-import { TravelItineraryDay } from '@/app/_types/supabase-update-payload';
+import { TripPlan } from '@/app/_types/trip-plan';
 import { Button } from '@/chadcn/components/ui/button';
 import { createClient } from '@/utils/supabase/server';
 import { Home } from 'lucide-react';
@@ -20,16 +20,15 @@ export async function Header() {
   if (user) {
     const { data: suggestions } = await supabase
       .from(DB_TABLES.travel_itineraries)
-      .select('days, id')
-      .eq('user_id', user.id)
-      .neq('days', JSON.stringify([]));
+      .select('trip_plan_details, id')
+      .eq('user_id', user.id);
 
     suggestionFields = suggestions?.map((item) => {
-      const daysData = item.days as TravelItineraryDay[];
+      const tripDetails = item.trip_plan_details as TripPlan;
 
       return {
         id: item.id,
-        metadata: daysData[0].metadata,
+        details: tripDetails,
       };
     });
   }

@@ -14,7 +14,7 @@ export async function startItineraryGeneration(form: SuggestionFormFields) {
 
   if (!user) throw new Error('Unauthorized');
 
-  const { data: trip } = await supabase
+  const { data: trip, error } = await supabase
     .from(DB_TABLES.travel_itineraries)
     .insert({
       status: 'in_progress',
@@ -23,6 +23,8 @@ export async function startItineraryGeneration(form: SuggestionFormFields) {
     })
     .select()
     .single();
+
+  if (error) throw new Error(error.message);
 
   await axios.post(
     `${process.env.NEXT_PUBLIC_SITE_URL}/api/suggestion/generate`,

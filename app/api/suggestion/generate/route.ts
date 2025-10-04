@@ -8,7 +8,7 @@ export async function POST(request: Request) {
   (async () => {
     const supabase = createClient();
     const generator = new ProgressiveItineraryGenerator(supabase);
-    await generator.runForTrip(tripId);
+    await generator.startGenerateTripPlan(tripId);
   })();
 
   return NextResponse.json({ ok: true }, { status: 202 });

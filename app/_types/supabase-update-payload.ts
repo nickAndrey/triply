@@ -1,3 +1,5 @@
+import { TripPlan } from '@/app/_types/trip-plan';
+
 export type TravelItineraryDay = {
   markdownContent: string;
   metadata: {
@@ -45,9 +47,7 @@ export type TravelItineraryForm = {
 
 export type TravelItineraryRow = {
   created_at: string;
-  days: TravelItineraryDay[];
-  final_markdown: string | null;
-  final_metadata: TravelItineraryDay['metadata'] | null;
+  trip_plan_details: TripPlan;
   form: TravelItineraryForm;
   id: string;
   status: 'in_progress' | 'completed' | string;
