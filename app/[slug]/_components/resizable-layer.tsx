@@ -10,7 +10,7 @@ type Props = {
 };
 
 export function ResizableLayer({ children, aside }: Props) {
-  const isSmallScreen = useMediaQuery('(width <= 768px)');
+  const isSmallScreen = useMediaQuery('(width <= 64rem)');
   const [hydrated, setHydrated] = useState(false);
 
   // Prevent layout jump on hydration

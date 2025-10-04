@@ -43,7 +43,7 @@ export default async function TravelSuggestionPage({ params }: { params: Promise
   }
 
   return (
-    <main className="flex flex-col gap-6 min-h-[100dvh] xl:max-w-10/12 m-auto prose dark:prose-invert">
+    <main className="prose dark:prose-invert min-w-[100dvw] xl:min-w-[90dvw] xl:m-auto">
       <ResizableLayer
         aside={
           <aside className="rounded-2xl bg-card p-4 shadow-md border-1">
