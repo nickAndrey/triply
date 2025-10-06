@@ -38,7 +38,8 @@ export default async function TravelSuggestionPage({ params }: { params: Promise
   }));
 
   function buildGoogleMapsLink(place: string, city: string, country: string) {
-    const query = encodeURIComponent(`${place} ${city} ${country}`);
+    const cleanedUpPlace = place.replace(/\s*\([^)]*\)/g, '').trim();
+    const query = encodeURIComponent(`${cleanedUpPlace} ${city} ${country}`);
     return `https://www.google.com/maps/search/?api=1&query=${query}`;
   }
 
@@ -65,7 +66,11 @@ export default async function TravelSuggestionPage({ params }: { params: Promise
                   <ul className="px-4 pb-2 text-sm space-y-1 list-disc list-inside">
                     {day.places.map((place, idx_2) => (
                       <li key={idx_2}>
-                        <a href={buildGoogleMapsLink(place, trip.city, trip.country)} target="_blank">
+                        <a
+                          href={buildGoogleMapsLink(place, trip.city, trip.country)}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
                           <strong>{place}</strong>
                         </a>
                       </li>
@@ -78,7 +83,7 @@ export default async function TravelSuggestionPage({ params }: { params: Promise
         }
       >
         <article className="">
-          <h1>{trip.destination} Itinerary</h1>
+          <h1>{trip.articleTitle}</h1>
 
           <h3>{trip.tripSummary}</h3>
 
@@ -97,7 +102,11 @@ export default async function TravelSuggestionPage({ params }: { params: Promise
               <ul>
                 {day.morning.map((act, i) => (
                   <li key={i}>
-                    <a href={buildGoogleMapsLink(act.name, trip.city, trip.country)} target="_blank">
+                    <a
+                      href={buildGoogleMapsLink(act.name, trip.city, trip.country)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
                       <strong>{act.name}</strong>
                     </a>
                     ({act.budget}) — {act.description}
@@ -109,7 +118,11 @@ export default async function TravelSuggestionPage({ params }: { params: Promise
               <ul>
                 {day.afternoon.map((act, i) => (
                   <li key={i}>
-                    <a href={buildGoogleMapsLink(act.name, trip.city, trip.country)} target="_blank">
+                    <a
+                      href={buildGoogleMapsLink(act.name, trip.city, trip.country)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
                       <strong>{act.name}</strong>
                     </a>
                     ({act.budget}) — {act.description}
@@ -121,7 +134,11 @@ export default async function TravelSuggestionPage({ params }: { params: Promise
               <ul>
                 {day.evening.map((act, i) => (
                   <li key={i}>
-                    <a href={buildGoogleMapsLink(act.name, trip.city, trip.country)} target="_blank">
+                    <a
+                      href={buildGoogleMapsLink(act.name, trip.city, trip.country)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
                       <strong>{act.name}</strong>
                     </a>
                     ({act.budget}) — {act.description}

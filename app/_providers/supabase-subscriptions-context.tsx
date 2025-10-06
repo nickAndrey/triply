@@ -3,23 +3,27 @@
 import { DB_TABLES } from '@/app/_constants/db-tables';
 import { useRequest } from '@/app/_providers/request-context';
 import { TravelItineraryRow } from '@/app/_types/supabase-update-payload';
-import { Progress } from '@/chadcn/components/ui/progress';
 import { createClient } from '@/utils/supabase/client';
 import { RealtimePostgresChangesPayload } from '@supabase/supabase-js';
 import axios from 'axios';
 import { differenceInSeconds } from 'date-fns';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
-import { toast } from 'sonner';
+import { createContext, ReactNode, useContext, useEffect, useRef, useState } from 'react';
 
-const SupabaseSubscriptionContext = createContext<
-  | {
-      tripId: string;
-      setTripId: (tripId: string) => void;
-    }
-  | undefined
->(undefined);
+type SubscriberStatus = 'idle' | 'core_generating' | 'core_ready' | 'days_generating' | 'completed' | 'error';
+
+type ContextType = {
+  tripId: string;
+  setTripId: (id: string) => void;
+  subscriberStatus: SubscriberStatus;
+  setSubscriberStatus: (status: SubscriberStatus) => void;
+  progressPercent: number;
+  currentDay: number;
+  totalDays: number;
+  slug: string;
+};
+
+const SupabaseSubscriptionContext = createContext<ContextType | undefined>(undefined);
 
 export function SupabaseSubscriptionProvider({ children }: { children: ReactNode }) {
   const supabase = createClient();
@@ -27,13 +31,37 @@ export function SupabaseSubscriptionProvider({ children }: { children: ReactNode
   const { start, finish } = useRequest();
 
   const [tripId, setTripId] = useState('');
+  const [subscriberStatus, setSubscriberStatus] = useState<SubscriberStatus>('idle');
+  const [progressPercent, setProgressPercent] = useState(0);
+  const [currentDay, setCurrentDay] = useState(0);
+  const [totalDays, setTotalDays] = useState(0);
+  const [slug, setSlug] = useState('');
 
+  // Prevent mount logic from overriding realtime
+  const initialized = useRef(false);
+
+  // --- Shared status resolver
+  const resolveStatus = (trip: TravelItineraryRow): SubscriberStatus => {
+    if (!trip) return 'idle';
+    if (trip.status === 'failed') return 'error';
+
+    const days = trip.trip_plan_details?.days ?? [];
+    const duration = parseInt(trip.form?.tripDurationDays || '1');
+
+    if (days.length === 0) return 'core_generating';
+    if (days.length === 1) return 'core_ready';
+    if (days.length < duration) return 'days_generating';
+    if (days.length >= duration) return 'completed';
+
+    return 'idle';
+  };
+
+  // --- Initial load: check for active trip
   useEffect(() => {
-    const getActiveGenerationTrip = async () => {
+    const getActiveTrip = async () => {
       const {
         data: { user },
       } = await supabase.auth.getUser();
-
       if (!user) return;
 
       const { data: trip } = await supabase
@@ -43,25 +71,29 @@ export function SupabaseSubscriptionProvider({ children }: { children: ReactNode
         .eq('user_id', user.id)
         .maybeSingle();
 
-      if (trip) {
-        setTripId(trip.id);
-        start();
+      if (!trip) return;
 
-        const lastUpdated = new Date(trip.updated_at);
-        const now = new Date();
-        const diffInSeconds = differenceInSeconds(now, lastUpdated);
-        const isStuck = trip.status === 'in_progress' && diffInSeconds > 60;
+      setTripId(trip.id);
+      start();
 
-        if (isStuck) {
-          console.warn('Trip generation seems stuck, resuming...');
-          await axios.post('/api/suggestion/resume', { tripId: trip.id });
-        }
+      const status = resolveStatus(trip as TravelItineraryRow);
+      setSubscriberStatus(status);
+
+      if (status === 'completed') finish();
+
+      // check if stuck
+      const diff = differenceInSeconds(new Date(), new Date(trip.updated_at));
+      if (trip.status === 'in_progress' && diff > 60) {
+        await axios.post('/api/suggestion/resume', { tripId: trip.id });
       }
+
+      initialized.current = true;
     };
 
-    getActiveGenerationTrip();
-  }, [supabase, start]);
+    getActiveTrip();
+  }, [supabase, start, finish]);
 
+  // --- Realtime subscription
   useEffect(() => {
     if (!tripId) return;
 
@@ -76,84 +108,33 @@ export function SupabaseSubscriptionProvider({ children }: { children: ReactNode
           filter: `id=eq.${tripId}`,
         },
         async (payload: RealtimePostgresChangesPayload<TravelItineraryRow>) => {
-          if (Object.keys(payload.new).length === 0) return;
+          const raw = payload.new;
 
-          const newPayload = payload.new as TravelItineraryRow;
-          const { trip_plan_details } = newPayload;
+          // 🛡️ Type guard
+          if (!raw || typeof raw !== 'object' || !('trip_plan_details' in raw)) {
+            console.warn('Invalid payload received:', raw);
+            return;
+          }
+          const trip = raw;
 
-          const days = trip_plan_details.days ?? [];
-          const form = newPayload.form ?? { tripDurationDays: '1' };
+          const days = trip.trip_plan_details?.days ?? [];
+          const duration = parseInt(trip.form?.tripDurationDays || '1');
+          const percent = Math.round((days.length / duration) * 100);
+          setProgressPercent(percent);
+          setCurrentDay(days.length);
+          setTotalDays(duration);
 
-          const progress = Math.round((days.length / parseInt(form.tripDurationDays || '1')) * 100);
+          if (trip.trip_plan_details?.slug) setSlug(trip.trip_plan_details.slug);
 
-          const slug = trip_plan_details.slug ?? '';
-          const isFirstDay = days.length === 1;
+          const status = resolveStatus(trip);
+          setSubscriberStatus(status);
+          if (status === 'completed') finish();
 
-          // Revalidate on the server
-          await axios.post('/api/revalidate', { paths: ['/', slug ? `/${slug}` : '/'] });
+          await axios.post('/api/revalidate', {
+            paths: ['/', trip.trip_plan_details?.slug ? `/${trip.trip_plan_details.slug}` : '/'],
+          });
 
-          // Force refresh current route so UI updates
           router.refresh();
-
-          if (isFirstDay) {
-            toast.custom(
-              () => (
-                <div className="p-6 bg-background border border-border rounded-xl shadow-lg w-96">
-                  <div className="flex items-start gap-3">
-                    <div className="flex-1">
-                      <h3 className="font-semibold text-foreground text-lg mb-1">✨ Hey, you can start diving in!</h3>
-                      <p className="text-muted-foreground text-sm mb-3">
-                        Your trip planning is underway. While we continue generating the rest of your itinerary, you can
-                        already explore the first day and start customizing your adventure.
-                      </p>
-
-                      <Progress value={progress} className="mb-4" />
-
-                      <div className="flex justify-between items-center">
-                        <span className="text-sm text-muted-foreground">{progress}% complete</span>
-                        <Link
-                          href={`/${slug}`}
-                          className="bg-primary text-primary-foreground px-4 py-2 rounded-lg font-medium hover:bg-primary/90 transition-colors"
-                        >
-                          Start Exploring →
-                        </Link>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ),
-              { duration: 15000 }
-            );
-          }
-
-          if (progress === 100) {
-            toast.custom(
-              () => (
-                <div className="p-6 bg-background border border-border rounded-xl shadow-lg w-96">
-                  <div className="flex items-start gap-3">
-                    <div className="flex-1">
-                      <h3 className="font-semibold text-foreground text-lg mb-2">🎉 Your itinerary is ready!</h3>
-                      <p className="text-muted-foreground text-sm mb-4">
-                        Your complete travel plan has been generated. Start exploring and make it yours!
-                      </p>
-                      {
-                        <div className="flex justify-end">
-                          <Link
-                            href={`/${slug}`}
-                            className="bg-primary text-primary-foreground px-4 py-2 rounded-lg font-medium hover:bg-primary/90 transition-colors"
-                          >
-                            View Full Itinerary →
-                          </Link>
-                        </div>
-                      }
-                    </div>
-                  </div>
-                </div>
-              ),
-              { duration: 10000 }
-            );
-            finish();
-          }
         }
       )
       .subscribe();
@@ -164,7 +145,18 @@ export function SupabaseSubscriptionProvider({ children }: { children: ReactNode
   }, [supabase, tripId, router, finish]);
 
   return (
-    <SupabaseSubscriptionContext.Provider value={{ tripId, setTripId }}>
+    <SupabaseSubscriptionContext.Provider
+      value={{
+        tripId,
+        setTripId,
+        subscriberStatus,
+        setSubscriberStatus,
+        progressPercent,
+        currentDay,
+        totalDays,
+        slug,
+      }}
+    >
       {children}
     </SupabaseSubscriptionContext.Provider>
   );
@@ -172,6 +164,6 @@ export function SupabaseSubscriptionProvider({ children }: { children: ReactNode
 
 export function useSupabaseSubscriptionContext() {
   const ctx = useContext(SupabaseSubscriptionContext);
-  if (!ctx) throw new Error('useSupabaseSubscriptionContext must be used inside ItineraryProvider');
+  if (!ctx) throw new Error('useSupabaseSubscriptionContext must be used inside SupabaseSubscriptionProvider');
   return ctx;
 }

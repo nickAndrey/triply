@@ -2,6 +2,7 @@ import { DB_TABLES } from '@/app/_constants/db-tables';
 import { TripPlan } from '@/app/_types/trip-plan';
 import { Button } from '@/chadcn/components/ui/button';
 import { createClient } from '@/utils/supabase/server';
+import { compareDesc, parseISO } from 'date-fns';
 import { Home } from 'lucide-react';
 import Link from 'next/link';
 import { NavBar } from './nav-bar/nav-bar';
@@ -20,17 +21,20 @@ export async function Header() {
   if (user) {
     const { data: suggestions } = await supabase
       .from(DB_TABLES.travel_itineraries)
-      .select('trip_plan_details, id')
+      .select('trip_plan_details, id, created_at')
       .eq('user_id', user.id);
 
-    suggestionFields = suggestions?.map((item) => {
-      const tripDetails = item.trip_plan_details as TripPlan;
+    suggestionFields = suggestions
+      ?.map((item) => {
+        const tripDetails = item.trip_plan_details as TripPlan;
 
-      return {
-        id: item.id,
-        details: tripDetails,
-      };
-    });
+        return {
+          id: item.id,
+          details: tripDetails,
+          createdAt: item.created_at,
+        };
+      })
+      .sort((a, b) => compareDesc(parseISO(a.createdAt), parseISO(b.createdAt)));
   }
 
   const homeLink = (

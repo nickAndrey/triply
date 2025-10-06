@@ -20,8 +20,8 @@ export function useSuggestionForm() {
   const formStep6 = useFormStep6();
   const formStep7 = useFormStep7();
 
-  const { start, isPending } = useRequest();
-  const { setTripId } = useSupabaseSubscriptionContext();
+  const { isPending } = useRequest();
+  const { setTripId, setSubscriberStatus } = useSupabaseSubscriptionContext();
 
   const handleSubmit = async () => {
     const mergedSteps = {
@@ -57,8 +57,7 @@ export function useSuggestionForm() {
       return mergedSteps;
     };
 
-    start('Gathering the best suggestions...');
-
+    setSubscriberStatus('core_generating');
     const processedForm = processFormSteps();
     const { tripId } = await startItineraryGeneration(processedForm);
     setTripId(tripId);
