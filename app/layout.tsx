@@ -1,7 +1,7 @@
 import { Header } from '@/app/_components/header/header';
 
 import { RequestProvider } from '@/app/_providers/request-context';
-import { SupabaseSubscriptionProvider } from '@/app/_providers/supabase-subscriptions-context';
+import { SupabaseSubscriptionProvider } from '@/app/_providers/supabase-subscriptions/supabase-subscriptions-context';
 import { Toaster } from '@/chadcn/components/ui/sonner';
 import { ThemeProvider } from '@/chadcn/components/ui/theme-provider';
 import { Nunito } from 'next/font/google';

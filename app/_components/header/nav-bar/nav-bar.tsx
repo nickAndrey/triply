@@ -8,7 +8,6 @@ import { Button } from '@/chadcn/components/ui/button';
 import { DialogDescription, DialogTitle } from '@/chadcn/components/ui/dialog';
 import { Drawer, DrawerClose, DrawerContent, DrawerHeader, DrawerTrigger } from '@/chadcn/components/ui/drawer';
 import { PanelRight, Plane, X } from 'lucide-react';
-import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 
 type NavBarProps = {
@@ -21,7 +20,6 @@ type NavBarProps = {
 export function NavBar({ suggestions }: NavBarProps) {
   const [open, setOpen] = useState(false);
   const { isPending } = useRequest();
-  const pathname = usePathname();
 
   return (
     <Drawer direction="right" open={open} onOpenChange={setOpen}>

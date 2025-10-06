@@ -9,7 +9,7 @@ import { useFormStep6 } from '@/app/(home)/_components/suggestion-form/steps/ste
 import { useFormStep7 } from '@/app/(home)/_components/suggestion-form/steps/step-7/use-form-step-7';
 import { startItineraryGeneration } from '@/app/_actions/personal-suggestion/get-personal-suggestion';
 import { useRequest } from '@/app/_providers/request-context';
-import { useSupabaseSubscriptionContext } from '@/app/_providers/supabase-subscriptions-context';
+import { useSupabaseSubscriptionContext } from '@/app/_providers/supabase-subscriptions/supabase-subscriptions-context';
 
 export function useSuggestionForm() {
   const formStep1 = useFormStep1();

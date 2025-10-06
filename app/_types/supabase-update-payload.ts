@@ -1,28 +1,5 @@
 import { TripPlan } from '@/app/_types/trip-plan';
 
-export type TravelItineraryDay = {
-  markdownContent: string;
-  metadata: {
-    activityIntensity: string;
-    articleTitle: string;
-    budget: string;
-    companions: string;
-    dayNumber: number;
-    daySummary: string;
-    destination: string;
-    foodAdventure: string;
-    pace: string;
-    planningStyle: string;
-    season: string;
-    slug: string;
-    themesUsed: string[];
-    travelDates: string[];
-    tripDuration: number;
-    tripVibe: string;
-    visitedPlaces: string[];
-  };
-};
-
 export type TravelItineraryForm = {
   activityIntensity: string;
   adults?: { adult: number }[];

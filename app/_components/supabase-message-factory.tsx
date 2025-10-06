@@ -1,144 +1,73 @@
 'use client';
 
 import { ProgressModal } from '@/app/_components/progress-modal';
-import { useSupabaseSubscriptionContext } from '@/app/_providers/supabase-subscriptions-context';
-import { useEffect, useState } from 'react';
+import { useSupabaseSubscriptionContext } from '@/app/_providers/supabase-subscriptions/supabase-subscriptions-context';
+import Link from 'next/link';
+import { ComponentProps, useEffect, useState } from 'react';
 
 export function SupabaseMessageFactory() {
-  const { subscriberStatus, progressPercent, currentDay, totalDays, slug, setSubscriberStatus } =
-    useSupabaseSubscriptionContext();
+  const { subscriberStatus, currentDay, slug } = useSupabaseSubscriptionContext();
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const [dialog, setDialog] = useState({
-    tripStart: { open: false },
-    coreReady: { open: false },
-    daysGenerating: { open: false },
-    completed: { open: false },
-    error: { open: false },
-  });
-
+  // Automatically open/close modal based on subscription status
   useEffect(() => {
-    setDialog({
-      tripStart: { open: subscriberStatus === 'core_generating' },
-      coreReady: { open: subscriberStatus === 'core_ready' },
-      daysGenerating: { open: subscriberStatus === 'days_generating' },
-      completed: { open: subscriberStatus === 'completed' },
-      error: { open: subscriberStatus === 'error' },
-    });
+    setIsDialogOpen(subscriberStatus !== 'idle');
   }, [subscriberStatus]);
 
-  switch (subscriberStatus) {
-    case 'idle':
-      return null;
-    case 'core_generating':
-      return (
-        <ProgressModal
-          open={dialog.tripStart.open}
-          onOpenChange={(isOpen) => setDialog((prev) => ({ ...prev, tripStart: { open: isOpen } }))}
-          data={{
-            icon: <span>🌍</span>,
-            title: 'We’re crafting your adventure!',
-            description: (
-              <>
-                We’re building your itinerary core. This usually takes about <strong>40 seconds</strong> for setup. Sit
-                tight — your personal travel map is on its way.
-              </>
-            ),
-          }}
-          progress={30}
-        />
-      );
+  const dialogData = {
+    idle: {
+      title: 'Waiting to start',
+      description: 'Preparing your adventure...',
+      icon: '🕓',
+    },
+    core_generating: {
+      title: 'Starting your journey ✈️',
+      description: 'We’re gathering inspiration and travel data to begin crafting your itinerary.',
+    },
+    core_ready: {
+      title: 'Core generated 🌍',
+      description: 'We’ve created the base structure for your adventure — now refining daily details.',
+    },
+    days_generating: {
+      title: 'Building your days 📅',
+      description: (
+        <>
+          <p>
+            {currentDay
+              ? `Currently generating day ${currentDay} of your adventure.`
+              : 'Generating your daily itinerary.'}
+          </p>
 
-    case 'core_ready':
-      return (
-        <ProgressModal
-          open={dialog.coreReady?.open ?? true}
-          onOpenChange={(isOpen) => setDialog((prev) => ({ ...prev, coreReady: { open: isOpen } }))}
-          data={{
-            icon: <span>🎉</span>,
-            title: 'Core Ready — Your Trip Page is Live!',
-            description: (
-              <>
-                We’ve set up your itinerary’s foundation. You can now visit your trip page — the first day will appear
-                soon!
-                {slug && (
-                  <div className="mt-3">
-                    <a
-                      href={`/${slug}`}
-                      className="inline-flex items-center gap-1 text-primary underline font-medium"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      🌍 View Your Trip
-                    </a>
-                  </div>
-                )}
-              </>
-            ),
-          }}
-          progress={50}
-        />
-      );
+          {currentDay && currentDay >= 1 && slug && (
+            <>
+              <p className="mt-2">You can already start exploring!</p>
+              <Link href={`/${slug}`} className="underline text-primary">
+                View itinerary
+              </Link>
+            </>
+          )}
+        </>
+      ),
+    },
+    completed: {
+      title: 'All done 🎉',
+      description: (
+        <p>
+          Your trip is ready to explore!{' '}
+          {slug && (
+            <a href={`/${slug}`} className="text-blue-500 underline">
+              View itinerary
+            </a>
+          )}
+        </p>
+      ),
+    },
+    error: {
+      title: 'Error 😕',
+      description: 'Something went wrong while generating your trip. Please try again or adjust your trip details.',
+      icon: '⚠️',
+    },
+  } satisfies Record<typeof subscriberStatus, ComponentProps<typeof ProgressModal>['data']>;
 
-    case 'days_generating':
-      return (
-        <ProgressModal
-          open={dialog.daysGenerating.open}
-          onOpenChange={(isOpen) => setDialog((prev) => ({ ...prev, daysGenerating: { open: isOpen } }))}
-          data={{
-            icon: <span>✈️</span>,
-            title: 'Building Your Daily Plan...',
-            description: (
-              <>
-                We’re crafting day {currentDay} of {totalDays}. This will complete soon — feel free to explore your trip
-                page while we finish up.
-              </>
-            ),
-          }}
-          progress={progressPercent ?? 50}
-        />
-      );
-
-    case 'completed':
-      return (
-        <ProgressModal
-          open={dialog.completed.open}
-          onOpenChange={(isOpen) => {
-            setDialog((prev) => ({ ...prev, completed: { open: isOpen } }));
-            setSubscriberStatus('idle');
-          }}
-          data={{
-            icon: <span>🎉</span>,
-            title: 'Your Itinerary is Ready!',
-            description: (
-              <>
-                Your full travel plan is complete! Head over to your trip page to explore all days and start
-                customizing.
-              </>
-            ),
-          }}
-          progress={100}
-        />
-      );
-
-    case 'error':
-      return (
-        <ProgressModal
-          open={dialog.error.open}
-          onOpenChange={(isOpen) => setDialog((prev) => ({ ...prev, error: { open: isOpen } }))}
-          data={{
-            icon: <span>⚠️</span>,
-            title: 'Something Went Wrong',
-            description: (
-              <>
-                We hit a snag while generating your itinerary. Please try again, or contact support if the issue
-                persists.
-              </>
-            ),
-          }}
-        />
-      );
-
-    default:
-      return null;
-  }
+  return <ProgressModal open={isDialogOpen} onOpenChange={setIsDialogOpen} data={dialogData[subscriberStatus]} />;
 }
