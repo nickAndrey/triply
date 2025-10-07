@@ -4,19 +4,27 @@ import { ResizableLayer } from '@/app/[slug]/_components/resizable-layer';
 import { TravelLoader } from '@/app/_components/travel-loader';
 import { useSupabaseSubscriptionContext } from '@/app/_providers/supabase-subscriptions/supabase-subscriptions-context';
 import { TravelItineraryRow } from '@/app/_types/supabase-update-payload';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 type Props = {
   dbRow: TravelItineraryRow;
 };
 
 export function TripPlanView({ dbRow }: Props) {
-  const { subscriberStatus, tripId } = useSupabaseSubscriptionContext();
+  const { subscriberStatus, tripId, tripData } = useSupabaseSubscriptionContext();
 
-  const isSameTrip = dbRow.id === tripId;
+  const [dataSrc, setDataSrc] = useState(dbRow);
+
+  useEffect(() => {
+    if (tripData && tripData.id === tripId) {
+      setDataSrc(tripData);
+    }
+  }, [tripData, tripId]);
+
+  const isSameTrip = dataSrc.id === tripId;
   const isLive = subscriberStatus !== 'completed' && subscriberStatus !== 'idle';
 
-  const trip = isLive && isSameTrip ? dbRow.trip_plan_details : dbRow.trip_plan_details;
+  const trip = isLive && isSameTrip ? dataSrc.trip_plan_details : dataSrc.trip_plan_details;
 
   const asideContent = trip.days.map((day) => ({
     anchor: day.dayNumber,

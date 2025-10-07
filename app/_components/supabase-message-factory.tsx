@@ -55,7 +55,7 @@ export function SupabaseMessageFactory() {
         <p>
           Your trip is ready to explore!{' '}
           {slug && (
-            <a href={`/${slug}`} className="text-blue-500 underline">
+            <a href={`/${slug}`} className="text-primary underline">
               View itinerary
             </a>
           )}

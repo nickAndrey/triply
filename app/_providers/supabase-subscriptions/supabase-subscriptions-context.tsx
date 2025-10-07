@@ -18,6 +18,7 @@ type ContextType = {
   subscriberStatus: SubscriberStatus;
   setSubscriberStatus: (status: SubscriberStatus) => void;
   slug: string;
+  tripData: TravelItineraryRow | null;
   currentDay?: number;
 };
 
@@ -31,6 +32,7 @@ export function SupabaseSubscriptionProvider({ children }: { children: ReactNode
   const [subscriberStatus, setSubscriberStatus] = useState<SubscriberStatus>('idle');
   const [slug, setSlug] = useState('');
   const [currentDay, setCurrentDay] = useState<number>();
+  const [tripData, setTripData] = useState<TravelItineraryRow | null>(null);
 
   useEffect(() => {
     async function bootstrap() {
@@ -73,6 +75,7 @@ export function SupabaseSubscriptionProvider({ children }: { children: ReactNode
           const days = trip.trip_plan_details?.days ?? [];
 
           setCurrentDay(days.length === 0 ? 1 : days.length);
+          setTripData(trip);
 
           if (trip.trip_plan_details?.slug) setSlug(trip.trip_plan_details.slug);
 
@@ -94,6 +97,7 @@ export function SupabaseSubscriptionProvider({ children }: { children: ReactNode
   return (
     <SupabaseSubscriptionContext.Provider
       value={{
+        tripData,
         tripId,
         setTripId,
         subscriberStatus,

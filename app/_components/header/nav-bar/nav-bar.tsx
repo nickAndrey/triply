@@ -1,6 +1,7 @@
 'use client';
 
 import { NavLink } from '@/app/_components/header/nav-bar/nav-link';
+import { SearchBox } from '@/app/_components/header/nav-bar/search-box';
 import { useRequest } from '@/app/_providers/request-context';
 import { TripPlan } from '@/app/_types/trip-plan';
 import { Badge } from '@/chadcn/components/ui/badge';
@@ -20,6 +21,13 @@ type NavBarProps = {
 export function NavBar({ suggestions }: NavBarProps) {
   const [open, setOpen] = useState(false);
   const { isPending } = useRequest();
+
+  const [searchValue, setSearchValue] = useState('');
+
+  const filterNavItems = () => {
+    const regex = new RegExp(searchValue, 'i');
+    return suggestions.filter((item) => regex.test(item.details.city));
+  };
 
   return (
     <Drawer direction="right" open={open} onOpenChange={setOpen}>
@@ -59,7 +67,11 @@ export function NavBar({ suggestions }: NavBarProps) {
         </DrawerHeader>
 
         <ul className="flex flex-col gap-1 px-3 pb-4 w-full overflow-auto">
-          {suggestions.map(({ id, details }) => {
+          <li className="py-2 sticky top-0 z-10 bg-background">
+            <SearchBox searchValue={searchValue} onChange={setSearchValue} clearValue={() => setSearchValue('')} />
+          </li>
+
+          {filterNavItems().map(({ id, details }) => {
             const baseCity = details.city || details.destination.split(',')[0];
             const duration = `${details.tripDurationDays}-day`;
             const subtitle = `${duration} ${details.companions.type.toLowerCase()} trip • ${details.season.toLowerCase()}`;
