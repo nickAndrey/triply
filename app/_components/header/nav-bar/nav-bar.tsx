@@ -6,6 +6,12 @@ import { useRequest } from '@/app/_providers/request-context';
 import { TripPlan } from '@/app/_types/trip-plan';
 import { Badge } from '@/chadcn/components/ui/badge';
 import { Button } from '@/chadcn/components/ui/button';
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuTrigger,
+} from '@/chadcn/components/ui/context-menu';
 import { DialogDescription, DialogTitle } from '@/chadcn/components/ui/dialog';
 import { Drawer, DrawerClose, DrawerContent, DrawerHeader, DrawerTrigger } from '@/chadcn/components/ui/drawer';
 import { PanelRight, Plane, X } from 'lucide-react';
@@ -61,6 +67,34 @@ export function NavBar({ suggestions }: NavBarProps) {
     });
   }, [activeIndex]);
 
+  const contextMenuConfig = [
+    {
+      name: 'rename',
+      label: 'Rename',
+      onClick: () => {},
+    },
+    {
+      name: 'edit_prompt',
+      label: 'Edit Prompt',
+      onClick: () => {},
+    },
+    {
+      name: 'duplicate',
+      label: 'Duplicate',
+      onClick: () => {},
+    },
+    {
+      name: 'export',
+      label: 'Export',
+      onClick: () => {},
+    },
+    {
+      name: 'delete',
+      label: 'Delete',
+      onClick: () => {},
+    },
+  ];
+
   return (
     <Drawer direction="right" open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>
@@ -115,12 +149,24 @@ export function NavBar({ suggestions }: NavBarProps) {
 
             return (
               <li key={id}>
-                <NavLink
-                  href={`/${details.slug}`}
-                  label={baseCity}
-                  subtitle={subtitle}
-                  icon={<Plane className="w-4 h-4" />}
-                />
+                <ContextMenu>
+                  <ContextMenuTrigger>
+                    <NavLink
+                      href={`/${details.slug}`}
+                      label={baseCity}
+                      subtitle={subtitle}
+                      contextMenuConfig={contextMenuConfig}
+                      icon={<Plane className="w-4 h-4" />}
+                    />
+                  </ContextMenuTrigger>
+                  <ContextMenuContent>
+                    {contextMenuConfig.map((item) => (
+                      <ContextMenuItem key={item.name} onClick={item.onClick}>
+                        {item.label}
+                      </ContextMenuItem>
+                    ))}
+                  </ContextMenuContent>
+                </ContextMenu>
               </li>
             );
           })}
