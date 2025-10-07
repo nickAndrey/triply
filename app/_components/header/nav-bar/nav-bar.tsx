@@ -9,7 +9,7 @@ import { Button } from '@/chadcn/components/ui/button';
 import { DialogDescription, DialogTitle } from '@/chadcn/components/ui/dialog';
 import { Drawer, DrawerClose, DrawerContent, DrawerHeader, DrawerTrigger } from '@/chadcn/components/ui/drawer';
 import { PanelRight, Plane, X } from 'lucide-react';
-import { useState } from 'react';
+import { KeyboardEvent, useEffect, useRef, useState } from 'react';
 
 type NavBarProps = {
   suggestions: {
@@ -23,11 +23,43 @@ export function NavBar({ suggestions }: NavBarProps) {
   const { isPending } = useRequest();
 
   const [searchValue, setSearchValue] = useState('');
+  const [activeIndex, setActiveIndex] = useState(-1);
 
   const filterNavItems = () => {
     const regex = new RegExp(searchValue, 'i');
     return suggestions.filter((item) => regex.test(item.details.city));
   };
+
+  const ulRef = useRef<HTMLUListElement>(null);
+
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (!ulRef.current) return;
+
+    const links = Array.from(ulRef.current.querySelectorAll('a'));
+
+    switch (e.key) {
+      case 'ArrowDown':
+        e.preventDefault();
+        setActiveIndex((prev) => (prev + 1) % links.length);
+        break;
+      case 'ArrowUp':
+        e.preventDefault();
+        setActiveIndex((prev) => (prev - 1 + links.length) % links.length);
+        break;
+      case 'Enter':
+        (links[activeIndex] as HTMLAnchorElement)?.click();
+        break;
+      default:
+        return;
+    }
+  };
+
+  useEffect(() => {
+    const links = ulRef.current?.querySelectorAll('a') as NodeListOf<HTMLAnchorElement>;
+    links?.forEach((link, idx) => {
+      link.classList.toggle('bg-blue-100', idx === activeIndex);
+    });
+  }, [activeIndex]);
 
   return (
     <Drawer direction="right" open={open} onOpenChange={setOpen}>
@@ -66,9 +98,14 @@ export function NavBar({ suggestions }: NavBarProps) {
           </DrawerClose>
         </DrawerHeader>
 
-        <ul className="flex flex-col gap-1 px-3 pb-4 w-full overflow-auto">
+        <ul className="flex flex-col gap-1 px-3 pb-4 w-full overflow-auto" ref={ulRef}>
           <li className="py-2 sticky top-0 z-10 bg-background">
-            <SearchBox searchValue={searchValue} onChange={setSearchValue} clearValue={() => setSearchValue('')} />
+            <SearchBox
+              searchValue={searchValue}
+              onChange={setSearchValue}
+              onKeyDown={handleKeyDown}
+              clearValue={() => setSearchValue('')}
+            />
           </li>
 
           {filterNavItems().map(({ id, details }) => {
