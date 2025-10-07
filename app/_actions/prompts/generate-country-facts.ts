@@ -21,8 +21,7 @@ export function generateCountryFacts() {
         properties: {
           markdownContent: {
             type: 'string',
-            description:
-              'The full travel article formatted in Markdown according to the rules.',
+            description: 'The full travel article formatted in Markdown according to the rules.',
           },
           metadata: {
             type: 'object',
@@ -37,8 +36,7 @@ export function generateCountryFacts() {
               },
               slug: {
                 type: 'string',
-                description:
-                  'Lowercase, hyphen-separated slug based on the article title.',
+                description: 'Lowercase, hyphen-separated slug based on the article title.',
               },
             },
             required: ['country', 'articleTitle', 'slug'],

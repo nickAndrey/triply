@@ -2,20 +2,9 @@
 
 import { useLoginForm } from '@/app/(auth)/login/_components/use-login-form';
 import { InputPassword } from '@/app/_components/input-password';
-import {
-  Alert,
-  AlertDescription,
-  AlertTitle,
-} from '@/chadcn/components/ui/alert';
+import { Alert, AlertDescription, AlertTitle } from '@/chadcn/components/ui/alert';
 import { Button } from '@/chadcn/components/ui/button';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/chadcn/components/ui/form';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/chadcn/components/ui/form';
 import { Input } from '@/chadcn/components/ui/input';
 import { AlertCircleIcon, LoaderCircle } from 'lucide-react';
 import Link from 'next/link';
@@ -33,12 +22,7 @@ export function LoginForm() {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input
-                  placeholder="Provide your email."
-                  autoComplete="email"
-                  type="email"
-                  {...field}
-                />
+                <Input placeholder="Provide your email." autoComplete="email" type="email" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -52,20 +36,13 @@ export function LoginForm() {
               <FormItem>
                 <FormLabel>Password</FormLabel>
                 <FormControl>
-                  <InputPassword
-                    placeholder="Provide password."
-                    autoComplete="new-password"
-                    {...field}
-                  />
+                  <InputPassword placeholder="Provide password." autoComplete="new-password" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
-          <Link
-            href="/forgot-password"
-            className="text-sm hover:underline"
-          >
+          <Link href="/forgot-password" className="text-sm hover:underline">
             Forgot Password?
           </Link>
         </fieldset>
@@ -73,16 +50,10 @@ export function LoginForm() {
           <Alert variant="destructive">
             <AlertCircleIcon />
             <AlertTitle>{generalError}</AlertTitle>
-            <AlertDescription>
-              Please check your email and password and try again
-            </AlertDescription>
+            <AlertDescription>Please check your email and password and try again</AlertDescription>
           </Alert>
         )}
-        <Button
-          type="submit"
-          className="py-5 flex items-center gap-3"
-          disabled={isPending}
-        >
+        <Button type="submit" className="py-5 flex items-center gap-3" disabled={isPending}>
           {isPending ? (
             <>
               <LoaderCircle className="animate-spin" />

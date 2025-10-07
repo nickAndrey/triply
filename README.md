@@ -36,3 +36,35 @@ Tired of endless searching, planning, and second-guessing your next trip? **AI T
 ## 🌟 Why Choose AI Travel Planner?
 
 Unlike generic trip apps, this planner doesn’t just list attractions — it **weaves together stories, tips, and local flavor** to make your journey unforgettable. Whether you want to explore ancient ruins, lounge on a beach, or eat your way through a city, your trip plan will feel curated just for you.
+
+# 🧭 Progressive Itinerary Generation Flow
+
+This document explains the **end-to-end architecture** of the progressive itinerary generation system.
+
+---
+
+## 📡 High-Level Flow of generating suggestion
+
+```
+[ Client (UI) ]
+      |
+      | POST /startItinerary
+      v
+[ Next.js Server Action ]
+      |
+      | 1. insert trip(status="in_progress")
+      | 2. return tripId
+      v
+[ Supabase DB ]
+      ^
+      |
+      | trigger background worker (/api/generate-itinerary?tripId=...)
+      v
+[ Background Generator ]
+      | loop days:
+      |   - generate day
+      |   - update DB (append new day JSON)
+      |   - mark status ("completed" when finished)
+      v
+[ Supabase DB ] -- realtime --> [ Client subscribed to tripId ]
+```

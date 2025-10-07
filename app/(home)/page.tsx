@@ -1,7 +1,8 @@
-import { GenerateSuggestionsCard } from '@/app/(home)/_components/generate-suggestions-form/generate-suggestions-card';
-import { PendingSuggestionDialog } from '@/app/(home)/_components/pending-suggestion-dialog';
+import { SuggestionForm } from '@/app/(home)/_components/suggestion-form/suggestion-form';
 import { SuggestionSkeleton } from '@/app/(home)/_components/suggestions-carousel/suggestion-skeleton';
 import { SuggestionsCarousel } from '@/app/(home)/_components/suggestions-carousel/suggestions-carousel';
+import { SupabaseMessageFactory } from '@/app/_components/supabase-message-factory';
+
 import { Metadata } from 'next';
 import { Suspense } from 'react';
 
@@ -16,8 +17,8 @@ export default function HomePage() {
       <Suspense fallback={<SuggestionSkeleton />}>
         <SuggestionsCarousel />
       </Suspense>
-      <GenerateSuggestionsCard />
-      <PendingSuggestionDialog />
+      <SuggestionForm />
+      <SupabaseMessageFactory />
     </main>
   );
 }

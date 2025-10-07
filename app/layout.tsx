@@ -1,6 +1,7 @@
 import { Header } from '@/app/_components/header/header';
-import { SupabaseJobSubscriber } from '@/app/_components/supabase-job-subscriber';
+
 import { RequestProvider } from '@/app/_providers/request-context';
+import { SupabaseSubscriptionProvider } from '@/app/_providers/supabase-subscriptions/supabase-subscriptions-context';
 import { Toaster } from '@/chadcn/components/ui/sonner';
 import { ThemeProvider } from '@/chadcn/components/ui/theme-provider';
 import { Nunito } from 'next/font/google';
@@ -21,17 +22,13 @@ export default function RootLayout({ children }: Props) {
       <head />
       <body className={nunito.className}>
         <RequestProvider>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            {children}
-            <Header />
-            <SupabaseJobSubscriber />
-            <Toaster position="top-right" />
-          </ThemeProvider>
+          <SupabaseSubscriptionProvider>
+            <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+              {children}
+              <Header />
+              <Toaster position="top-right" richColors expand />
+            </ThemeProvider>
+          </SupabaseSubscriptionProvider>
         </RequestProvider>
       </body>
     </html>

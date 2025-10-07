@@ -30,19 +30,12 @@ export function UserMenu() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button
-          variant="outline"
-          className="rounded-full"
-          size="icon"
-          aria-label="open user menu"
-        >
+        <Button variant="outline" className="rounded-full" size="icon" aria-label="open user menu">
           <User />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent side="bottom" align="end">
-        <DropdownMenuLabel className="text-muted-foreground">
-          {email ?? 'Anonymous'}
-        </DropdownMenuLabel>
+        <DropdownMenuLabel className="text-muted-foreground">{email ?? 'Anonymous'}</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={handleLogOut}>Logout</DropdownMenuItem>
       </DropdownMenuContent>

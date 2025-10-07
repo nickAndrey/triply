@@ -50,9 +50,7 @@ export function useSignupForm() {
     const result = await signup(form.getValues());
 
     if (result.errors) {
-      fail(
-        'Sign up failed. Please check the highlighted fields and try again.'
-      );
+      fail('Sign up failed. Please check the highlighted fields and try again.');
 
       if ('username' in result.errors) {
         form.setError('username', {

@@ -38,9 +38,7 @@ export function useForgotPasswordForm() {
     }
 
     if (result.errors) {
-      fail(
-        result?.errors?.email?.errors[0] || 'Failed to send reset email.'
-      );
+      fail(result?.errors?.email?.errors[0] || 'Failed to send reset email.');
 
       if ('email' in result.errors) {
         form.setError('email', {

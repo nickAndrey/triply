@@ -1,6 +1,8 @@
 import { DB_TABLES } from '@/app/_constants/db-tables';
+import { TripPlan } from '@/app/_types/trip-plan';
 import { Button } from '@/chadcn/components/ui/button';
 import { createClient } from '@/utils/supabase/server';
+import { compareDesc, parseISO } from 'date-fns';
 import { Home } from 'lucide-react';
 import Link from 'next/link';
 import { NavBar } from './nav-bar/nav-bar';
@@ -17,22 +19,27 @@ export async function Header() {
   let suggestionFields = null;
 
   if (user) {
-    const { data } = await supabase
-      .from(DB_TABLES.personal_travel_suggestions)
-      .select('id,destination,travel_dates,article_title,slug')
+    const { data: suggestions } = await supabase
+      .from(DB_TABLES.travel_itineraries)
+      .select('trip_plan_details, id, created_at')
       .eq('user_id', user.id);
 
-    suggestionFields = data;
+    suggestionFields = suggestions
+      ?.map((item) => {
+        const tripDetails = item.trip_plan_details as TripPlan;
+
+        return {
+          id: item.id,
+          details: tripDetails,
+          createdAt: item.created_at,
+        };
+      })
+      .sort((a, b) => compareDesc(parseISO(a.createdAt), parseISO(b.createdAt)));
   }
 
   const homeLink = (
     <Link href="/">
-      <Button
-        size="icon"
-        variant="outline"
-        className="rounded-full"
-        aria-label="home"
-      >
+      <Button size="icon" variant="outline" className="rounded-full" aria-label="home">
         <Home />
       </Button>
     </Link>
