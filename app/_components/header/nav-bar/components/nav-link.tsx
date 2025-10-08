@@ -1,5 +1,7 @@
 'use client';
 
+import { InputRenameNavItem } from '@/app/_components/header/nav-bar/components/input-rename-nav-item/input-rename-nav-item';
+import { useInputRenameNavItem } from '@/app/_components/header/nav-bar/components/input-rename-nav-item/use-input-rename-nav-item';
 import { useNavBarActions } from '@/app/_components/header/nav-bar/hooks/use-nav-bar-actions';
 import { NavBarItem } from '@/app/_components/header/nav-bar/types/nav-bar-item';
 import { Button } from '@/chadcn/components/ui/button';
@@ -9,12 +11,11 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/chadcn/components/ui/dropdown-menu';
-import { Input } from '@/chadcn/components/ui/input';
 import { cn } from '@/chadcn/lib/utils';
 import { EllipsisVertical } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { KeyboardEvent, ReactNode, useEffect, useRef, useState } from 'react';
+import { ReactNode } from 'react';
 
 type NavLinkProps = {
   href: string;
@@ -30,32 +31,14 @@ export function NavLink({ href, label, subtitle, icon, actions, navBarItem, onNa
   const pathname = usePathname();
   const isActive = pathname === href || pathname.startsWith(`${href}/`);
 
-  const [linkLabel, setLinkLabel] = useState(label);
-
-  const linkRef = useRef<HTMLInputElement>(null);
-
   const isEditMode = actions.editingItemId === navBarItem.id;
 
-  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      actions.resetEditingItemId();
-    }
-  };
-
-  const handleBlur = () => {
-    actions.resetEditingItemId();
-  };
-
-  useEffect(() => {
-    if (isEditMode) {
-      const timer = setTimeout(() => {
-        linkRef.current?.focus();
-        linkRef.current?.select();
-      }, 200); // TODO!: find a better way to make that input focusable
-      return () => clearTimeout(timer);
-    }
-  }, [isEditMode]);
+  const renameInputState = useInputRenameNavItem({
+    navItemId: navBarItem.id,
+    isEditMode,
+    actions,
+    label,
+  });
 
   return (
     <Link
@@ -77,16 +60,10 @@ export function NavLink({ href, label, subtitle, icon, actions, navBarItem, onNa
             <span className={cn('w-4 h-4 shrink-0', isActive ? 'text-primary' : 'text-muted-foreground')}>{icon}</span>
           )}
           {actions.editingItemId === navBarItem.id ? (
-            <Input
-              ref={linkRef}
-              value={linkLabel}
-              onChange={(e) => setLinkLabel(e.target.value)}
-              onKeyDown={handleKeyDown}
-              onBlur={handleBlur}
-            />
+            <InputRenameNavItem {...renameInputState} />
           ) : (
             <span className={cn('font-medium text-sm truncate', isActive ? 'text-primary' : 'text-foreground')}>
-              {linkLabel}
+              {renameInputState.linkLabel}
             </span>
           )}
         </div>
