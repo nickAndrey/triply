@@ -45,14 +45,14 @@ export function useSearchBox({ navbarItems, ulRef }: Params) {
     links?.forEach((link, idx) => {
       link.classList.toggle('bg-blue-100', idx === activeIndex);
     });
-  }, [activeIndex]);
+  }, [activeIndex, ulRef]);
 
   useEffect(() => {
     const regex = new RegExp(searchValueDebounced, 'i');
     const filtered = navbarItems.filter((item) => regex.test(item.trip_plan_details.city));
 
     setFilteredNavbarItems(filtered);
-  }, [searchValueDebounced]);
+  }, [searchValueDebounced, navbarItems]);
 
   return {
     searchValue,
