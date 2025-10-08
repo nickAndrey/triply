@@ -1,4 +1,5 @@
 export type TripPlan = {
+  navTitle: string; // by default set to "TripPlan.city" value
   destination: string; // Full destination name (e.g. "Warsaw, Poland")
   city: string; // City name only
   country: string; // Country name only

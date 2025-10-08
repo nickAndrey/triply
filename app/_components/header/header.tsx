@@ -16,21 +16,21 @@ export async function Header() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  let suggestionFields = null;
+  let navbarItems = null;
 
   if (user) {
-    const { data: suggestions } = await supabase
+    const { data: tripDetails } = await supabase
       .from(DB_TABLES.travel_itineraries)
       .select('trip_plan_details, id, created_at')
       .eq('user_id', user.id);
 
-    suggestionFields = suggestions
+    navbarItems = tripDetails
       ?.map((item) => {
         const tripDetails = item.trip_plan_details as TripPlan;
 
         return {
           id: item.id,
-          details: tripDetails,
+          trip_plan_details: tripDetails,
           createdAt: item.created_at,
         };
       })
@@ -50,7 +50,7 @@ export async function Header() {
       {user && (
         <>
           {homeLink}
-          <NavBar suggestions={suggestionFields || []} />
+          <NavBar navbarItems={navbarItems || []} />
           <UserMenu />
         </>
       )}

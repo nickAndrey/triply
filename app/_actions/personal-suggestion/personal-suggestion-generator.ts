@@ -12,7 +12,6 @@ export class ProgressiveItineraryGenerator {
   private API_URL = 'https://api.deepseek.com/chat/completions';
   private currentDay = 1;
   private supabase;
-  private chunks: Day[] = [];
 
   private TRIP_PLAN: TripPlan | null = null;
 
