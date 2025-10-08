@@ -1,5 +1,5 @@
 import { useNavBarActions } from '@/app/_components/header/nav-bar/hooks/use-nav-bar-actions';
-import { ChangeEvent, KeyboardEvent, useEffect, useRef, useState } from 'react';
+import { ChangeEvent, FocusEvent, KeyboardEvent, useEffect, useRef, useState } from 'react';
 
 type Params = {
   label: string;
@@ -19,8 +19,8 @@ export function useInputRenameNavItem({ label, navItemId, actions, isEditMode }:
     }
   };
 
-  const handleBlur = () => {
-    actions.handleRename(navItemId, linkLabel);
+  const handleBlur = (e: FocusEvent<HTMLInputElement>) => {
+    actions.handleRename(navItemId, linkLabel, e.target.value === linkLabel);
   };
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {

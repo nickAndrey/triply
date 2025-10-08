@@ -9,6 +9,7 @@ import {
   ContextMenuItem,
   ContextMenuTrigger,
 } from '@/chadcn/components/ui/context-menu';
+import { cn } from '@/chadcn/lib/utils';
 import { Plane } from 'lucide-react';
 import { useRef } from 'react';
 
@@ -50,7 +51,13 @@ export function NavItems({ navbarItems, actions }: Props) {
               </ContextMenuTrigger>
               <ContextMenuContent onCloseAutoFocus={(e) => e.preventDefault()}>
                 {actions.actionsConfig.map((item) => (
-                  <ContextMenuItem key={item.id} onClick={() => item.action(navBarItem)}>
+                  <ContextMenuItem
+                    key={item.id}
+                    onClick={() => item.action(navBarItem)}
+                    className={cn(
+                      item.label === 'Delete' && 'text-destructive hover:!bg-destructive/20 hover:!text-destructive'
+                    )}
+                  >
                     {item.label}
                   </ContextMenuItem>
                 ))}

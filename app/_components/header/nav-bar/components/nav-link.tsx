@@ -89,7 +89,13 @@ export function NavLink({ href, label, subtitle, icon, actions, navBarItem, onNa
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" side="bottom" onCloseAutoFocus={(e) => e.preventDefault()}>
             {actions.actionsConfig.map((item) => (
-              <DropdownMenuItem key={item.id} onClick={() => item.action(navBarItem)}>
+              <DropdownMenuItem
+                key={item.id}
+                onClick={() => item.action(navBarItem)}
+                className={cn(
+                  item.label === 'Delete' && 'text-destructive hover:!bg-destructive/20 hover:!text-destructive'
+                )}
+              >
                 {item.label}
               </DropdownMenuItem>
             ))}

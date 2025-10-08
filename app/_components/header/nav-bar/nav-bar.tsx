@@ -4,6 +4,16 @@ import { NavItems } from '@/app/_components/header/nav-bar/components/nav-items'
 import { useNavBarActions } from '@/app/_components/header/nav-bar/hooks/use-nav-bar-actions';
 import { NavBarItem } from '@/app/_components/header/nav-bar/types/nav-bar-item';
 import { useRequest } from '@/app/_providers/request-context';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/chadcn/components/ui/alert-dialog';
 import { Badge } from '@/chadcn/components/ui/badge';
 import { Button } from '@/chadcn/components/ui/button';
 import { DialogDescription, DialogTitle } from '@/chadcn/components/ui/dialog';
@@ -20,6 +30,8 @@ export function NavBar({ navbarItems }: NavBarProps) {
   const { isPending } = useRequest();
 
   const actions = useNavBarActions();
+
+  const { alertDialogProps } = actions;
 
   return (
     <Drawer direction="right" open={open} onOpenChange={setOpen}>
@@ -59,6 +71,19 @@ export function NavBar({ navbarItems }: NavBarProps) {
         </DrawerHeader>
 
         <NavItems navbarItems={navbarItems} actions={actions} />
+
+        <AlertDialog open={alertDialogProps.open} onOpenChange={actions.handleDialogOnOpenChange}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>{alertDialogProps.title}</AlertDialogTitle>
+              <AlertDialogDescription>{alertDialogProps.description}</AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction onClick={alertDialogProps.action}>Continue</AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </DrawerContent>
     </Drawer>
   );
