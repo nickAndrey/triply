@@ -23,7 +23,7 @@ export function useSuggestionForm() {
   const { isPending } = useRequest();
   const { setTripId, setSubscriberStatus } = useSupabaseSubscriptionContext();
 
-  const handleSubmit = async () => {
+  const processFormSteps = () => {
     const mergedSteps = {
       ...formStep1.form.getValues(),
       ...formStep2.form.getValues(),
@@ -34,29 +34,29 @@ export function useSuggestionForm() {
       ...formStep7.form.getValues(),
     };
 
-    const processFormSteps = () => {
-      switch (mergedSteps.companions) {
-        case 'Solo':
-        case 'Couple':
-          mergedSteps.children = [];
-          mergedSteps.adults = [];
-          mergedSteps.friends = [];
-          break;
-        case 'Family':
-          mergedSteps.friends = [];
-          break;
-        case 'Friends':
-          mergedSteps.children = [];
-          mergedSteps.adults = [];
-          break;
-        default:
-          const _exhaustiveCheck: never = mergedSteps.companions;
-          return _exhaustiveCheck;
-      }
+    switch (mergedSteps.companions) {
+      case 'Solo':
+      case 'Couple':
+        mergedSteps.children = [];
+        mergedSteps.adults = [];
+        mergedSteps.friends = [];
+        break;
+      case 'Family':
+        mergedSteps.friends = [];
+        break;
+      case 'Friends':
+        mergedSteps.children = [];
+        mergedSteps.adults = [];
+        break;
+      default:
+        const _exhaustiveCheck: never = mergedSteps.companions;
+        return _exhaustiveCheck;
+    }
 
-      return mergedSteps;
-    };
+    return mergedSteps;
+  };
 
+  const handleSubmit = async () => {
     setSubscriberStatus('core_generating');
     const processedForm = processFormSteps();
     const { tripId } = await startItineraryGeneration(processedForm);
