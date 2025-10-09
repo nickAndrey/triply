@@ -13,7 +13,7 @@
   ],
   "importOrderSeparation": true,
   "importOrderSortSpecifiers": true,
-  "importOrderCaseInsensitive": false,
+  "importOrderCaseInsensitive": true,
   "semi": true,
   "singleQuote": true,
   "trailingComma": "es5",

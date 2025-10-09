@@ -5,7 +5,7 @@ import { Textarea } from '@chadcn/components/ui/textarea';
 
 import { CheckboxButtonCard } from '@components/checkbox-button-card';
 
-import { FoodPreferencesEnum, enums, useFormStep5 } from './use-form-step-5';
+import { enums, FoodPreferencesEnum, useFormStep5 } from './use-form-step-5';
 
 type Props = ReturnType<typeof useFormStep5> & {};
 
