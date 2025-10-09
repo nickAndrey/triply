@@ -1,10 +1,10 @@
 'use client';
 
-import { schema, useFormStep6 } from '@/app/(home)/_components/suggestion-form/steps/step-6/use-form-step-6';
 import { RadioButtonCard } from '@/app/_components/radio-button-card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/chadcn/components/ui/form';
 import { RadioGroup } from '@/chadcn/components/ui/radio-group';
 import { Textarea } from '@/chadcn/components/ui/textarea';
+import { schema, useFormStep6 } from './use-form-step-6';
 
 type Props = ReturnType<typeof useFormStep6> & {};
 

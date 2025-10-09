@@ -1,6 +1,6 @@
-import { SuggestionForm } from '@/app/(home)/_components/suggestion-form/suggestion-form';
 import { SuggestionSkeleton } from '@/app/(home)/_components/suggestions-carousel/suggestion-skeleton';
 import { SuggestionsCarousel } from '@/app/(home)/_components/suggestions-carousel/suggestions-carousel';
+import { TripPlanWizardForm } from '@/app/(home)/_components/trip-plan-wizard-form';
 import { SupabaseMessageFactory } from '@/app/_components/supabase-message-factory';
 
 import { Metadata } from 'next';
@@ -17,7 +17,7 @@ export default function HomePage() {
       <Suspense fallback={<SuggestionSkeleton />}>
         <SuggestionsCarousel />
       </Suspense>
-      <SuggestionForm />
+      <TripPlanWizardForm />
       <SupabaseMessageFactory />
     </main>
   );

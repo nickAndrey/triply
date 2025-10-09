@@ -1,7 +1,5 @@
 'use client';
 
-import { formStepsConfig } from '@/app/(home)/_components/suggestion-form/configs/form-steps-config';
-import { useFormStep1 } from '@/app/(home)/_components/suggestion-form/steps/step-1/use-form-step-1';
 import { Button } from '@/chadcn/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/chadcn/components/ui/form';
 import { Input } from '@/chadcn/components/ui/input';
@@ -10,6 +8,8 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/chadcn/components/ui/
 import { cn } from '@/chadcn/lib/utils';
 import { MapPin, X } from 'lucide-react';
 import { useRef, useState } from 'react';
+import { formStepsConfig } from '../../configs/form-steps-config';
+import { useFormStep1 } from './use-form-step-1';
 
 type Props = ReturnType<typeof useFormStep1> & {};
 

@@ -1,23 +1,37 @@
 'use client';
 
-import { formStepsConfig } from '@/app/(home)/_components/suggestion-form/configs/form-steps-config';
-import { FormStep1 } from '@/app/(home)/_components/suggestion-form/steps/step-1/form-step-1';
-import { FormStep2 } from '@/app/(home)/_components/suggestion-form/steps/step-2/form-step-2';
-import { FormStep3 } from '@/app/(home)/_components/suggestion-form/steps/step-3/form-step-3';
-import { FormStep4 } from '@/app/(home)/_components/suggestion-form/steps/step-4/form-step-4';
-import { FormStep5 } from '@/app/(home)/_components/suggestion-form/steps/step-5/form-step-5';
-import { FormStep6 } from '@/app/(home)/_components/suggestion-form/steps/step-6/form-step-6';
-import { FormStep7 } from '@/app/(home)/_components/suggestion-form/steps/step-7/form-step-7';
-import { useSuggestionForm } from '@/app/(home)/_components/suggestion-form/use-suggestion-form';
+import { startItineraryGeneration } from '@/app/_actions/personal-suggestion/get-personal-suggestion';
 import { Stepper } from '@/app/_components/stepper';
+import { formStepsConfig } from '@/app/_components/trip-plan-form-steps/configs/form-steps-config';
+import { useTripPlanFormSteps } from '@/app/_components/trip-plan-form-steps/hooks/use-trip-plan-form-steps';
+import { FormStep1 } from '@/app/_components/trip-plan-form-steps/steps/step-1/form-step-1';
+import { FormStep2 } from '@/app/_components/trip-plan-form-steps/steps/step-2/form-step-2';
+import { FormStep3 } from '@/app/_components/trip-plan-form-steps/steps/step-3/form-step-3';
+import { FormStep4 } from '@/app/_components/trip-plan-form-steps/steps/step-4/form-step-4';
+import { FormStep5 } from '@/app/_components/trip-plan-form-steps/steps/step-5/form-step-5';
+import { FormStep6 } from '@/app/_components/trip-plan-form-steps/steps/step-6/form-step-6';
+import { FormStep7 } from '@/app/_components/trip-plan-form-steps/steps/step-7/form-step-7';
+import { useRequest } from '@/app/_providers/request-context';
+import { useSupabaseSubscriptionContext } from '@/app/_providers/supabase-subscriptions/supabase-subscriptions-context';
 import { Button } from '@/chadcn/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/chadcn/components/ui/card';
 import { LoaderCircle } from 'lucide-react';
 import { useState } from 'react';
 
-export function SuggestionForm() {
-  const { forms, isPending, handleSubmit } = useSuggestionForm();
+export function TripPlanWizardForm() {
+  const { forms, processFormSteps } = useTripPlanFormSteps();
+
+  const { isPending } = useRequest();
+  const { setTripId, setSubscriberStatus } = useSupabaseSubscriptionContext();
+
   const [step, setStep] = useState(0);
+
+  const handleSubmit = async () => {
+    setSubscriberStatus('core_generating');
+    const processedForm = processFormSteps();
+    const { tripId } = await startItineraryGeneration(processedForm);
+    setTripId(tripId);
+  };
 
   return (
     <Card>

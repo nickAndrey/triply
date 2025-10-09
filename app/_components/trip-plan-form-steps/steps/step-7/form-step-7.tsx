@@ -1,8 +1,8 @@
 'use client';
 
-import { useFormStep7 } from '@/app/(home)/_components/suggestion-form/steps/step-7/use-form-step-7';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/chadcn/components/ui/form';
 import { Textarea } from '@/chadcn/components/ui/textarea';
+import { useFormStep7 } from './use-form-step-7';
 
 type Props = ReturnType<typeof useFormStep7> & {};
 
