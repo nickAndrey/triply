@@ -1,9 +1,11 @@
 'use server';
 
+import axios, { AxiosError } from 'axios';
+
 import { DB_TABLES } from '@/app/_constants/db-tables';
 import { Suggestion } from '@/app/_types/suggestion';
 import { createClient } from '@/utils/supabase/server';
-import axios, { AxiosError } from 'axios';
+
 import { createCountrySuggestionPrompt } from './prompts/create-country-suggestion-prompt';
 
 async function generateTravelSuggestions() {

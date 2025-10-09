@@ -1,7 +1,9 @@
-import { Checkbox } from '@/chadcn/components/ui/checkbox';
-import { Label } from '@/chadcn/components/ui/label';
-import { CheckboxProps } from '@radix-ui/react-checkbox';
 import { ReactNode } from 'react';
+
+import { CheckboxProps } from '@radix-ui/react-checkbox';
+
+import { Checkbox } from '@chadcn/components/ui/checkbox';
+import { Label } from '@chadcn/components/ui/label';
 
 type Props = CheckboxProps & {
   title: string;

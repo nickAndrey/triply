@@ -1,10 +1,12 @@
+import { Suspense } from 'react';
+
+import { Metadata } from 'next';
+
+import { SupabaseMessageFactory } from '@components/supabase-message-factory';
+
 import { SuggestionSkeleton } from '@/app/(home)/_components/suggestions-carousel/suggestion-skeleton';
 import { SuggestionsCarousel } from '@/app/(home)/_components/suggestions-carousel/suggestions-carousel';
 import { TripPlanWizardForm } from '@/app/(home)/_components/trip-plan-wizard-form';
-import { SupabaseMessageFactory } from '@/app/_components/supabase-message-factory';
-
-import { Metadata } from 'next';
-import { Suspense } from 'react';
 
 export const metadata: Metadata = {
   title: 'Triply | Home',

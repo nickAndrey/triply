@@ -1,9 +1,10 @@
 'use server';
 
+import axios from 'axios';
+
 import { SuggestionFormFields } from '@/app/_actions/personal-suggestion/_types/form';
 import { DB_TABLES } from '@/app/_constants/db-tables';
 import { createClient } from '@/utils/supabase/server';
-import axios from 'axios';
 
 export async function startItineraryGeneration(form: SuggestionFormFields) {
   const supabase = await createClient();

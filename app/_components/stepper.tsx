@@ -1,9 +1,11 @@
 'use client';
 
-import { Button } from '@/chadcn/components/ui/button';
-import { cn } from '@/chadcn/lib/utils';
 import { ReactNode } from 'react';
+
 import { useStep } from 'usehooks-ts';
+
+import { Button } from '@chadcn/components/ui/button';
+import { cn } from '@chadcn/lib/utils';
 
 type Props = {
   steps: { element: ReactNode }[];

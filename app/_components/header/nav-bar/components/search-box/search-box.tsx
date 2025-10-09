@@ -1,9 +1,11 @@
 'use client';
 
-import { useSearchBox } from '@/app/_components/header/nav-bar/components/search-box/use-search-box';
-import { Button } from '@/chadcn/components/ui/button';
-import { Input } from '@/chadcn/components/ui/input';
 import { Search, X } from 'lucide-react';
+
+import { Button } from '@chadcn/components/ui/button';
+import { Input } from '@chadcn/components/ui/input';
+
+import { useSearchBox } from '@components/header/nav-bar/components/search-box/use-search-box';
 
 type Props = ReturnType<typeof useSearchBox> & {};
 

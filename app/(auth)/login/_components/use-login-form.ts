@@ -1,12 +1,16 @@
 'use client';
 
-import { login } from '@/app/_actions/login';
-import { useRequest } from '@/app/_providers/request-context';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useRouter } from 'next/navigation';
 import { FormEventHandler, useState } from 'react';
+
+import { useRouter } from 'next/navigation';
+
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+
+import { login } from '@server-actions/login';
+
+import { useRequest } from '@providers/request-context';
 
 const schema = z.object({
   email: z.email('Invalid email'),

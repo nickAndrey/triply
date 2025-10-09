@@ -1,7 +1,8 @@
 'use server';
 
-import { createClient } from '@/utils/supabase/server';
 import { type User } from '@supabase/supabase-js';
+
+import { createClient } from '@/utils/supabase/server';
 
 export async function ensureAuth(): Promise<User> {
   const supabase = await createClient();

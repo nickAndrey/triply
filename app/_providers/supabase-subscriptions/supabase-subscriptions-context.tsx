@@ -1,14 +1,17 @@
 'use client';
 
-import { DB_TABLES } from '@/app/_constants/db-tables';
-import { useRequest } from '@/app/_providers/request-context';
-import { initTripStatus } from '@/app/_providers/supabase-subscriptions/_utils/init-trip-status';
-import { resolveTripStatus } from '@/app/_providers/supabase-subscriptions/_utils/status-resolver';
-import { TravelItineraryRow } from '@/app/_types/supabase-update-payload';
-import { createClient } from '@/utils/supabase/client';
+import { ReactNode, createContext, useContext, useEffect, useState } from 'react';
+
 import { RealtimePostgresChangesPayload } from '@supabase/supabase-js';
 import axios from 'axios';
-import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
+
+import { useRequest } from '@providers/request-context';
+import { initTripStatus } from '@providers/supabase-subscriptions/_utils/init-trip-status';
+import { resolveTripStatus } from '@providers/supabase-subscriptions/_utils/status-resolver';
+
+import { DB_TABLES } from '@/app/_constants/db-tables';
+import { TravelItineraryRow } from '@/app/_types/supabase-update-payload';
+import { createClient } from '@/utils/supabase/client';
 
 export type SubscriberStatus = 'idle' | 'core_generating' | 'core_ready' | 'days_generating' | 'completed' | 'error';
 

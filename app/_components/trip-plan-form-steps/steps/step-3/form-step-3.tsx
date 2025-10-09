@@ -1,9 +1,11 @@
 'use client';
 
-import { Counter } from '@/app/_components/counter/counter';
-import { RadioButtonCard } from '@/app/_components/radio-button-card';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/chadcn/components/ui/form';
-import { RadioGroup } from '@/chadcn/components/ui/radio-group';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@chadcn/components/ui/form';
+import { RadioGroup } from '@chadcn/components/ui/radio-group';
+
+import { Counter } from '@components/counter/counter';
+import { RadioButtonCard } from '@components/radio-button-card';
+
 import { formStepsConfig } from '../../configs/form-steps-config';
 import { schema, useFormStep3 } from './use-form-step-3';
 

@@ -1,8 +1,10 @@
 'use client';
 
-import { RadioButtonCard } from '@/app/_components/radio-button-card';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/chadcn/components/ui/form';
-import { RadioGroup } from '@/chadcn/components/ui/radio-group';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@chadcn/components/ui/form';
+import { RadioGroup } from '@chadcn/components/ui/radio-group';
+
+import { RadioButtonCard } from '@components/radio-button-card';
+
 import { formStepsConfig } from '../../configs/form-steps-config';
 import { schema, useFormStep4 } from './use-form-step-4';
 

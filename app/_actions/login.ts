@@ -1,7 +1,8 @@
 'use server';
 
-import { createClient } from '@/utils/supabase/server';
 import { z } from 'zod';
+
+import { createClient } from '@/utils/supabase/server';
 
 const schema = z.object({
   email: z.email('Email is required'),

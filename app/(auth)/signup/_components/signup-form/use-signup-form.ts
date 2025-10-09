@@ -1,11 +1,14 @@
 'use client';
 
-import { signup } from '@/app/_actions/signup';
-import { useRequest } from '@/app/_providers/request-context';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { FormEventHandler } from 'react';
+
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+
+import { signup } from '@server-actions/signup';
+
+import { useRequest } from '@providers/request-context';
 
 const schema = z
   .object({

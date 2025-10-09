@@ -1,11 +1,15 @@
+import Link from 'next/link';
+
+import { compareDesc, parseISO } from 'date-fns';
+import { Home } from 'lucide-react';
+
+import { Button } from '@chadcn/components/ui/button';
+
 import { DB_TABLES } from '@/app/_constants/db-tables';
 import { TravelItineraryForm } from '@/app/_types/supabase-update-payload';
 import { TripPlan } from '@/app/_types/trip-plan';
-import { Button } from '@/chadcn/components/ui/button';
 import { createClient } from '@/utils/supabase/server';
-import { compareDesc, parseISO } from 'date-fns';
-import { Home } from 'lucide-react';
-import Link from 'next/link';
+
 import { NavBar } from './nav-bar/nav-bar';
 import { ThemeSwitcher } from './theme-switcher';
 import { UserMenu } from './user-menu';

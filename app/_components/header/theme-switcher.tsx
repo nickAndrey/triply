@@ -1,14 +1,16 @@
 'use client';
 
-import { Button } from '@/chadcn/components/ui/button';
+import { useTheme } from 'next-themes';
+
+import { Moon, Sun } from 'lucide-react';
+
+import { Button } from '@chadcn/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/chadcn/components/ui/dropdown-menu';
-import { Moon, Sun } from 'lucide-react';
-import { useTheme } from 'next-themes';
+} from '@chadcn/components/ui/dropdown-menu';
 
 export function ThemeSwitcher() {
   const { setTheme } = useTheme();

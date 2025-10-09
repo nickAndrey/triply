@@ -1,17 +1,20 @@
-import { NavLink } from '@/app/_components/header/nav-bar/components/nav-link';
-import { SearchBox } from '@/app/_components/header/nav-bar/components/search-box/search-box';
-import { useSearchBox } from '@/app/_components/header/nav-bar/components/search-box/use-search-box';
-import { useNavBarActions } from '@/app/_components/header/nav-bar/hooks/use-nav-bar-actions';
-import { NavBarItem } from '@/app/_components/header/nav-bar/types/nav-bar-item';
+import { useRef } from 'react';
+
+import { Plane } from 'lucide-react';
+
 import {
   ContextMenu,
   ContextMenuContent,
   ContextMenuItem,
   ContextMenuTrigger,
-} from '@/chadcn/components/ui/context-menu';
-import { cn } from '@/chadcn/lib/utils';
-import { Plane } from 'lucide-react';
-import { useRef } from 'react';
+} from '@chadcn/components/ui/context-menu';
+import { cn } from '@chadcn/lib/utils';
+
+import { NavLink } from '@components/header/nav-bar/components/nav-link';
+import { SearchBox } from '@components/header/nav-bar/components/search-box/search-box';
+import { useSearchBox } from '@components/header/nav-bar/components/search-box/use-search-box';
+import { useNavBarActions } from '@components/header/nav-bar/hooks/use-nav-bar-actions';
+import { NavBarItem } from '@components/header/nav-bar/types/nav-bar-item';
 
 type Props = {
   navbarItems: NavBarItem[];

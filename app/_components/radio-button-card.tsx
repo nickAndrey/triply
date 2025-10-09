@@ -1,7 +1,9 @@
-import { Label } from '@/chadcn/components/ui/label';
-import { RadioGroupItem } from '@/chadcn/components/ui/radio-group';
-import { RadioGroupItemProps } from '@radix-ui/react-radio-group';
 import { ReactNode } from 'react';
+
+import { RadioGroupItemProps } from '@radix-ui/react-radio-group';
+
+import { Label } from '@chadcn/components/ui/label';
+import { RadioGroupItem } from '@chadcn/components/ui/radio-group';
 
 type Props = RadioGroupItemProps & {
   title: string;

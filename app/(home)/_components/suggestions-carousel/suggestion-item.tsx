@@ -1,9 +1,11 @@
-import { Suggestion } from '@/app/_types/suggestion';
-import { Avatar, AvatarFallback, AvatarImage } from '@/chadcn/components/ui/avatar';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/chadcn/components/ui/card';
+import Image from 'next/image';
+
 import { Ghost } from 'lucide-react';
 
-import Image from 'next/image';
+import { Avatar, AvatarFallback, AvatarImage } from '@chadcn/components/ui/avatar';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@chadcn/components/ui/card';
+
+import { Suggestion } from '@/app/_types/suggestion';
 
 type SuggestionItemProps = {
   suggestion: Suggestion | null;

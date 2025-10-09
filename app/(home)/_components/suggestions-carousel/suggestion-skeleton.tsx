@@ -1,7 +1,8 @@
-import { Button } from '@/chadcn/components/ui/button';
-import { Card } from '@/chadcn/components/ui/card';
-import { cn } from '@/chadcn/lib/utils';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
+
+import { Button } from '@chadcn/components/ui/button';
+import { Card } from '@chadcn/components/ui/card';
+import { cn } from '@chadcn/lib/utils';
 
 export function SuggestionSkeleton() {
   return (

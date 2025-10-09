@@ -1,9 +1,12 @@
-import { UpdatePasswordForm } from '@/app/(auth)/update-password/_components/update-password-form';
-import { Alert, AlertDescription, AlertTitle } from '@/chadcn/components/ui/alert';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/chadcn/components/ui/card';
-import { AlertCircleIcon, SquareArrowOutUpRight } from 'lucide-react';
 import { Metadata } from 'next';
 import Link from 'next/link';
+
+import { AlertCircleIcon, SquareArrowOutUpRight } from 'lucide-react';
+
+import { Alert, AlertDescription, AlertTitle } from '@chadcn/components/ui/alert';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@chadcn/components/ui/card';
+
+import { UpdatePasswordForm } from '@/app/(auth)/update-password/_components/update-password-form';
 
 export const metadata: Metadata = {
   title: 'Triply | Update Password',

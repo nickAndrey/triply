@@ -1,7 +1,8 @@
 'use client';
 
-import { useInputRenameNavItem } from '@/app/_components/header/nav-bar/components/input-rename-nav-item/use-input-rename-nav-item';
-import { Input } from '@/chadcn/components/ui/input';
+import { Input } from '@chadcn/components/ui/input';
+
+import { useInputRenameNavItem } from '@components/header/nav-bar/components/input-rename-nav-item/use-input-rename-nav-item';
 
 type Props = ReturnType<typeof useInputRenameNavItem>;
 

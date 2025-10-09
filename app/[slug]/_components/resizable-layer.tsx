@@ -1,8 +1,10 @@
 'use client';
 
-import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/chadcn/components/ui/resizable';
 import { ReactNode, useEffect, useState } from 'react';
+
 import { useMediaQuery } from 'usehooks-ts';
+
+import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@chadcn/components/ui/resizable';
 
 type Props = {
   children: ReactNode;

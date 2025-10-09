@@ -1,13 +1,16 @@
 'use client';
 
-import { Button } from '@/chadcn/components/ui/button';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/chadcn/components/ui/form';
-import { Input } from '@/chadcn/components/ui/input';
-import { Popover, PopoverContent, PopoverTrigger } from '@/chadcn/components/ui/popover';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/chadcn/components/ui/tooltip';
-import { cn } from '@/chadcn/lib/utils';
-import { MapPin, X } from 'lucide-react';
 import { useRef, useState } from 'react';
+
+import { MapPin, X } from 'lucide-react';
+
+import { Button } from '@chadcn/components/ui/button';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@chadcn/components/ui/form';
+import { Input } from '@chadcn/components/ui/input';
+import { Popover, PopoverContent, PopoverTrigger } from '@chadcn/components/ui/popover';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@chadcn/components/ui/tooltip';
+import { cn } from '@chadcn/lib/utils';
+
 import { formStepsConfig } from '../../configs/form-steps-config';
 import { useFormStep1 } from './use-form-step-1';
 

@@ -1,11 +1,14 @@
 'use client';
 
-import { sendResetPasswordEmail } from '@/app/_actions/send-reset-password-email';
-import { useRequest } from '@/app/_providers/request-context';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { FormEventHandler } from 'react';
+
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+
+import { sendResetPasswordEmail } from '@server-actions/send-reset-password-email';
+
+import { useRequest } from '@providers/request-context';
 
 const schema = z.object({
   email: z.email('Invalid email.'),

@@ -1,9 +1,11 @@
 'use client';
 
-import { NavItems } from '@/app/_components/header/nav-bar/components/nav-items';
-import { useNavBarActions } from '@/app/_components/header/nav-bar/hooks/use-nav-bar-actions';
-import { NavBarItem } from '@/app/_components/header/nav-bar/types/nav-bar-item';
-import { useRequest } from '@/app/_providers/request-context';
+import { useState } from 'react';
+
+import { PanelRight, Plane, X } from 'lucide-react';
+
+import { useRequest } from '@providers/request-context';
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -13,13 +15,15 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from '@/chadcn/components/ui/alert-dialog';
-import { Badge } from '@/chadcn/components/ui/badge';
-import { Button } from '@/chadcn/components/ui/button';
-import { DialogDescription, DialogTitle } from '@/chadcn/components/ui/dialog';
-import { Drawer, DrawerClose, DrawerContent, DrawerHeader, DrawerTrigger } from '@/chadcn/components/ui/drawer';
-import { PanelRight, Plane, X } from 'lucide-react';
-import { useState } from 'react';
+} from '@chadcn/components/ui/alert-dialog';
+import { Badge } from '@chadcn/components/ui/badge';
+import { Button } from '@chadcn/components/ui/button';
+import { DialogDescription, DialogTitle } from '@chadcn/components/ui/dialog';
+import { Drawer, DrawerClose, DrawerContent, DrawerHeader, DrawerTrigger } from '@chadcn/components/ui/drawer';
+
+import { NavItems } from '@components/header/nav-bar/components/nav-items';
+import { useNavBarActions } from '@components/header/nav-bar/hooks/use-nav-bar-actions';
+import { NavBarItem } from '@components/header/nav-bar/types/nav-bar-item';
 
 type NavBarProps = {
   navbarItems: NavBarItem[];

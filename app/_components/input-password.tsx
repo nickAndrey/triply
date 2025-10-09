@@ -2,9 +2,10 @@
 
 import { useState } from 'react';
 
-import { Button } from '@/chadcn/components/ui/button';
-import { Input } from '@/chadcn/components/ui/input';
 import { Eye, EyeOff } from 'lucide-react';
+
+import { Button } from '@chadcn/components/ui/button';
+import { Input } from '@chadcn/components/ui/input';
 
 export function InputPassword({ className, ...props }: React.ComponentProps<'input'>) {
   const [show, setShow] = useState(false);

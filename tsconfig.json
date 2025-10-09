@@ -19,9 +19,11 @@
       }
     ],
     "paths": {
-      "@/*": ["./*"],
+      "@components/*": ["./app/_components/*"],
       "@chadcn/*": ["./chadcn/*"],
-      "@components/*": ["./app/(home)/_components/*"]
+      "@server-actions/*": ["./app/_actions/*"],
+      "@providers/*": ["./app/_providers/*"],
+      "@/*": ["./*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

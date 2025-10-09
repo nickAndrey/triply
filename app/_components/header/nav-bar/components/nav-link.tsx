@@ -1,21 +1,25 @@
 'use client';
 
-import { InputRenameNavItem } from '@/app/_components/header/nav-bar/components/input-rename-nav-item/input-rename-nav-item';
-import { useInputRenameNavItem } from '@/app/_components/header/nav-bar/components/input-rename-nav-item/use-input-rename-nav-item';
-import { useNavBarActions } from '@/app/_components/header/nav-bar/hooks/use-nav-bar-actions';
-import { NavBarItem } from '@/app/_components/header/nav-bar/types/nav-bar-item';
-import { Button } from '@/chadcn/components/ui/button';
+import { ReactNode } from 'react';
+
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+
+import { EllipsisVertical } from 'lucide-react';
+
+import { Button } from '@chadcn/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/chadcn/components/ui/dropdown-menu';
-import { cn } from '@/chadcn/lib/utils';
-import { EllipsisVertical } from 'lucide-react';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { ReactNode } from 'react';
+} from '@chadcn/components/ui/dropdown-menu';
+import { cn } from '@chadcn/lib/utils';
+
+import { InputRenameNavItem } from '@components/header/nav-bar/components/input-rename-nav-item/input-rename-nav-item';
+import { useInputRenameNavItem } from '@components/header/nav-bar/components/input-rename-nav-item/use-input-rename-nav-item';
+import { useNavBarActions } from '@components/header/nav-bar/hooks/use-nav-bar-actions';
+import { NavBarItem } from '@components/header/nav-bar/types/nav-bar-item';
 
 type NavLinkProps = {
   href: string;

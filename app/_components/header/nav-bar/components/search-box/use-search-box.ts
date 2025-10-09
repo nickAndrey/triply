@@ -1,6 +1,8 @@
-import { NavBarItem } from '@/app/_components/header/nav-bar/types/nav-bar-item';
-import { useDebounce } from '@/chadcn/components/ui/multi-selector';
 import { KeyboardEvent, RefObject, useEffect, useState } from 'react';
+
+import { useDebounce } from '@chadcn/components/ui/multi-selector';
+
+import { NavBarItem } from '@components/header/nav-bar/types/nav-bar-item';
 
 type Params = {
   navbarItems: NavBarItem[];

@@ -1,11 +1,15 @@
 'use client';
 
-import { deleteTrip } from '@/app/_actions/trips/delete-trip';
-import { renameTrip } from '@/app/_actions/trips/rename-trip';
-import { NavBarAction } from '@/app/_components/header/nav-bar/types/nav-bar-action';
-import { useRequest } from '@/app/_providers/request-context';
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+
+import { useRouter } from 'next/navigation';
+
+import { deleteTrip } from '@server-actions/trips/delete-trip';
+import { renameTrip } from '@server-actions/trips/rename-trip';
+
+import { useRequest } from '@providers/request-context';
+
+import { NavBarAction } from '@components/header/nav-bar/types/nav-bar-action';
 
 type AlertDialogProps =
   | {

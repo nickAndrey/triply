@@ -1,9 +1,10 @@
+import { Metadata } from 'next';
+import { notFound, redirect } from 'next/navigation';
+
 import { TripPlanView } from '@/app/[slug]/_components/trip-plan-view';
 import { DB_TABLES } from '@/app/_constants/db-tables';
 import { TravelItineraryRow } from '@/app/_types/supabase-update-payload';
 import { createClient } from '@/utils/supabase/server';
-import { Metadata } from 'next';
-import { notFound, redirect } from 'next/navigation';
 
 export const metadata: Metadata = {
   title: 'Triply | Suggestions',

@@ -1,10 +1,12 @@
 'use client';
 
-import { useForgotPasswordForm } from '@/app/(auth)/forgot-password/_components/use-forgot-password-form';
-import { Button } from '@/chadcn/components/ui/button';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/chadcn/components/ui/form';
-import { Input } from '@/chadcn/components/ui/input';
 import { LoaderCircle } from 'lucide-react';
+
+import { Button } from '@chadcn/components/ui/button';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@chadcn/components/ui/form';
+import { Input } from '@chadcn/components/ui/input';
+
+import { useForgotPasswordForm } from '@/app/(auth)/forgot-password/_components/use-forgot-password-form';
 
 export function ForgotPasswordForm() {
   const { form, isPending, handleSubmit } = useForgotPasswordForm();

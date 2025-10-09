@@ -1,5 +1,6 @@
-import { useNavBarActions } from '@/app/_components/header/nav-bar/hooks/use-nav-bar-actions';
 import { ChangeEvent, FocusEvent, KeyboardEvent, useEffect, useRef, useState } from 'react';
+
+import { useNavBarActions } from '@components/header/nav-bar/hooks/use-nav-bar-actions';
 
 type Params = {
   label: string;

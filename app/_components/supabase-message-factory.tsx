@@ -1,9 +1,12 @@
 'use client';
 
-import { ProgressModal } from '@/app/_components/progress-modal';
-import { useSupabaseSubscriptionContext } from '@/app/_providers/supabase-subscriptions/supabase-subscriptions-context';
-import Link from 'next/link';
 import { ComponentProps, useEffect, useState } from 'react';
+
+import Link from 'next/link';
+
+import { useSupabaseSubscriptionContext } from '@providers/supabase-subscriptions/supabase-subscriptions-context';
+
+import { ProgressModal } from '@components/progress-modal';
 
 export function SupabaseMessageFactory() {
   const { subscriberStatus, currentDay, slug } = useSupabaseSubscriptionContext();
