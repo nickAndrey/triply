@@ -1,6 +1,7 @@
 'use client';
 
 import { TravelItineraryRow } from '@/app/_types/supabase-update-payload';
+
 import { SubscriberStatus } from '../supabase-subscriptions-context';
 
 export function resolveTripStatus(trip: TravelItineraryRow): SubscriberStatus {

@@ -1,13 +1,11 @@
 'use client';
 
-import {
-  enums,
-  useFormStep5,
-  type FoodPreferencesEnum,
-} from '@/app/(home)/_components/suggestion-form/steps/step-5/use-form-step-5';
-import { CheckboxButtonCard } from '@/app/_components/checkbox-button-card';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/chadcn/components/ui/form';
-import { Textarea } from '@/chadcn/components/ui/textarea';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@chadcn/components/ui/form';
+import { Textarea } from '@chadcn/components/ui/textarea';
+
+import { CheckboxButtonCard } from '@components/checkbox-button-card';
+
+import { enums, FoodPreferencesEnum, useFormStep5 } from './use-form-step-5';
 
 type Props = ReturnType<typeof useFormStep5> & {};
 

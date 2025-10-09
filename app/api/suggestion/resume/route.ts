@@ -1,6 +1,8 @@
-import { ProgressiveItineraryGenerator } from '@/app/_actions/personal-suggestion/personal-suggestion-generator';
-import { createClient } from '@/utils/supabase/server';
 import { NextResponse } from 'next/server';
+
+import { ProgressiveItineraryGenerator } from '@server-actions/personal-suggestion/personal-suggestion-generator';
+
+import { createClient } from '@/utils/supabase/server';
 
 export async function POST(request: Request) {
   const { tripId } = await request.json();

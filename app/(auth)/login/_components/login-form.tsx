@@ -1,13 +1,17 @@
 'use client';
 
-import { useLoginForm } from '@/app/(auth)/login/_components/use-login-form';
-import { InputPassword } from '@/app/_components/input-password';
-import { Alert, AlertDescription, AlertTitle } from '@/chadcn/components/ui/alert';
-import { Button } from '@/chadcn/components/ui/button';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/chadcn/components/ui/form';
-import { Input } from '@/chadcn/components/ui/input';
-import { AlertCircleIcon, LoaderCircle } from 'lucide-react';
 import Link from 'next/link';
+
+import { AlertCircleIcon, LoaderCircle } from 'lucide-react';
+
+import { Alert, AlertDescription, AlertTitle } from '@chadcn/components/ui/alert';
+import { Button } from '@chadcn/components/ui/button';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@chadcn/components/ui/form';
+import { Input } from '@chadcn/components/ui/input';
+
+import { InputPassword } from '@components/input-password';
+
+import { useLoginForm } from '@/app/(auth)/login/_components/use-login-form';
 
 export function LoginForm() {
   const { form, isPending, generalError, handleSubmit } = useLoginForm();

@@ -1,7 +1,12 @@
 'use client';
 
-import { logout } from '@/app/_actions/logout';
-import { Button } from '@/chadcn/components/ui/button';
+import { useEffect, useState } from 'react';
+
+import { User } from 'lucide-react';
+
+import { logout } from '@server-actions/logout';
+
+import { Button } from '@chadcn/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,10 +14,9 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/chadcn/components/ui/dropdown-menu';
+} from '@chadcn/components/ui/dropdown-menu';
+
 import { createClient } from '@/utils/supabase/client';
-import { User } from 'lucide-react';
-import { useEffect, useState } from 'react';
 
 export function UserMenu() {
   const supabase = createClient();

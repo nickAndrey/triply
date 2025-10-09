@@ -1,10 +1,12 @@
 'use client';
 
-import { useCounter } from '@/app/_components/counter/use-counter';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect } from 'react';
+
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import z from 'zod';
+
+import { useCounter } from '@components/counter/use-counter';
 
 export const schema = z.object({
   tripDurationDays: z

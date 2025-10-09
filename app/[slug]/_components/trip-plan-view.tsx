@@ -1,10 +1,13 @@
 'use client';
 
-import { ResizableLayer } from '@/app/[slug]/_components/resizable-layer';
-import { TravelLoader } from '@/app/_components/travel-loader';
-import { useSupabaseSubscriptionContext } from '@/app/_providers/supabase-subscriptions/supabase-subscriptions-context';
-import { TravelItineraryRow } from '@/app/_types/supabase-update-payload';
 import { useEffect, useState } from 'react';
+
+import { useSupabaseSubscriptionContext } from '@providers/supabase-subscriptions/supabase-subscriptions-context';
+
+import { TravelLoader } from '@components/travel-loader';
+
+import { ResizableLayer } from '@/app/[slug]/_components/resizable-layer';
+import { TravelItineraryRow } from '@/app/_types/supabase-update-payload';
 
 type Props = {
   dbRow: TravelItineraryRow;

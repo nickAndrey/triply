@@ -1,9 +1,11 @@
 'use client';
 
-import { useCounter } from '@/app/_components/counter/use-counter';
-import { Button } from '@/chadcn/components/ui/button';
-import { Input } from '@/chadcn/components/ui/input';
 import { Minus, Plus } from 'lucide-react';
+
+import { Button } from '@chadcn/components/ui/button';
+import { Input } from '@chadcn/components/ui/input';
+
+import { useCounter } from '@components/counter/use-counter';
 
 type Props = ReturnType<typeof useCounter>;
 

@@ -1,7 +1,9 @@
-import { LoginForm } from '@/app/(auth)/login/_components/login-form';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/chadcn/components/ui/card';
 import { Metadata } from 'next';
 import Link from 'next/link';
+
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@chadcn/components/ui/card';
+
+import { LoginForm } from '@/app/(auth)/login/_components/login-form';
 
 export const metadata: Metadata = {
   title: 'Triply | Login',

@@ -1,3 +1,5 @@
+import axios, { AxiosError } from 'axios';
+
 import { buildTripCorePrompt } from '@/app/_actions/personal-suggestion/_prompts/trip-core-prompt_v1';
 import { buildTripDayPrompt } from '@/app/_actions/personal-suggestion/_prompts/trip-day-prompt_v1';
 import { SuggestionFormFields } from '@/app/_actions/personal-suggestion/_types/form';
@@ -5,14 +7,12 @@ import { DB_TABLES } from '@/app/_constants/db-tables';
 import { Day, TripPlan } from '@/app/_types/trip-plan';
 import { safeJsonParse } from '@/app/_utils/safe-json-parse';
 import { createClient } from '@/utils/supabase/server';
-import axios, { AxiosError } from 'axios';
 
 export class ProgressiveItineraryGenerator {
   private DEEPSEEK_API_KEY = process.env.NEXT_DEEPSEEK_API_KEY;
   private API_URL = 'https://api.deepseek.com/chat/completions';
   private currentDay = 1;
   private supabase;
-  private chunks: Day[] = [];
 
   private TRIP_PLAN: TripPlan | null = null;
 

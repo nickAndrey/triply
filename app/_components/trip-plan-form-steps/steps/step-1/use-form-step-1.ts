@@ -1,14 +1,17 @@
 'use client';
 
-import { transformSearchSuggestions } from '@/app/(home)/_components/suggestion-form/steps/step-1/_utils/transform-search-suggestions';
-import { NominatimResult } from '@/app/_types/place';
-import { removeDuplicatesFromArray } from '@/app/_utils/remove-duplicates-from-array';
+import { useEffect, useRef, useState } from 'react';
+
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios from 'axios';
-import { useEffect, useRef, useState } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import { useDebounceValue } from 'usehooks-ts';
 import z from 'zod';
+
+import { NominatimResult } from '@/app/_types/place';
+import { removeDuplicatesFromArray } from '@/app/_utils/remove-duplicates-from-array';
+
+import { transformSearchSuggestions } from './_utils/transform-search-suggestions';
 
 export const schema = z.object({
   destinationSearch: z.string().min(1, 'Field is required.'),

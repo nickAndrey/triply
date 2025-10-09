@@ -1,65 +1,41 @@
 'use client';
 
-import { NavLink } from '@/app/_components/header/nav-bar/nav-link';
-import { SearchBox } from '@/app/_components/header/nav-bar/search-box';
-import { useRequest } from '@/app/_providers/request-context';
-import { TripPlan } from '@/app/_types/trip-plan';
-import { Badge } from '@/chadcn/components/ui/badge';
-import { Button } from '@/chadcn/components/ui/button';
-import { DialogDescription, DialogTitle } from '@/chadcn/components/ui/dialog';
-import { Drawer, DrawerClose, DrawerContent, DrawerHeader, DrawerTrigger } from '@/chadcn/components/ui/drawer';
+import { useState } from 'react';
+
 import { PanelRight, Plane, X } from 'lucide-react';
-import { KeyboardEvent, useEffect, useRef, useState } from 'react';
+
+import { useRequest } from '@providers/request-context';
+
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@chadcn/components/ui/alert-dialog';
+import { Badge } from '@chadcn/components/ui/badge';
+import { Button } from '@chadcn/components/ui/button';
+import { DialogDescription, DialogTitle } from '@chadcn/components/ui/dialog';
+import { Drawer, DrawerClose, DrawerContent, DrawerHeader, DrawerTrigger } from '@chadcn/components/ui/drawer';
+
+import { NavItems } from '@components/header/nav-bar/components/nav-items';
+import { useNavBarActions } from '@components/header/nav-bar/hooks/use-nav-bar-actions';
+import { NavBarItem } from '@components/header/nav-bar/types/nav-bar-item';
 
 type NavBarProps = {
-  suggestions: {
-    id: string;
-    details: TripPlan;
-  }[];
+  navbarItems: NavBarItem[];
 };
 
-export function NavBar({ suggestions }: NavBarProps) {
+export function NavBar({ navbarItems }: NavBarProps) {
   const [open, setOpen] = useState(false);
   const { isPending } = useRequest();
 
-  const [searchValue, setSearchValue] = useState('');
-  const [activeIndex, setActiveIndex] = useState(-1);
+  const actions = useNavBarActions();
 
-  const filterNavItems = () => {
-    const regex = new RegExp(searchValue, 'i');
-    return suggestions.filter((item) => regex.test(item.details.city));
-  };
-
-  const ulRef = useRef<HTMLUListElement>(null);
-
-  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (!ulRef.current) return;
-
-    const links = Array.from(ulRef.current.querySelectorAll('a'));
-
-    switch (e.key) {
-      case 'ArrowDown':
-        e.preventDefault();
-        setActiveIndex((prev) => (prev + 1) % links.length);
-        break;
-      case 'ArrowUp':
-        e.preventDefault();
-        setActiveIndex((prev) => (prev - 1 + links.length) % links.length);
-        break;
-      case 'Enter':
-        (links[activeIndex] as HTMLAnchorElement)?.click();
-        break;
-      default:
-        return;
-    }
-  };
-
-  useEffect(() => {
-    const links = ulRef.current?.querySelectorAll('a') as NodeListOf<HTMLAnchorElement>;
-    links?.forEach((link, idx) => {
-      link.classList.toggle('bg-blue-100', idx === activeIndex);
-    });
-  }, [activeIndex]);
+  const { alertDialogProps } = actions;
 
   return (
     <Drawer direction="right" open={open} onOpenChange={setOpen}>
@@ -75,11 +51,11 @@ export function NavBar({ suggestions }: NavBarProps) {
           <div>
             <DialogTitle className="text-2xl font-semibold flex items-center gap-2">
               <Plane className="w-6 h-6 text-primary" />
-              {suggestions.length > 0 ? 'Your Trips' : 'No Trips Yet'}
+              {navbarItems.length > 0 ? 'Your Trips' : 'No Trips Yet'}
             </DialogTitle>
 
             <DialogDescription className="text-sm text-muted-foreground mt-1">
-              {suggestions.length > 0
+              {navbarItems.length > 0
                 ? 'View your saved itineraries and recent adventures.'
                 : 'Start exploring — plan your first trip today!'}
             </DialogDescription>
@@ -98,33 +74,20 @@ export function NavBar({ suggestions }: NavBarProps) {
           </DrawerClose>
         </DrawerHeader>
 
-        <ul className="flex flex-col gap-1 px-3 pb-4 w-full overflow-auto" ref={ulRef}>
-          <li className="py-2 sticky top-0 z-10 bg-background">
-            <SearchBox
-              searchValue={searchValue}
-              onChange={setSearchValue}
-              onKeyDown={handleKeyDown}
-              clearValue={() => setSearchValue('')}
-            />
-          </li>
+        <NavItems navbarItems={navbarItems} actions={actions} />
 
-          {filterNavItems().map(({ id, details }) => {
-            const baseCity = details.city || details.destination.split(',')[0];
-            const duration = `${details.tripDurationDays}-day`;
-            const subtitle = `${duration} ${details.companions.type.toLowerCase()} trip • ${details.season.toLowerCase()}`;
-
-            return (
-              <li key={id}>
-                <NavLink
-                  href={`/${details.slug}`}
-                  label={baseCity}
-                  subtitle={subtitle}
-                  icon={<Plane className="w-4 h-4" />}
-                />
-              </li>
-            );
-          })}
-        </ul>
+        <AlertDialog open={alertDialogProps.open} onOpenChange={actions.handleDialogOnOpenChange}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>{alertDialogProps.title}</AlertDialogTitle>
+              <AlertDialogDescription>{alertDialogProps.description}</AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction onClick={alertDialogProps.action}>Continue</AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </DrawerContent>
     </Drawer>
   );

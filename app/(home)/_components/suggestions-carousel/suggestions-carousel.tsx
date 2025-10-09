@@ -1,12 +1,13 @@
+import { getSuggestions } from '@server-actions/get-suggestions';
+
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
-} from '@/chadcn/components/ui/carousel';
+} from '@chadcn/components/ui/carousel';
 
-import { getSuggestions } from '@/app/_actions/get-suggestions';
 import { SuggestionItem } from './suggestion-item';
 
 export async function SuggestionsCarousel() {

@@ -1,8 +1,9 @@
 'use client';
 
-import { TravelItineraryRow } from '@/app/_types/supabase-update-payload';
 import axios from 'axios';
 import { differenceInSeconds } from 'date-fns';
+
+import { TravelItineraryRow } from '@/app/_types/supabase-update-payload';
 
 export async function checkAndResumeStuckTrip(trip: TravelItineraryRow) {
   const diff = differenceInSeconds(new Date(), new Date(trip.updated_at));

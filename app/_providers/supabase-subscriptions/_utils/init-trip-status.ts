@@ -1,7 +1,8 @@
 'use client';
 
+import { resolveTripStatus } from '@providers/supabase-subscriptions/_utils/status-resolver';
+
 import { DB_TABLES } from '@/app/_constants/db-tables';
-import { resolveTripStatus } from '@/app/_providers/supabase-subscriptions/_utils/status-resolver';
 import { TravelItineraryRow } from '@/app/_types/supabase-update-payload';
 import { createClient } from '@/utils/supabase/client';
 

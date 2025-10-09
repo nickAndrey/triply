@@ -1,10 +1,12 @@
-import { SuggestionForm } from '@/app/(home)/_components/suggestion-form/suggestion-form';
-import { SuggestionSkeleton } from '@/app/(home)/_components/suggestions-carousel/suggestion-skeleton';
-import { SuggestionsCarousel } from '@/app/(home)/_components/suggestions-carousel/suggestions-carousel';
-import { SupabaseMessageFactory } from '@/app/_components/supabase-message-factory';
+import { Suspense } from 'react';
 
 import { Metadata } from 'next';
-import { Suspense } from 'react';
+
+import { SupabaseMessageFactory } from '@components/supabase-message-factory';
+
+import { SuggestionSkeleton } from '@/app/(home)/_components/suggestions-carousel/suggestion-skeleton';
+import { SuggestionsCarousel } from '@/app/(home)/_components/suggestions-carousel/suggestions-carousel';
+import { TripPlanWizardForm } from '@/app/(home)/_components/trip-plan-wizard-form';
 
 export const metadata: Metadata = {
   title: 'Triply | Home',
@@ -17,7 +19,7 @@ export default function HomePage() {
       <Suspense fallback={<SuggestionSkeleton />}>
         <SuggestionsCarousel />
       </Suspense>
-      <SuggestionForm />
+      <TripPlanWizardForm />
       <SupabaseMessageFactory />
     </main>
   );

@@ -1,9 +1,12 @@
-import { SignupForm } from '@/app/(auth)/signup/_components/signup-form/signup-form';
-import { Alert, AlertDescription, AlertTitle } from '@/chadcn/components/ui/alert';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/chadcn/components/ui/card';
-import { CheckCircle2Icon } from 'lucide-react';
 import { Metadata } from 'next';
 import Link from 'next/link';
+
+import { CheckCircle2Icon } from 'lucide-react';
+
+import { Alert, AlertDescription, AlertTitle } from '@chadcn/components/ui/alert';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@chadcn/components/ui/card';
+
+import { SignupForm } from '@/app/(auth)/signup/_components/signup-form/signup-form';
 
 export const metadata: Metadata = {
   title: 'Triply | Sign Up',

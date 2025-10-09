@@ -1,8 +1,10 @@
 'use server';
 
-import { createClient } from '@/utils/supabase/server';
 import { redirect } from 'next/navigation';
+
 import { z } from 'zod';
+
+import { createClient } from '@/utils/supabase/server';
 
 const schema = z.object({
   username: z.string().min(1, 'Field is required'),

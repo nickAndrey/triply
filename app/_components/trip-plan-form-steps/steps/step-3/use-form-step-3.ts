@@ -1,10 +1,12 @@
 'use client';
 
-import { useCounter } from '@/app/_components/counter/use-counter';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect } from 'react';
+
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useFieldArray, useForm } from 'react-hook-form';
 import z from 'zod';
+
+import { useCounter } from '@components/counter/use-counter';
 
 function syncArray<T>(
   fields: { fields: T[]; append: (value: T) => void; remove: (index: number) => void },

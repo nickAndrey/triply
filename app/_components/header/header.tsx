@@ -1,10 +1,15 @@
-import { DB_TABLES } from '@/app/_constants/db-tables';
-import { TripPlan } from '@/app/_types/trip-plan';
-import { Button } from '@/chadcn/components/ui/button';
-import { createClient } from '@/utils/supabase/server';
+import Link from 'next/link';
+
 import { compareDesc, parseISO } from 'date-fns';
 import { Home } from 'lucide-react';
-import Link from 'next/link';
+
+import { Button } from '@chadcn/components/ui/button';
+
+import { DB_TABLES } from '@/app/_constants/db-tables';
+import { TravelItineraryForm } from '@/app/_types/supabase-update-payload';
+import { TripPlan } from '@/app/_types/trip-plan';
+import { createClient } from '@/utils/supabase/server';
+
 import { NavBar } from './nav-bar/nav-bar';
 import { ThemeSwitcher } from './theme-switcher';
 import { UserMenu } from './user-menu';
@@ -16,22 +21,21 @@ export async function Header() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  let suggestionFields = null;
+  let navbarItems = null;
 
   if (user) {
-    const { data: suggestions } = await supabase
+    const { data: tripDetails } = await supabase
       .from(DB_TABLES.travel_itineraries)
-      .select('trip_plan_details, id, created_at')
+      .select('trip_plan_details, id, created_at, form')
       .eq('user_id', user.id);
 
-    suggestionFields = suggestions
+    navbarItems = tripDetails
       ?.map((item) => {
-        const tripDetails = item.trip_plan_details as TripPlan;
-
         return {
-          id: item.id,
-          details: tripDetails,
+          trip_plan_details: item.trip_plan_details as TripPlan,
+          form: item.form as TravelItineraryForm,
           createdAt: item.created_at,
+          id: item.id,
         };
       })
       .sort((a, b) => compareDesc(parseISO(a.createdAt), parseISO(b.createdAt)));
@@ -50,7 +54,7 @@ export async function Header() {
       {user && (
         <>
           {homeLink}
-          <NavBar suggestions={suggestionFields || []} />
+          <NavBar navbarItems={navbarItems || []} />
           <UserMenu />
         </>
       )}

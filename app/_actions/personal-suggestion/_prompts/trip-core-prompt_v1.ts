@@ -30,6 +30,7 @@ export function buildTripCorePrompt(form: SuggestionFormFields) {
     ---
 
     ### Root JSON Object Fields
+    - "navTitle": string → A short, user-friendly title for navigation (default = city name, e.g. "Rome").
     - "destination": string → Full destination name (e.g. "Warsaw, Poland").
     - "city": string → City name only.
     - "country": string → Country name only.
@@ -80,6 +81,7 @@ export function buildTripCorePrompt(form: SuggestionFormFields) {
     The trip request is based on:
 
     {
+      "navTitle": "${city}",
       "destination": "${form.destination}",
       "city": "${city}",
       "country": "${country}",

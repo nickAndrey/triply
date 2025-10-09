@@ -1,12 +1,16 @@
 'use client';
 
-import { updatePassword } from '@/app/_actions/update-password';
-import { useRequest } from '@/app/_providers/request-context';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useRouter } from 'next/navigation';
 import { FormEventHandler } from 'react';
+
+import { useRouter } from 'next/navigation';
+
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+
+import { updatePassword } from '@server-actions/update-password';
+
+import { useRequest } from '@providers/request-context';
 
 const schema = z.object({
   password: z.string(),

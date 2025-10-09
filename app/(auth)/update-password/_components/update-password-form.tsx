@@ -1,10 +1,13 @@
 'use client';
 
-import { useUpdatePasswordForm } from '@/app/(auth)/update-password/_components/use-update-password-form';
-import { InputPassword } from '@/app/_components/input-password';
-import { Button } from '@/chadcn/components/ui/button';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/chadcn/components/ui/form';
 import { LoaderCircle } from 'lucide-react';
+
+import { Button } from '@chadcn/components/ui/button';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@chadcn/components/ui/form';
+
+import { InputPassword } from '@components/input-password';
+
+import { useUpdatePasswordForm } from '@/app/(auth)/update-password/_components/use-update-password-form';
 
 export function UpdatePasswordForm() {
   const { form, isPending, handleSubmit } = useUpdatePasswordForm();

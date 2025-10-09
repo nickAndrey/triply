@@ -1,6 +1,8 @@
-import { cn } from '@/chadcn/lib/utils';
-import { LoaderCircle } from 'lucide-react';
 import { ReactNode } from 'react';
+
+import { LoaderCircle } from 'lucide-react';
+
+import { cn } from '@chadcn/lib/utils';
 
 type TravelLoaderProps = {
   icon?: ReactNode;

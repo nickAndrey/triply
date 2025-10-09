@@ -1,8 +1,10 @@
 'use client';
 
-import { TravelLoader } from '@/app/_components/travel-loader';
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/chadcn/components/ui/dialog';
 import { ReactNode } from 'react';
+
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@chadcn/components/ui/dialog';
+
+import { TravelLoader } from '@components/travel-loader';
 
 type ModalProgressData = {
   title?: string;
