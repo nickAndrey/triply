@@ -1,4 +1,5 @@
 import { DB_TABLES } from '@/app/_constants/db-tables';
+import { TravelItineraryForm } from '@/app/_types/supabase-update-payload';
 import { TripPlan } from '@/app/_types/trip-plan';
 import { Button } from '@/chadcn/components/ui/button';
 import { createClient } from '@/utils/supabase/server';
@@ -21,17 +22,16 @@ export async function Header() {
   if (user) {
     const { data: tripDetails } = await supabase
       .from(DB_TABLES.travel_itineraries)
-      .select('trip_plan_details, id, created_at')
+      .select('trip_plan_details, id, created_at, form')
       .eq('user_id', user.id);
 
     navbarItems = tripDetails
       ?.map((item) => {
-        const tripDetails = item.trip_plan_details as TripPlan;
-
         return {
-          id: item.id,
-          trip_plan_details: tripDetails,
+          trip_plan_details: item.trip_plan_details as TripPlan,
+          form: item.form as TravelItineraryForm,
           createdAt: item.created_at,
+          id: item.id,
         };
       })
       .sort((a, b) => compareDesc(parseISO(a.createdAt), parseISO(b.createdAt)));
