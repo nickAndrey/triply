@@ -5,6 +5,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import { LoaderCircle } from 'lucide-react';
 
+import { useItineraryGenerationSubscriber } from '@providers/itinerary-generation-subscriber-context';
 import { useRequest } from '@providers/request-context';
 
 import { Button } from '@chadcn/components/ui/button';
@@ -23,6 +24,7 @@ import { FormStep7 } from '@components/trip-plan-form-steps/steps/step-7/form-st
 
 export function TripPlanWizardForm() {
   const { forms, processFormSteps } = useTripPlanFormSteps();
+  const { setInitialItineraryId } = useItineraryGenerationSubscriber();
 
   const { isPending, start } = useRequest();
 
@@ -31,13 +33,19 @@ export function TripPlanWizardForm() {
   const handleSubmit = async () => {
     const processedForm = processFormSteps();
 
-    await axios.post(
-      '/api/suggestion/generate',
-      { form: processedForm },
-      { headers: { 'Content-Type': 'application/json' } }
-    );
+    try {
+      const { data } = await axios.post(
+        '/api/suggestion/generate',
+        { form: processedForm },
+        { headers: { 'Content-Type': 'application/json' } }
+      );
 
-    start();
+      setInitialItineraryId(data.itineraryId);
+      start();
+    } catch (error) {
+      console.error('Error occurred attempting to generate suggestion');
+      throw error;
+    }
   };
 
   return (
@@ -78,7 +86,7 @@ export function TripPlanWizardForm() {
                     Continue
                   </Button>
                 ) : (
-                  <Button onClick={handleSubmit}>
+                  <Button onClick={handleSubmit} disabled={isPending}>
                     {isPending ? (
                       <>
                         <LoaderCircle className="animate-spin" />

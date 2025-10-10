@@ -1,13 +1,11 @@
 'use server';
 
-import { ensureAuth } from '@/app/_actions/utils/ensure-auth';
+import { requireUser } from '@features/auth/utils/require-user';
+
 import { DB_TABLES } from '@/app/_constants/db-tables';
-import { createClient } from '@/utils/supabase/server';
 
 export async function deleteTrip(tripId: string) {
-  const supabase = await createClient();
-  const user = await ensureAuth();
-
+  const { supabase, user } = await requireUser();
   const { error } = await supabase.from(DB_TABLES.travel_itineraries).delete().eq('user_id', user.id).eq('id', tripId);
 
   if (error) throw new Error(`Failed to delete trip: ${error.message}`);

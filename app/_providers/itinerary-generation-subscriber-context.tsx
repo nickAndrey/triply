@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, ReactNode, useContext, useEffect, useMemo, useState } from 'react';
+import { createContext, ReactNode, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 
 import { RealtimePostgresChangesPayload } from '@supabase/supabase-js';
 import axios from 'axios';
@@ -13,10 +13,14 @@ import { useRequest } from './request-context';
 
 type Params = {
   itinerary: TravelItineraryRow | null;
+  setInitialItineraryId: (id: string) => void;
+  handleResume: (incompleteItinerary: TravelItineraryRow | null) => Promise<void>;
 };
 
 const ItineraryGenerationSubscriberContext = createContext<Params>({
   itinerary: null,
+  setInitialItineraryId: () => {},
+  handleResume: async () => {},
 });
 
 type Props = {
@@ -25,18 +29,29 @@ type Props = {
 
 export function ItineraryGenerationSubscriberProvider({ children }: Props) {
   const { start, finish } = useRequest();
+  const [initialItineraryId, setInitialItineraryId] = useState<string | undefined>();
 
   const [itinerary, setItinerary] = useState<TravelItineraryRow | null>(null);
 
+  const handleResume = useCallback(
+    async (incompleteItinerary: TravelItineraryRow | null) => {
+      if (!incompleteItinerary) return;
+      start();
+      await axios.post('/api/suggestion/resume', { itinerary: incompleteItinerary });
+    },
+    [start]
+  );
+
   useEffect(() => {
+    let isActive = true;
+
     const init = async () => {
       const supabase = createClient();
-
       const {
         data: { user },
       } = await supabase.auth.getUser();
 
-      if (!user?.id) return;
+      if (!user?.id || !isActive) return;
 
       const { data } = await supabase
         .from(DB_TABLES.travel_itineraries)
@@ -45,25 +60,23 @@ export function ItineraryGenerationSubscriberProvider({ children }: Props) {
         .eq('user_id', user.id)
         .maybeSingle();
 
-      if (!data) return;
+      if (!data || !isActive) return;
 
       const incompleteItinerary = data as TravelItineraryRow;
-
       setItinerary(incompleteItinerary);
 
       if (incompleteItinerary.trip_status !== 'failed') {
         console.log('Resuming unfinished itinerary generation...');
-
-        await axios.post(
-          '/api/suggestion/resume',
-          { itinerary: incompleteItinerary },
-          { headers: { 'Content-Type': 'application/json' } }
-        );
+        await handleResume(incompleteItinerary);
       }
     };
 
     init();
-  }, [finish, start]);
+
+    return () => {
+      isActive = false;
+    };
+  }, [finish, start, handleResume, initialItineraryId]);
 
   useEffect(() => {
     if (!itinerary?.id) return;
@@ -84,18 +97,25 @@ export function ItineraryGenerationSubscriberProvider({ children }: Props) {
           const newItinerary = payload.new;
 
           if (newItinerary && typeof newItinerary === 'object' && 'trip_days' in newItinerary) {
-            setItinerary((prev) => (prev ? { ...prev, ...newItinerary } : newItinerary));
+            setItinerary((prev) => ({ ...prev, ...newItinerary }));
           }
         }
       )
       .subscribe();
 
     return () => {
-      supabase.removeChannel(channel);
+      channel.unsubscribe();
     };
   }, [itinerary?.id]);
 
-  const value = useMemo(() => ({ itinerary }), [itinerary]);
+  const value = useMemo(
+    () => ({
+      itinerary,
+      setInitialItineraryId,
+      handleResume,
+    }),
+    [itinerary, handleResume]
+  );
 
   return (
     <ItineraryGenerationSubscriberContext.Provider value={value}>

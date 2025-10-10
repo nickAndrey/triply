@@ -4,8 +4,8 @@ import { useState } from 'react';
 
 import { useRouter } from 'next/navigation';
 
-import { deleteTrip } from '@server-actions/trips/delete-trip';
-import { renameTrip } from '@server-actions/trips/rename-trip';
+import { deleteTrip } from '@features/itinerary/actions/delete-trip';
+import { renameTrip } from '@features/itinerary/actions/rename-trip';
 
 import { useRequest } from '@providers/request-context';
 
