@@ -1,5 +1,3 @@
-'use server';
-
 import axios, { type AxiosError } from 'axios';
 
 import { TripCore } from '@/app/_types/trip/trip-core';

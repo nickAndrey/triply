@@ -9,11 +9,13 @@ import { SuggestionFormFields } from '../types/form';
 
 export async function startItineraryGeneration(form: SuggestionFormFields) {
   try {
-    const newItinerary = await createEmptyTripRecord(form);
+    const { id } = await createEmptyTripRecord(form);
+
     const corePrompt = buildTripCorePrompt(form);
     const newItineraryCore = await aiGenerateCore(corePrompt);
-    await dbSaveCore({ tripId: newItinerary.id, tripCore: newItineraryCore });
-    await dbSaveDays({ tripId: newItinerary.id, form });
+
+    await dbSaveCore({ tripId: id, tripCore: newItineraryCore });
+    await dbSaveDays({ tripId: id, form });
   } catch (err) {
     console.error('Trip generation failed:', err);
     throw err;

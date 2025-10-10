@@ -107,7 +107,7 @@ export function useNavBarActions() {
           title: 'Delete Trip',
           description: 'Are you sure you want to delete this trip? This action cannot be undone.',
           action() {
-            handleDelete(params.id, params.trip_plan_details.slug);
+            handleDelete(params.id, params.trip_core.slug);
           },
         }));
       },

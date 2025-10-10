@@ -2,8 +2,8 @@ import { ReactNode } from 'react';
 
 import { Nunito } from 'next/font/google';
 
+import { ItineraryGenerationSubscriberProvider } from '@providers/itinerary-generation-subscriber-context';
 import { RequestProvider } from '@providers/request-context';
-import { SupabaseSubscriptionProvider } from '@providers/supabase-subscriptions/supabase-subscriptions-context';
 
 import { Toaster } from '@chadcn/components/ui/sonner';
 import { ThemeProvider } from '@chadcn/components/ui/theme-provider';
@@ -26,13 +26,13 @@ export default function RootLayout({ children }: Props) {
       <head />
       <body className={nunito.className}>
         <RequestProvider>
-          <SupabaseSubscriptionProvider>
+          <ItineraryGenerationSubscriberProvider>
             <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
               {children}
               <Header />
               <Toaster position="top-right" richColors expand />
             </ThemeProvider>
-          </SupabaseSubscriptionProvider>
+          </ItineraryGenerationSubscriberProvider>
         </RequestProvider>
       </body>
     </html>

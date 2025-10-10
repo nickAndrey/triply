@@ -1,8 +1,7 @@
-'use server';
+import { requireUser } from '@features/auth/utils/require-user';
 
 import { DB_TABLES } from '@/app/_constants/db-tables';
 import { TripCore } from '@/app/_types/trip/trip-core';
-import { createClient } from '@/utils/supabase/server';
 
 type Args = {
   tripId: string;
@@ -10,10 +9,10 @@ type Args = {
 };
 
 export async function dbSaveCore({ tripId, tripCore }: Args) {
-  const db = await createClient();
+  const { supabase } = await requireUser();
 
   try {
-    const { error: updateError } = await db
+    const { error: updateError } = await supabase
       .from(DB_TABLES.travel_itineraries)
       .update({
         trip_core: tripCore,
@@ -26,7 +25,7 @@ export async function dbSaveCore({ tripId, tripCore }: Args) {
   } catch (error) {
     console.error(`[Trip:${tripId}] Core generation failed:`, error);
 
-    await db
+    await supabase
       .from(DB_TABLES.travel_itineraries)
       .update({ trip_status: 'failed', updated_at: new Date().toISOString() })
       .eq('id', tripId);

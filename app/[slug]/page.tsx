@@ -1,10 +1,12 @@
 import { Metadata } from 'next';
-import { notFound, redirect } from 'next/navigation';
+import { notFound } from 'next/navigation';
+
+import { requireUser } from '@features/auth/utils/require-user';
 
 import { TripPlanView } from '@/app/[slug]/_components/trip-plan-view';
 import { DB_TABLES } from '@/app/_constants/db-tables';
-import { TravelItineraryRow } from '@/app/_types/supabase-update-payload';
-import { createClient } from '@/utils/supabase/server';
+
+import { TravelItineraryRow } from '../_types/db/travel-itinerary-row';
 
 export const metadata: Metadata = {
   title: 'Triply | Suggestions',
@@ -13,22 +15,16 @@ export const metadata: Metadata = {
 
 export default async function TravelSuggestionPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const supabase = await createClient();
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) return redirect('/login');
+  const { supabase, user } = await requireUser();
 
   const { data } = await supabase
     .from(DB_TABLES.travel_itineraries)
     .select('*')
     .eq('user_id', user.id)
-    .filter('trip_plan_details->>slug', 'eq', slug)
-    .maybeSingle<TravelItineraryRow>();
+    .filter('trip_core->>slug', 'eq', slug)
+    .single<TravelItineraryRow>();
 
   if (!data) return notFound();
 
-  return <TripPlanView dbRow={data} />;
+  return <TripPlanView dbItinerary={data} />;
 }

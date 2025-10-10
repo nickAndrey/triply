@@ -2,12 +2,10 @@
 
 import { useState } from 'react';
 
+import axios from 'axios';
 import { LoaderCircle } from 'lucide-react';
 
-import { startItineraryGeneration } from '@server-actions/personal-suggestion/get-personal-suggestion';
-
 import { useRequest } from '@providers/request-context';
-import { useSupabaseSubscriptionContext } from '@providers/supabase-subscriptions/supabase-subscriptions-context';
 
 import { Button } from '@chadcn/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@chadcn/components/ui/card';
@@ -26,16 +24,20 @@ import { FormStep7 } from '@components/trip-plan-form-steps/steps/step-7/form-st
 export function TripPlanWizardForm() {
   const { forms, processFormSteps } = useTripPlanFormSteps();
 
-  const { isPending } = useRequest();
-  const { setTripId, setSubscriberStatus } = useSupabaseSubscriptionContext();
+  const { isPending, start } = useRequest();
 
   const [step, setStep] = useState(0);
 
   const handleSubmit = async () => {
-    setSubscriberStatus('core_generating');
     const processedForm = processFormSteps();
-    const { tripId } = await startItineraryGeneration(processedForm);
-    setTripId(tripId);
+
+    await axios.post(
+      '/api/suggestion/generate',
+      { form: processedForm },
+      { headers: { 'Content-Type': 'application/json' } }
+    );
+
+    start();
   };
 
   return (

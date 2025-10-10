@@ -1,3 +1,3 @@
-import { TravelItineraryRow } from '@/app/_types/supabase-update-payload';
+import { TravelItineraryRow } from '@/app/_types/db/travel-itinerary-row';
 
-export type NavBarItem = Pick<TravelItineraryRow, 'id' | 'trip_plan_details' | 'form'>;
+export type NavBarItem = Pick<TravelItineraryRow, 'id' | 'trip_core' | 'form'>;

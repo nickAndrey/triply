@@ -1,5 +1,3 @@
-'use server';
-
 import { Day } from '@/app/_types/trip/trip-day';
 
 import { SuggestionFormFields } from '../types/form';

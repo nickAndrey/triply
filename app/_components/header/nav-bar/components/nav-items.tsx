@@ -33,18 +33,20 @@ export function NavItems({ navbarItems, actions }: Props) {
       </li>
 
       {searchProps.filteredNavbarItems.map((navBarItem) => {
-        const { id, trip_plan_details } = navBarItem;
+        const { id, trip_core } = navBarItem;
 
-        const navTitle = trip_plan_details.navTitle;
-        const duration = `${trip_plan_details.tripDurationDays}-day`;
-        const subtitle = `${duration} ${trip_plan_details.companions.type.toLowerCase()} trip • ${trip_plan_details.season.toLowerCase()}`;
+        if (!trip_core) return null;
+
+        const navTitle = trip_core?.navTitle;
+        const duration = `${trip_core.tripDurationDays}-day`;
+        const subtitle = `${duration} ${trip_core.companions.type.toLowerCase()} trip • ${trip_core.season.toLowerCase()}`;
 
         return (
           <li key={id}>
             <ContextMenu>
               <ContextMenuTrigger>
                 <NavLink
-                  href={`/${trip_plan_details.slug}`}
+                  href={`/${trip_core.slug}`}
                   label={navTitle}
                   subtitle={subtitle}
                   actions={actions}

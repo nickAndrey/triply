@@ -1,5 +1,3 @@
-'use server';
-
 import { jsonrepair } from 'jsonrepair';
 
 /**

@@ -1,17 +1,11 @@
 import { NextResponse } from 'next/server';
 
-import { ProgressiveItineraryGenerator } from '@server-actions/personal-suggestion/personal-suggestion-generator';
-
-import { createClient } from '@/utils/supabase/server';
+import { startItineraryGeneration } from '@features/itinerary/actions/start-itinerary-generation';
 
 export async function POST(request: Request) {
-  const { tripId } = await request.json();
+  const { form } = await request.json();
 
-  (async () => {
-    const supabase = createClient();
-    const generator = new ProgressiveItineraryGenerator(supabase);
-    await generator.startGenerateTripPlan(tripId);
-  })();
+  startItineraryGeneration(form).catch((err) => console.error('Background generation failed:', err));
 
   return NextResponse.json({ ok: true }, { status: 202 });
 }

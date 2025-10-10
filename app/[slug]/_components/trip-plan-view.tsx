@@ -1,35 +1,26 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-
-import { useSupabaseSubscriptionContext } from '@providers/supabase-subscriptions/supabase-subscriptions-context';
+import { useItineraryGenerationSubscriber } from '@providers/itinerary-generation-subscriber-context';
 
 import { TravelLoader } from '@components/travel-loader';
 
 import { ResizableLayer } from '@/app/[slug]/_components/resizable-layer';
-import { TravelItineraryRow } from '@/app/_types/supabase-update-payload';
+import { TravelItineraryRow } from '@/app/_types/db/travel-itinerary-row';
 
 type Props = {
-  dbRow: TravelItineraryRow;
+  dbItinerary: TravelItineraryRow;
 };
 
-export function TripPlanView({ dbRow }: Props) {
-  const { subscriberStatus, tripId, tripData } = useSupabaseSubscriptionContext();
+export function TripPlanView({ dbItinerary }: Props) {
+  const { itinerary } = useItineraryGenerationSubscriber();
 
-  const [dataSrc, setDataSrc] = useState(dbRow);
+  const itineraryDataSrc = itinerary ? itinerary : dbItinerary;
 
-  useEffect(() => {
-    if (tripData && tripData.id === tripId) {
-      setDataSrc(tripData);
-    }
-  }, [tripData, tripId]);
+  const { trip_core, trip_days, trip_status } = itineraryDataSrc;
 
-  const isSameTrip = dataSrc.id === tripId;
-  const isLive = subscriberStatus !== 'completed' && subscriberStatus !== 'idle';
+  const isLive = trip_status !== 'completed' && trip_status !== 'failed';
 
-  const trip = isLive && isSameTrip ? dataSrc.trip_plan_details : dataSrc.trip_plan_details;
-
-  const asideContent = trip.days.map((day) => ({
+  const asideContent = trip_days.map((day) => ({
     anchor: day.dayNumber,
     title: `Day ${day.dayNumber}: ${day.theme}`,
     places: [...day.morning.map((m) => m.name), ...day.afternoon.map((a) => a.name), ...day.evening.map((e) => e.name)],
@@ -65,7 +56,7 @@ export function TripPlanView({ dbRow }: Props) {
                     {day.places.map((place, idx_2) => (
                       <li key={idx_2}>
                         <a
-                          href={buildGoogleMapsLink(place, trip.city, trip.country)}
+                          href={buildGoogleMapsLink(place, trip_core.city, trip_core.country)}
                           target="_blank"
                           rel="noopener noreferrer"
                         >
@@ -81,11 +72,11 @@ export function TripPlanView({ dbRow }: Props) {
         }
       >
         <article className="">
-          <h1>{trip.articleTitle}</h1>
+          <h1>{trip_core.articleTitle}</h1>
 
-          <h3>{trip.tripSummary}</h3>
+          <h3>{trip_core.tripSummary}</h3>
 
-          {trip.days.map((day) => (
+          {trip_days.map((day) => (
             <section key={day.dayNumber}>
               <header>
                 <h2 id={day.dayNumber.toString()}>
@@ -101,7 +92,7 @@ export function TripPlanView({ dbRow }: Props) {
                 {day.morning.map((act, i) => (
                   <li key={i}>
                     <a
-                      href={buildGoogleMapsLink(act.name, trip.city, trip.country)}
+                      href={buildGoogleMapsLink(act.name, trip_core.city, trip_core.country)}
                       target="_blank"
                       rel="noopener noreferrer"
                     >
@@ -117,7 +108,7 @@ export function TripPlanView({ dbRow }: Props) {
                 {day.afternoon.map((act, i) => (
                   <li key={i}>
                     <a
-                      href={buildGoogleMapsLink(act.name, trip.city, trip.country)}
+                      href={buildGoogleMapsLink(act.name, trip_core.city, trip_core.country)}
                       target="_blank"
                       rel="noopener noreferrer"
                     >
@@ -133,7 +124,7 @@ export function TripPlanView({ dbRow }: Props) {
                 {day.evening.map((act, i) => (
                   <li key={i}>
                     <a
-                      href={buildGoogleMapsLink(act.name, trip.city, trip.country)}
+                      href={buildGoogleMapsLink(act.name, trip_core.city, trip_core.country)}
                       target="_blank"
                       rel="noopener noreferrer"
                     >
@@ -171,7 +162,7 @@ export function TripPlanView({ dbRow }: Props) {
           ) : (
             <section className="mt-10 space-y-4">
               <h2 className="text-2xl font-semibold tracking-tight text-foreground">Conclusion</h2>
-              <p className="text-lg leading-relaxed text-muted-foreground">{trip.tripConclusion}</p>
+              <p className="text-lg leading-relaxed text-muted-foreground">{trip_core.tripConclusion}</p>
             </section>
           )}
         </article>

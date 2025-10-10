@@ -51,7 +51,7 @@ export function useSearchBox({ navbarItems, ulRef }: Params) {
 
   useEffect(() => {
     const regex = new RegExp(searchValueDebounced, 'i');
-    const filtered = navbarItems.filter((item) => regex.test(item.trip_plan_details.city));
+    const filtered = navbarItems.filter((item) => regex.test(item.trip_core.city));
 
     setFilteredNavbarItems(filtered);
   }, [searchValueDebounced, navbarItems]);
