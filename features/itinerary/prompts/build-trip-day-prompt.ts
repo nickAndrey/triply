@@ -1,4 +1,4 @@
-import { SuggestionFormFields } from '@/app/_actions/personal-suggestion/_types/form';
+import { SuggestionFormFields } from '@server-actions/personal-suggestion/types/form';
 
 export function buildTripDayPrompt(form: SuggestionFormFields) {
   const destination = form.destination;

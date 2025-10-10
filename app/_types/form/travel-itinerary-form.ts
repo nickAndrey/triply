@@ -1,0 +1,22 @@
+export type TravelItineraryForm = {
+  activityIntensity: string;
+  adults?: { adult: number }[];
+  budget: 'Free' | '$' | '$$' | '$$$';
+  children?: { child: number; group: string }[];
+  companions: string;
+  destination: string;
+  destinationSearch?: string;
+  foodPreferences: string[];
+  foodRestrictions?: string;
+  friends?: { friend: number }[];
+  pace: string;
+  perfectDay?: string;
+  placesAvoidToSee?: string;
+  placesToSee?: string;
+  planningStyle: string;
+  season: string;
+  tripDurationDays: string;
+  tripSuccessDefinition?: string;
+  tripVibe: string;
+  toneStyle?: 'Vivid' | 'Historical' | 'Balanced';
+};

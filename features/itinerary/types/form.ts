@@ -1,4 +1,4 @@
-import { TravelItineraryForm } from '@/app/_types/supabase-update-payload';
+import { TravelItineraryForm } from '@/app/_types/form/travel-itinerary-form';
 
 export type SuggestionFormFields = TravelItineraryForm & {
   travelDates?: string[];

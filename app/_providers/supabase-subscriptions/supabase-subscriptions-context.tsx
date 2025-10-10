@@ -6,13 +6,15 @@ import { RealtimePostgresChangesPayload } from '@supabase/supabase-js';
 import axios from 'axios';
 
 import { useRequest } from '@providers/request-context';
-import { initTripStatus } from '@providers/supabase-subscriptions/_utils/init-trip-status';
-import { resolveTripStatus } from '@providers/supabase-subscriptions/_utils/status-resolver';
 
 import { DB_TABLES } from '@/app/_constants/db-tables';
 import { TravelItineraryRow } from '@/app/_types/supabase-update-payload';
 import { createClient } from '@/utils/supabase/client';
 
+import { initTripStatus } from './_utils/init-trip-status';
+import { resolveTripStatus } from './_utils/status-resolver';
+
+/**  @deprecated use app/_types/db/travel-itinerary-row.ts */
 export type SubscriberStatus = 'idle' | 'core_generating' | 'core_ready' | 'days_generating' | 'completed' | 'error';
 
 type ContextType = {

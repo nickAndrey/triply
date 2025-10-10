@@ -23,6 +23,7 @@
       "@chadcn/*": ["./chadcn/*"],
       "@server-actions/*": ["./app/_actions/*"],
       "@providers/*": ["./app/_providers/*"],
+      "@features/*": ["./features/*"],
       "@/*": ["./*"]
     }
   },

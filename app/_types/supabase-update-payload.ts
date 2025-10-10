@@ -1,5 +1,8 @@
 import { TripPlan } from '@/app/_types/trip-plan';
 
+/**
+ * @deprecated use `app/_types/db/*` types instead
+ */
 export type TravelItineraryForm = {
   activityIntensity: string;
   adults?: { adult: number }[];
@@ -21,7 +24,9 @@ export type TravelItineraryForm = {
   tripSuccessDefinition?: string;
   tripVibe: string;
 };
-
+/**
+ * @deprecated use `app/_types/db/*` types instead
+ */
 export type TravelItineraryRow = {
   created_at: string;
   trip_plan_details: TripPlan;
@@ -31,7 +36,9 @@ export type TravelItineraryRow = {
   updated_at: string;
   user_id: string;
 };
-
+/**
+ * @deprecated use `app/_types/db/*` types instead
+ */
 export type SupabaseUpdatePayload = {
   schema: string;
   table: string;

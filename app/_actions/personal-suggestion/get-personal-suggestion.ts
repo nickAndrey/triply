@@ -2,7 +2,8 @@
 
 import axios from 'axios';
 
-import { SuggestionFormFields } from '@/app/_actions/personal-suggestion/_types/form';
+import { SuggestionFormFields } from '@server-actions/personal-suggestion/types/form';
+
 import { DB_TABLES } from '@/app/_constants/db-tables';
 import { createClient } from '@/utils/supabase/server';
 

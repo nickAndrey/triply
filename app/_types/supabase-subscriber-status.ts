@@ -1,3 +1,6 @@
+/**
+ * @deprecated use app/_types/db/travel-itinerary-row.ts instead
+ */
 export type SubscriberGenerationStatus =
   | 'idle' // Nothing in progress
   | 'core_generating' // AI generating trip core (before DB insert)

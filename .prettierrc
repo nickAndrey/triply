@@ -5,6 +5,7 @@
     "^next(.*)$",
     "<THIRD_PARTY_MODULES>",
     "^@server-actions/(.*)$",
+    "^@features/(.*)$",
     "^@providers/(.*)$",
     "^@chadcn/(.*)$",
     "^@components/(.*)$",

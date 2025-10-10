@@ -1,8 +1,9 @@
 import axios, { AxiosError } from 'axios';
 
-import { buildTripCorePrompt } from '@/app/_actions/personal-suggestion/_prompts/trip-core-prompt_v1';
-import { buildTripDayPrompt } from '@/app/_actions/personal-suggestion/_prompts/trip-day-prompt_v1';
-import { SuggestionFormFields } from '@/app/_actions/personal-suggestion/_types/form';
+import { buildTripCorePrompt } from '@server-actions/personal-suggestion/prompts/trip-core-prompt_v1';
+import { buildTripDayPrompt } from '@server-actions/personal-suggestion/prompts/trip-day-prompt_v1';
+import { SuggestionFormFields } from '@server-actions/personal-suggestion/types/form';
+
 import { DB_TABLES } from '@/app/_constants/db-tables';
 import { Day, TripPlan } from '@/app/_types/trip-plan';
 import { safeJsonParse } from '@/app/_utils/safe-json-parse';
@@ -186,3 +187,27 @@ export class ProgressiveItineraryGenerator {
     await db.from(DB_TABLES.travel_itineraries).update({ status: 'completed' }).eq('id', tripId);
   }
 }
+
+/*
+
+features/
+   └─ itinerary/
+      ├─ ai/
+      │  ├─ ai-generate-core.ts
+      │  └─ ai-generate-day.ts
+      ├─ db/
+      │  ├─ db-create-empty-trip.ts
+      │  ├─ db-save-core.ts
+      │  └─ db-append-day.ts
+      ├─ signals/
+      │  ├─ signal-start-generation.ts
+      │  └─ signal-resume-generation.ts
+      ├─ prompts/
+      │  ├─ build-trip-core-prompt.ts
+      │  └─ build-trip-day-prompt.ts
+      ├─ types/
+      │  └─ form.ts
+      └─ utils/
+         └─ safe-json-parse.ts
+
+    */

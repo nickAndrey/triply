@@ -1,4 +1,4 @@
-import { SuggestionFormFields } from '@/app/_actions/personal-suggestion/_types/form';
+import { SuggestionFormFields } from '@server-actions/personal-suggestion/types/form';
 
 export function buildTripCorePrompt(form: SuggestionFormFields) {
   const destination = form.destination;
@@ -20,17 +20,17 @@ export function buildTripCorePrompt(form: SuggestionFormFields) {
   })();
 
   return `
-    You are a travel planner. Generate the **trip plan core** as JSON.
+    You are a professional travel planner. Generate the **trip plan core** as JSON.
 
-    ### Output Requirements
-    - Respond ONLY with valid JSON.
-    - Must pass JSON.parse() with no errors.
-    - No text outside JSON.
+    ### 🧾 Output Requirements
+    - Respond **ONLY** with valid JSON.
+    - Must pass \`JSON.parse()\` with no errors.
+    - No text or explanation outside the JSON.
 
     ---
 
-    ### Root JSON Object Fields
-    - "navTitle": string → A short, user-friendly title for navigation (default = city name, e.g. "Rome").
+    ### 🧩 Root JSON Object Fields
+    - "navTitle": string → Short title for navigation (default = city name, e.g. "Rome").
     - "destination": string → Full destination name (e.g. "Warsaw, Poland").
     - "city": string → City name only.
     - "country": string → Country name only.
@@ -38,7 +38,7 @@ export function buildTripCorePrompt(form: SuggestionFormFields) {
     - "season": "Winter" | "Spring" | "Summer" | "Autumn".
     - "companions": object → Traveler group:
       - "type": "Solo" | "Couple" | "Family" | "Friends".
-      - "adults": array of { "adult": number } (if Family).
+      - "adults": array of { "adult": number } (if Family or Couple).
       - "children": array of { "child": number, "group": "0-3" | "4-9" | "10-16" } (if Family).
       - "friends": array of { "friend": number } (if Friends).
     - "tripVibe": "Beach" | "City" | "Nature".
@@ -57,28 +57,27 @@ export function buildTripCorePrompt(form: SuggestionFormFields) {
     - "tripConclusion": string → Closing reflection at the end of the journey.
     - "articleTitle": string → Title summarizing the trip.
     - "slug": string → URL-safe slug (lowercase, hyphenated, no special characters, e.g. "5-days-in-rome").
-    - "days": []
 
     ---
 
-    ### Rules
-    - Do not generate any days yet — only provide the trip core.
-    - All fields listed above must be included, even if empty or "not specified".
-    - The following fields must reflect the selected "${form.toneStyle || 'Balanced'}" writing tone:
-      - "articleTitle"
-      - "tripSummary"
-      - "tripConclusion"
-    - Write all text in the "${form.toneStyle || 'Balanced'}" style:
+    ### 🧠 Rules
+    - ❌ **Do NOT** generate any days yet — only provide the trip core.
+    - ✅ Include **all fields**, even if empty or "not specified".
+    - 🪶 Use the "${form.toneStyle || 'Balanced'}" writing tone:
       - "Vivid" → sensory, emotional, immersive.
       - "Historical" → local history, cultural context, interesting facts.
       - "Balanced" → mix of vivid and factual.
-    - Ensure strict JSON validity.
-    - Do not add fields outside the schema.
+    - Apply tone specifically to:
+      - "articleTitle"
+      - "tripSummary"
+      - "tripConclusion"
+    - ⚙️ Output must be **strictly valid JSON**.
+    - 🚫 No additional fields, text, or comments outside schema.
 
     ---
 
-    ### Input Context
-    The trip request is based on:
+    ### 📥 Input Context
+    Use this context to personalize the trip:
 
     {
       "navTitle": "${city}",
