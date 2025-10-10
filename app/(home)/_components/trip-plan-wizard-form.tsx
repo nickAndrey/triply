@@ -26,7 +26,7 @@ export function TripPlanWizardForm() {
   const { forms, processFormSteps } = useTripPlanFormSteps();
   const { setInitialItineraryId } = useItineraryGenerationSubscriber();
 
-  const { isPending, start } = useRequest();
+  const { isPending, start, fail } = useRequest();
 
   const [step, setStep] = useState(0);
 
@@ -34,16 +34,18 @@ export function TripPlanWizardForm() {
     const processedForm = processFormSteps();
 
     try {
+      start();
       const { data } = await axios.post(
         '/api/suggestion/generate',
         { form: processedForm },
         { headers: { 'Content-Type': 'application/json' } }
       );
 
+      setStep(0);
       setInitialItineraryId(data.itineraryId);
-      start();
     } catch (error) {
       console.error('Error occurred attempting to generate suggestion');
+      fail((error as Error).message);
       throw error;
     }
   };
