@@ -22,8 +22,9 @@ import { DialogDescription, DialogTitle } from '@chadcn/components/ui/dialog';
 import { Drawer, DrawerClose, DrawerContent, DrawerHeader, DrawerTrigger } from '@chadcn/components/ui/drawer';
 
 import { NavItems } from '@components/header/nav-bar/components/nav-items';
-import { useNavBarActions } from '@components/header/nav-bar/hooks/use-nav-bar-actions';
 import { NavBarItem } from '@components/header/nav-bar/types/nav-bar-item';
+
+import { useTripActions } from '@/app/_hooks/use-trip-actions';
 
 type NavBarProps = {
   navbarItems: NavBarItem[];
@@ -33,7 +34,7 @@ export function NavBar({ navbarItems }: NavBarProps) {
   const [open, setOpen] = useState(false);
   const { isPending } = useRequest();
 
-  const actions = useNavBarActions();
+  const actions = useTripActions();
 
   const { alertDialogProps } = actions;
 

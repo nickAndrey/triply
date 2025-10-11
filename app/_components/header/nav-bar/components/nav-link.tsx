@@ -18,15 +18,16 @@ import { cn } from '@chadcn/lib/utils';
 
 import { InputRenameNavItem } from '@components/header/nav-bar/components/input-rename-nav-item/input-rename-nav-item';
 import { useInputRenameNavItem } from '@components/header/nav-bar/components/input-rename-nav-item/use-input-rename-nav-item';
-import { useNavBarActions } from '@components/header/nav-bar/hooks/use-nav-bar-actions';
 import { NavBarItem } from '@components/header/nav-bar/types/nav-bar-item';
+
+import { useTripActions } from '@/app/_hooks/use-trip-actions';
 
 type NavLinkProps = {
   href: string;
   label: string;
   subtitle?: string;
   icon?: ReactNode;
-  actions: ReturnType<typeof useNavBarActions>;
+  actions: ReturnType<typeof useTripActions>;
   navBarItem: NavBarItem;
   onNavigate?: () => void;
 };

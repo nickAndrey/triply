@@ -37,9 +37,9 @@ export function ResizableLayer({ children, aside }: Props) {
 
       <ResizableHandle withHandle />
 
-      {/* MAIN CONTENT PANEL */}
+      {/* ARTICLE CONTENT PANEL */}
       <ResizablePanel className="overflow-y-auto" defaultSize={75} maxSize={isSmallScreen ? 95 : 80}>
-        <div className="h-full overflow-y-auto px-4 py-4">{children}</div>
+        {children}
       </ResizablePanel>
     </ResizablePanelGroup>
   );

@@ -1,11 +1,11 @@
 import { ChangeEvent, FocusEvent, KeyboardEvent, useEffect, useRef, useState } from 'react';
 
-import { useNavBarActions } from '@components/header/nav-bar/hooks/use-nav-bar-actions';
+import { useTripActions } from '@/app/_hooks/use-trip-actions';
 
 type Params = {
   label: string;
   navItemId: string;
-  actions: ReturnType<typeof useNavBarActions>;
+  actions: ReturnType<typeof useTripActions>;
   isEditMode: boolean;
 };
 

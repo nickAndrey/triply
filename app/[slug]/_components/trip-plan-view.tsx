@@ -2,10 +2,15 @@
 
 import { useItineraryGenerationSubscriber } from '@providers/itinerary-generation-subscriber-context';
 
+import { ScrollToTopButton } from '@components/scroll-to-top-button';
 import { TravelLoader } from '@components/travel-loader';
 
 import { ResizableLayer } from '@/app/[slug]/_components/resizable-layer';
 import { TravelItineraryRow } from '@/app/_types/db/travel-itinerary-row';
+
+import { buildGoogleMapsLink } from '../_utils/build-google-maps-link';
+import { ItineraryActionsPanel } from './itineray-actions-panel/itinerary-actions-panel';
+import { TripOverview } from './trip-overview';
 
 type Props = {
   dbItinerary: TravelItineraryRow;
@@ -20,61 +25,15 @@ export function TripPlanView({ dbItinerary }: Props) {
 
   const isLive = trip_status !== 'completed' && trip_status !== 'failed';
 
-  const asideContent = trip_days.map((day) => ({
-    anchor: day.dayNumber,
-    title: `Day ${day.dayNumber}: ${day.theme}`,
-    places: [...day.morning.map((m) => m.name), ...day.afternoon.map((a) => a.name), ...day.evening.map((e) => e.name)],
-  }));
-
-  function buildGoogleMapsLink(place: string, city: string, country: string) {
-    const cleanedUpPlace = place.replace(/\s*\([^)]*\)/g, '').trim();
-    const query = encodeURIComponent(`${cleanedUpPlace} ${city} ${country}`);
-    return `https://www.google.com/maps/search/?api=1&query=${query}`;
-  }
-
   return (
     <main className="prose dark:prose-invert min-w-[100dvw] xl:min-w-[90dvw] xl:m-auto">
-      <ResizableLayer
-        aside={
-          <aside className="rounded-2xl bg-card p-4 shadow-md border-1">
-            <h2 className="text-lg font-semibold !my-3">Trip Overview</h2>
-
-            <nav className="space-y-3">
-              {asideContent.map((day, idx) => (
-                <details
-                  key={day.anchor}
-                  open={idx === 0}
-                  className="rounded-lg bg-accent/20 hover:bg-accent/50 transition"
-                >
-                  <summary className="cursor-pointer px-3 py-2 font-medium">
-                    <a href={`#${day.anchor}`} className="no-underline hover:underline text-sm">
-                      {day.title}
-                    </a>
-                  </summary>
-
-                  <ul className="px-4 pb-2 text-sm space-y-1 list-disc list-inside">
-                    {day.places.map((place, idx_2) => (
-                      <li key={idx_2}>
-                        <a
-                          href={buildGoogleMapsLink(place, trip_core.city, trip_core.country)}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          <strong>{place}</strong>
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </details>
-              ))}
-            </nav>
-          </aside>
-        }
-      >
-        <article className="">
+      <ResizableLayer aside={<TripOverview itinerary={itineraryDataSrc} />}>
+        <article className="h-full overflow-y-auto px-4 py-4">
           <h1>{trip_core.articleTitle}</h1>
-
           <h3>{trip_core.tripSummary}</h3>
+
+          <ItineraryActionsPanel itinerary={itineraryDataSrc} />
+          <ScrollToTopButton />
 
           {trip_days.map((day) => (
             <section key={day.dayNumber}>
@@ -92,7 +51,11 @@ export function TripPlanView({ dbItinerary }: Props) {
                 {day.morning.map((act, i) => (
                   <li key={i}>
                     <a
-                      href={buildGoogleMapsLink(act.name, trip_core.city, trip_core.country)}
+                      href={buildGoogleMapsLink({
+                        place: act.name,
+                        city: trip_core.city,
+                        country: trip_core.country,
+                      })}
                       target="_blank"
                       rel="noopener noreferrer"
                     >
@@ -108,7 +71,11 @@ export function TripPlanView({ dbItinerary }: Props) {
                 {day.afternoon.map((act, i) => (
                   <li key={i}>
                     <a
-                      href={buildGoogleMapsLink(act.name, trip_core.city, trip_core.country)}
+                      href={buildGoogleMapsLink({
+                        place: act.name,
+                        city: trip_core.city,
+                        country: trip_core.country,
+                      })}
                       target="_blank"
                       rel="noopener noreferrer"
                     >
@@ -124,7 +91,11 @@ export function TripPlanView({ dbItinerary }: Props) {
                 {day.evening.map((act, i) => (
                   <li key={i}>
                     <a
-                      href={buildGoogleMapsLink(act.name, trip_core.city, trip_core.country)}
+                      href={buildGoogleMapsLink({
+                        place: act.name,
+                        city: trip_core.city,
+                        country: trip_core.country,
+                      })}
                       target="_blank"
                       rel="noopener noreferrer"
                     >

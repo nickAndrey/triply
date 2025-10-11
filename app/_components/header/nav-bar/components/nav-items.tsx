@@ -13,12 +13,13 @@ import { cn } from '@chadcn/lib/utils';
 import { NavLink } from '@components/header/nav-bar/components/nav-link';
 import { SearchBox } from '@components/header/nav-bar/components/search-box/search-box';
 import { useSearchBox } from '@components/header/nav-bar/components/search-box/use-search-box';
-import { useNavBarActions } from '@components/header/nav-bar/hooks/use-nav-bar-actions';
 import { NavBarItem } from '@components/header/nav-bar/types/nav-bar-item';
+
+import { useTripActions } from '@/app/_hooks/use-trip-actions';
 
 type Props = {
   navbarItems: NavBarItem[];
-  actions: ReturnType<typeof useNavBarActions>;
+  actions: ReturnType<typeof useTripActions>;
 };
 
 export function NavItems({ navbarItems, actions }: Props) {
