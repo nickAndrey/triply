@@ -9,7 +9,7 @@ import { ResizableLayer } from '@/app/[slug]/_components/resizable-layer';
 import { TravelItineraryRow } from '@/app/_types/db/travel-itinerary-row';
 
 import { buildGoogleMapsLink } from '../_utils/build-google-maps-link';
-import { ItineraryActionsPanel } from './itineray-actions-panel/itinerary-actions-panel';
+import { ItineraryActions } from './itinerary-actions/itinerary-actions';
 import { TripOverview } from './trip-overview';
 
 type Props = {
@@ -32,7 +32,7 @@ export function TripPlanView({ dbItinerary }: Props) {
           <h1>{trip_core.articleTitle}</h1>
           <h3>{trip_core.tripSummary}</h3>
 
-          <ItineraryActionsPanel itinerary={itineraryDataSrc} />
+          <ItineraryActions itinerary={itineraryDataSrc} />
           <ScrollToTopButton />
 
           {trip_days.map((day) => (
