@@ -26,11 +26,11 @@ export function TripPlanView({ dbItinerary }: Props) {
   const isLive = trip_status !== 'completed' && trip_status !== 'failed';
 
   return (
-    <main className="prose dark:prose-invert min-w-[100dvw] xl:min-w-[90dvw] xl:m-auto">
+    <main>
       <ResizableLayer aside={<TripOverview itinerary={itineraryDataSrc} />}>
-        <article className="h-full overflow-y-auto px-4 py-4">
+        <article className="h-full overflow-y-auto px-4 py-4 prose dark:prose-invert !max-w-none">
           <h1>{trip_core.articleTitle}</h1>
-          <h3>{trip_core.tripSummary}</h3>
+          <h4>{trip_core.tripSummary}</h4>
 
           <ItineraryActions itinerary={itineraryDataSrc} />
           <ScrollToTopButton />

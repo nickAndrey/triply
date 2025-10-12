@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 
-import { Nunito } from 'next/font/google';
+import { Geist } from 'next/font/google';
 
 import { ItineraryGenerationSubscriberProvider } from '@providers/itinerary-generation-subscriber-context';
 import { RequestProvider } from '@providers/request-context';
@@ -12,7 +12,7 @@ import { Header } from '@components/header/header';
 
 import './_styles/globals.css';
 
-const nunito = Nunito({
+const geist = Geist({
   subsets: [],
 });
 
@@ -24,7 +24,7 @@ export default function RootLayout({ children }: Props) {
   return (
     <html lang="en" suppressHydrationWarning>
       <head />
-      <body className={nunito.className}>
+      <body className={geist.className}>
         <RequestProvider>
           <ItineraryGenerationSubscriberProvider>
             <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>

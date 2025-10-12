@@ -2,7 +2,6 @@
 
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -80,9 +79,7 @@ export function ActionDialog(props: Props) {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction asChild>
-            <Button variant="destructive">Delete trip</Button>
-          </AlertDialogAction>
+          <Button variant="destructive">Delete trip</Button>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
