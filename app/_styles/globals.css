@@ -1,8 +1,10 @@
-@plugin '@tailwindcss/typography';
-@import 'tailwindcss';
-@import 'tw-animate-css';
 @import './color-theme.css';
 @import './md-typography-color-theme.css';
+
+@plugin '@tailwindcss/typography';
+@import 'tw-animate-css';
+
+@import 'tailwindcss';
 
 @custom-variant dark (&:is(.dark *));
 
