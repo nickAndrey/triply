@@ -20,11 +20,15 @@ import {
   DialogTitle,
 } from '@chadcn/components/ui/dialog';
 
+import { useItineraryDelete } from '@/app/_hooks/use-itinerary-delete';
+
 import { useItineraryActions } from '../hooks/use-itinerary-actions';
 
 type Props = ReturnType<typeof useItineraryActions> & {};
 
 export function ActionDialog(props: Props) {
+  const { handleItineraryDelete } = useItineraryDelete();
+
   const editPromptConfirmationDialog = (
     <Dialog {...props.editPromptConfirmationDialog}>
       <DialogContent>
@@ -79,7 +83,12 @@ export function ActionDialog(props: Props) {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <Button variant="destructive">Delete trip</Button>
+          <Button
+            variant="destructive"
+            onClick={() => handleItineraryDelete(props.itinerary.id, props.itinerary.trip_core.slug)}
+          >
+            Delete trip
+          </Button>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

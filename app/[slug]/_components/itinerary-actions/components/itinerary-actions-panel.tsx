@@ -27,6 +27,7 @@ export function ItineraryActionsPanel(props: Props) {
       id: 'export',
       icon: <Download />,
       tooltipLabel: 'Export as PDF to share',
+      disabled: true,
       onClick: () => {},
     },
     {
@@ -41,6 +42,7 @@ export function ItineraryActionsPanel(props: Props) {
       id: 'delete',
       icon: <Trash2 />,
       tooltipLabel: 'Delete itinerary',
+      className: 'text-destructive hover:!bg-destructive/20 hover:!text-destructive',
       onClick: () => {
         deleteConfirmationDialog.onOpenChange(true);
       },
@@ -48,21 +50,21 @@ export function ItineraryActionsPanel(props: Props) {
   ];
 
   return (
-    <div className="p-2 flex items-center gap-3">
+    <div className="inline-flex items-center gap-3">
       {actions.map((item) => (
         <Tooltip key={item.id}>
           <TooltipTrigger asChild>
-            <Button
-              variant="outline"
-              size="icon"
-              className={cn(
-                'rounded-full',
-                item.id === 'delete' && 'text-destructive hover:!bg-destructive/20 hover:!text-destructive'
-              )}
-              onClick={item.onClick}
-            >
-              {item.icon}
-            </Button>
+            <span>
+              <Button
+                variant="outline"
+                size="icon"
+                className={cn('rounded-full', item.className)}
+                onClick={item.onClick}
+                disabled={item.disabled}
+              >
+                {item.icon}
+              </Button>
+            </span>
           </TooltipTrigger>
           <TooltipContent>{item.tooltipLabel}</TooltipContent>
         </Tooltip>
