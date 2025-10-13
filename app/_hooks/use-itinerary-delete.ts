@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 
-import { deleteTrip } from '@features/itinerary/actions/delete-trip';
+import { deleteItinerary } from '@features/itinerary/actions/delete-itinerary';
 
 import { useRequest } from '@providers/request-context';
 
@@ -14,16 +14,14 @@ export function useItineraryDelete() {
   const handleItineraryDelete = async (id: string, slug: string) => {
     try {
       request.start();
-      await deleteTrip(id);
-      request.finish({ message: 'The trip has been removed successfully' });
+      await deleteItinerary(id);
+
+      request.finish({
+        message: 'The trip has been removed successfully',
+      });
 
       if (window.location.pathname.includes(slug)) {
-        setTimeout(() => {
-          router.push('/');
-          router.refresh();
-        }, 800);
-      } else {
-        router.refresh();
+        setTimeout(() => router.push('/'), 800);
       }
     } catch (err) {
       request.fail((err as Error).message);

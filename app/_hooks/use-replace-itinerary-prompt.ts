@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 
 import axios from 'axios';
 
-import { deleteTrip } from '@features/itinerary/actions/delete-trip';
+import { deleteItinerary } from '@features/itinerary/actions/delete-itinerary';
 
 import { useItineraryGenerationSubscriber } from '@providers/itinerary-generation-subscriber-context';
 import { useRequest } from '@providers/request-context';
@@ -22,7 +22,7 @@ export function useReplaceItineraryPrompt() {
       if (!itinerary?.id) return;
       if (!itineraryIdToRemove) return;
 
-      await deleteTrip(itineraryIdToRemove);
+      await deleteItinerary(itineraryIdToRemove);
     };
 
     if (itinerary?.id) {

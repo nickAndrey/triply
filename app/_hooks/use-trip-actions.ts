@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 import { useRouter } from 'next/navigation';
 
-import { deleteTrip } from '@features/itinerary/actions/delete-trip';
+import { deleteItinerary } from '@features/itinerary/actions/delete-itinerary';
 import { renameTrip } from '@features/itinerary/actions/rename-trip';
 
 import { useRequest } from '@providers/request-context';
@@ -66,16 +66,11 @@ export function useTripActions() {
 
   const handleDelete = async (id: string, slug: string) => {
     try {
-      await deleteTrip(id);
+      await deleteItinerary(id);
       finish({ message: 'The trip has been removed successfully' });
 
       if (window.location.pathname.includes(slug)) {
-        setTimeout(() => {
-          router.push('/');
-          router.refresh();
-        }, 800);
-      } else {
-        router.refresh();
+        setTimeout(() => router.push('/'), 800);
       }
     } catch (err) {
       fail((err as Error).message);

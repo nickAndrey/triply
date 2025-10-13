@@ -20,6 +20,7 @@ import {
   DialogTitle,
 } from '@chadcn/components/ui/dialog';
 
+import { useDuplicateItinerary } from '@/app/_hooks/use-duplicate-itinerary';
 import { useItineraryDelete } from '@/app/_hooks/use-itinerary-delete';
 
 import { useItineraryActions } from '../hooks/use-itinerary-actions';
@@ -28,6 +29,7 @@ type Props = ReturnType<typeof useItineraryActions> & {};
 
 export function ActionDialog(props: Props) {
   const { handleItineraryDelete } = useItineraryDelete();
+  const { onDuplicateItinerary } = useDuplicateItinerary();
 
   const editPromptConfirmationDialog = (
     <Dialog {...props.editPromptConfirmationDialog}>
@@ -62,7 +64,9 @@ export function ActionDialog(props: Props) {
           <DialogClose asChild>
             <Button variant="outline">Cancel</Button>
           </DialogClose>
-          <Button variant="default">Duplicate</Button>
+          <Button variant="default" onClick={() => onDuplicateItinerary(props.itinerary.id)}>
+            Duplicate
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
