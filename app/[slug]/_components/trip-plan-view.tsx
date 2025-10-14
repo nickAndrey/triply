@@ -1,5 +1,7 @@
 'use client';
 
+import { useState } from 'react';
+
 import { useItineraryGenerationSubscriber } from '@providers/itinerary-generation-subscriber-context';
 
 import { ScrollToTopButton } from '@components/scroll-to-top-button';
@@ -7,9 +9,11 @@ import { TravelLoader } from '@components/travel-loader';
 
 import { ResizableLayer } from '@/app/[slug]/_components/resizable-layer';
 import { TravelItineraryRow } from '@/app/_types/db/travel-itinerary-row';
+import { ItineraryAction } from '@/app/_types/itinerary-action';
 
 import { buildGoogleMapsLink } from '../_utils/build-google-maps-link';
-import { ItineraryActions } from './itinerary-actions/itinerary-actions';
+import { ActionDialog } from './action-dialog';
+import { ItineraryActionsPanel } from './itinerary-actions-panel';
 import { TripOverview } from './trip-overview';
 
 type Props = {
@@ -20,10 +24,13 @@ export function TripPlanView({ dbItinerary }: Props) {
   const { itinerary } = useItineraryGenerationSubscriber();
 
   const itineraryDataSrc = itinerary ? itinerary : dbItinerary;
-
   const { trip_core, trip_days, trip_status } = itineraryDataSrc;
-
   const isLive = trip_status !== 'completed' && trip_status !== 'failed';
+
+  const [action, setAction] = useState<{ key: ItineraryAction | null; id: number }>({
+    key: null,
+    id: 0,
+  });
 
   return (
     <main>
@@ -32,7 +39,9 @@ export function TripPlanView({ dbItinerary }: Props) {
           <h1>{trip_core.articleTitle}</h1>
           <h4>{trip_core.tripSummary}</h4>
 
-          <ItineraryActions itinerary={itineraryDataSrc} />
+          <ItineraryActionsPanel onClick={(key) => setAction({ key, id: Date.now() })} />
+          <ActionDialog action={action} itinerary={itineraryDataSrc} />
+
           <ScrollToTopButton />
 
           {trip_days.map((day) => (
