@@ -8,11 +8,12 @@ import { ScrollToTopButton } from '@components/scroll-to-top-button';
 import { TravelLoader } from '@components/travel-loader';
 
 import { ResizableLayer } from '@/app/[slug]/_components/resizable-layer';
+import { useDuplicateItinerary } from '@/app/_hooks/use-duplicate-itinerary';
+import { useItineraryDelete } from '@/app/_hooks/use-itinerary-delete';
 import { TravelItineraryRow } from '@/app/_types/db/travel-itinerary-row';
 import { ItineraryAction } from '@/app/_types/itinerary-action';
 
 import { buildGoogleMapsLink } from '../_utils/build-google-maps-link';
-import { ActionDialog } from './action-dialog';
 import { ItineraryActionsPanel } from './itinerary-actions-panel';
 import { TripOverview } from './trip-overview';
 
@@ -32,15 +33,38 @@ export function TripPlanView({ dbItinerary }: Props) {
     id: 0,
   });
 
+  const [isEditMode, setIsEditMode] = useState(false);
+
+  const { handleItineraryDelete } = useItineraryDelete();
+  const { onDuplicateItinerary } = useDuplicateItinerary();
+
   return (
     <main>
-      <ResizableLayer aside={<TripOverview itinerary={itineraryDataSrc} />}>
+      <ResizableLayer aside={isEditMode ? 'test' : <TripOverview itinerary={itineraryDataSrc} />}>
         <article className="h-full overflow-y-auto px-4 py-4 prose dark:prose-invert !max-w-none">
           <h1>{trip_core.articleTitle}</h1>
           <h4>{trip_core.tripSummary}</h4>
 
-          <ItineraryActionsPanel onClick={(key) => setAction({ key, id: Date.now() })} />
-          <ActionDialog action={action} itinerary={itineraryDataSrc} />
+          <ItineraryActionsPanel
+            onClick={async (key) => {
+              switch (key) {
+                case 'delete':
+                // return handleItineraryDelete
+                case 'duplicate':
+                  return await onDuplicateItinerary(itineraryDataSrc.id);
+
+                case 'rename':
+                case 'export':
+                case 'edit_prompt':
+              }
+            }}
+          />
+
+          {/* <ActionDialog
+            action={action}
+            itinerary={itineraryDataSrc}
+            editPromptActionButtonClick={() => setIsEditMode((prev) => !prev)}
+          /> */}
 
           <ScrollToTopButton />
 

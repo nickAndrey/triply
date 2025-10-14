@@ -37,7 +37,7 @@ export function useForgotPasswordForm() {
     const result = await sendResetPasswordEmail(form.getValues());
 
     if (result.success) {
-      finish({ message: 'Password reset email sent' });
+      finish('Password reset email sent');
     }
 
     if (result.errors) {

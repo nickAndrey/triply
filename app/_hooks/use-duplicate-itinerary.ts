@@ -11,7 +11,7 @@ export function useDuplicateItinerary() {
     try {
       request.start('Starting duplicate itinerary');
       await duplicateItinerary(id);
-      request.finish({ message: 'Itinerary have been duplicated' });
+      request.finish('Itinerary have been duplicated');
     } catch (error) {
       console.error((error as Error).message);
       request.fail((error as Error).message);

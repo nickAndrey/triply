@@ -44,7 +44,7 @@ export function useLoginForm() {
 
     if (result.user) {
       setGeneralError('');
-      finish({ message: 'Login successful! Redirecting…' });
+      finish('Login successful! Redirecting…');
       setTimeout(() => router.push('/'), 2000);
     }
 

@@ -13,10 +13,7 @@ export function useItineraryDelete() {
     try {
       request.start();
       await deleteItinerary(id, currentLocationPath);
-
-      request.finish({
-        message: 'The trip has been removed successfully',
-      });
+      request.finish('The trip has been removed successfully');
     } catch (err) {
       request.fail((err as Error).message);
     }

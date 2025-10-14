@@ -57,7 +57,7 @@ export function useTripActions() {
 
     try {
       await renameTrip(id, newValue);
-      finish({ message: 'Item has been renamed successfully' });
+      finish('Item has been renamed successfully');
       setEditingItemId(null);
     } catch (err) {
       fail((err as Error).message);
@@ -67,7 +67,7 @@ export function useTripActions() {
   const handleDelete = async (id: string, slug: string) => {
     try {
       await deleteItinerary(id);
-      finish({ message: 'The trip has been removed successfully' });
+      finish('The trip has been removed successfully');
 
       if (window.location.pathname.includes(slug)) {
         setTimeout(() => router.push('/'), 800);

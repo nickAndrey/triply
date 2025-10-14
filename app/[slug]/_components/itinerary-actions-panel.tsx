@@ -18,7 +18,7 @@ export function ItineraryActionsPanel({ onClick }: Props) {
   const actions: {
     id: ItineraryAction;
     icon: ReactNode;
-    tooltipLabel: string;
+    tooltipLabel: ReactNode;
     className?: string;
     disabled?: boolean;
   }[] = [
@@ -36,7 +36,16 @@ export function ItineraryActionsPanel({ onClick }: Props) {
     {
       id: 'edit_prompt',
       icon: <Pencil />,
-      tooltipLabel: 'Edit trip preferences',
+      tooltipLabel: (
+        <div>
+          You’re about to edit your trip’s prompt. When you continue, the sidebar will switch to the{' '}
+          <strong>Prompt Editor</strong>, replacing your current trip overview.
+          <br />
+          <br />
+          <em>Tip:</em> You can adjust destinations, tone, or preferences here — then regenerate the itinerary when
+          ready.
+        </div>
+      ),
     },
     {
       id: 'delete',
@@ -63,7 +72,7 @@ export function ItineraryActionsPanel({ onClick }: Props) {
               </Button>
             </span>
           </TooltipTrigger>
-          <TooltipContent>{item.tooltipLabel}</TooltipContent>
+          <TooltipContent className="max-w-3xs">{item.tooltipLabel}</TooltipContent>
         </Tooltip>
       ))}
     </div>

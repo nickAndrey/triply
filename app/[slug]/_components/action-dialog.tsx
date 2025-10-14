@@ -16,6 +16,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@chadcn/components/ui/dialog';
+import { Input } from '@chadcn/components/ui/input';
+import { Label } from '@chadcn/components/ui/label';
 
 import { useDuplicateItinerary } from '@/app/_hooks/use-duplicate-itinerary';
 import { useItineraryDelete } from '@/app/_hooks/use-itinerary-delete';
@@ -28,15 +30,19 @@ type Props = {
     id: number;
   };
   itinerary: TravelItineraryRow | null;
+} & {
+  editPromptActionButtonClick?: () => void;
 };
 
-export function ActionDialog({ action, itinerary }: Props) {
+export function ActionDialog({ action, itinerary, editPromptActionButtonClick }: Props) {
   const { isPending } = useRequest();
 
   const { handleItineraryDelete } = useItineraryDelete();
   const { onDuplicateItinerary } = useDuplicateItinerary();
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  const [itineraryName, setItineraryName] = useState(itinerary?.trip_core.navTitle);
 
   useEffect(() => setIsDialogOpen(true), [action.id]);
 
@@ -93,9 +99,20 @@ export function ActionDialog({ action, itinerary }: Props) {
       title: 'Rename Trip',
       description: 'Give your trip a new name.',
       content: (
-        <div>
-          Enter a new name for this trip below. Renaming won’t affect the trip’s content — just how it appears in your
-          trip list.
+        <div className="flex flex-col gap-3">
+          <p>
+            Enter a new name for this trip below. Renaming won’t affect the trip’s content — just how it appears in your
+            trip list.
+          </p>
+
+          <Label htmlFor="new-itinerary-name">Name</Label>
+          <Input
+            id="new-itinerary-name"
+            type="text"
+            value={itineraryName}
+            onChange={(e) => setItineraryName(e.target.value)}
+            placeholder="Provide a new name"
+          />
         </div>
       ),
       actionButton: {
@@ -136,7 +153,7 @@ export function ActionDialog({ action, itinerary }: Props) {
       ),
       actionButton: {
         label: 'Switch to edit mode',
-        onClick: () => {},
+        onClick: () => editPromptActionButtonClick?.(),
       },
     },
   };

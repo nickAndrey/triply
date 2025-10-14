@@ -7,11 +7,9 @@ import { toast } from 'sonner';
 type RequestState = {
   isPending: boolean;
   status: 'idle' | 'pending' | 'success' | 'error';
-  result?: unknown;
-  onSetMessage?: (params: { start?: ReactNode; finish?: ReactNode; fail?: ReactNode }) => void;
-  start: (message?: string) => void;
-  finish: (params?: { res?: unknown; message?: string }) => void;
-  fail: (message?: string) => void;
+  start: (message?: ReactNode) => void;
+  finish: (message?: ReactNode) => void;
+  fail: (message?: ReactNode) => void;
 };
 
 const RequestContext = createContext<RequestState | null>(null);
@@ -19,42 +17,21 @@ const RequestContext = createContext<RequestState | null>(null);
 export function RequestProvider({ children }: { children: ReactNode }) {
   const [isPending, setIsPending] = useState(false);
   const [status, setStatus] = useState<'idle' | 'pending' | 'success' | 'error'>('idle');
-  const [result, setResult] = useState<unknown>(null);
-  const [customMessage, setCustomMessage] = useState<{
-    start?: ReactNode;
-    finish?: ReactNode;
-    fail?: ReactNode;
-  }>({});
 
-  const start = (message?: string) => {
+  const start = (message?: ReactNode) => {
     setIsPending(true);
     setStatus('pending');
-    setResult(null);
-
-    // Set [start] message:
-    const _msg = customMessage.start || message;
-    if (_msg) toast.info(_msg);
-    // ---
+    toast.info(message);
   };
-  const finish = (params?: { res?: unknown; message?: string }) => {
+  const finish = (message?: ReactNode) => {
     setIsPending(false);
     setStatus('success');
-    setResult(params?.res);
-
-    // Set [finish] message:
-    const _msg = customMessage.finish || params?.message;
-    if (_msg) toast.success(_msg);
-    // ---
+    toast.success(message);
   };
-  const fail = (message?: string) => {
+  const fail = (message?: ReactNode) => {
     setIsPending(false);
     setStatus('error');
-    setResult(null);
-
-    // Set [fail] message:
-    const _msg = customMessage.fail || message;
-    if (_msg) toast.error(_msg);
-    // ---
+    toast.error(message);
   };
 
   return (
@@ -62,13 +39,9 @@ export function RequestProvider({ children }: { children: ReactNode }) {
       value={{
         isPending,
         status,
-        result,
         start,
         finish,
         fail,
-        onSetMessage: (params) => {
-          return setCustomMessage((prev) => ({ ...prev, ...params }));
-        },
       }}
     >
       {children}
