@@ -19,7 +19,7 @@ import {
 import { Badge } from '@chadcn/components/ui/badge';
 import { Button } from '@chadcn/components/ui/button';
 import { DialogDescription, DialogTitle } from '@chadcn/components/ui/dialog';
-import { Drawer, DrawerClose, DrawerContent, DrawerHeader, DrawerTrigger } from '@chadcn/components/ui/drawer';
+import { Sheet, SheetClose, SheetContent, SheetHeader, SheetTrigger } from '@chadcn/components/ui/sheet';
 
 import { NavItems } from '@components/header/nav-bar/components/nav-items';
 import { NavBarItem } from '@components/header/nav-bar/types/nav-bar-item';
@@ -39,16 +39,16 @@ export function NavBar({ navbarItems }: NavBarProps) {
   const { alertDialogProps } = actions;
 
   return (
-    <Drawer direction="right" open={open} onOpenChange={setOpen}>
-      <DrawerTrigger asChild>
+    <Sheet open={open} onOpenChange={setOpen}>
+      <SheetTrigger asChild>
         <Button variant="outline" className="rounded-full relative" size="icon" aria-label="Open trip sidebar">
           <PanelRight />
           {isPending && <Badge variant="default" className="p-0 size-2 absolute top-[-2px] right-[-2px]" />}
         </Button>
-      </DrawerTrigger>
+      </SheetTrigger>
 
-      <DrawerContent>
-        <DrawerHeader className="flex flex-row items-center justify-between px-4 pt-4 pb-2">
+      <SheetContent side="right">
+        <SheetHeader className="flex flex-row items-center justify-between px-4 pt-4 pb-2">
           <div>
             <DialogTitle className="text-2xl font-semibold flex items-center gap-2">
               <Plane className="w-6 h-6 text-primary" />
@@ -62,7 +62,7 @@ export function NavBar({ navbarItems }: NavBarProps) {
             </DialogDescription>
           </div>
 
-          <DrawerClose asChild>
+          <SheetClose asChild>
             <Button
               variant="ghost"
               size="icon"
@@ -72,8 +72,8 @@ export function NavBar({ navbarItems }: NavBarProps) {
             >
               <X className="w-4 h-4" />
             </Button>
-          </DrawerClose>
-        </DrawerHeader>
+          </SheetClose>
+        </SheetHeader>
 
         <NavItems navbarItems={navbarItems} actions={actions} />
 
@@ -89,7 +89,7 @@ export function NavBar({ navbarItems }: NavBarProps) {
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
-      </DrawerContent>
-    </Drawer>
+      </SheetContent>
+    </Sheet>
   );
 }
