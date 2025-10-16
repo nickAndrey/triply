@@ -46,6 +46,7 @@ export function TripPlanWizardForm() {
 
       <CardContent>
         <Stepper
+          className="max-w-xl"
           steps={[
             { element: <FormStep1 {...forms[0]} /> },
             { element: <FormStep2 {...forms[1]} /> },
