@@ -38,11 +38,11 @@ export async function deleteItinerary(tripId: string, currentLocationPath?: stri
     throw new Error(`Failed to delete trip: ${deletionError.message}`);
   }
 
-  revalidatePath('/', 'layout');
-
   if (itineraryCopy && itineraryCopy.trip_core.slug === currentLocationPath) {
     redirect('/');
   }
+
+  revalidatePath('/', 'layout');
 
   return { success: true };
 }

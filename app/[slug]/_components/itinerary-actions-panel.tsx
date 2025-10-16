@@ -38,12 +38,7 @@ export function ItineraryActionsPanel({ onClick }: Props) {
       icon: <Pencil />,
       tooltipLabel: (
         <div>
-          You’re about to edit your trip’s prompt. When you continue, the sidebar will switch to the{' '}
-          <strong>Prompt Editor</strong>, replacing your current trip overview.
-          <br />
-          <br />
-          <em>Tip:</em> You can adjust destinations, tone, or preferences here — then regenerate the itinerary when
-          ready.
+          Open the <strong>Prompt Editor</strong>
         </div>
       ),
     },

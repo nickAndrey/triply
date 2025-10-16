@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
@@ -29,11 +29,21 @@ export function useFormStep2() {
 
   const tripDurationDaysCounter = useCounter();
 
+  const syncedOnce = useRef(false);
+  const tripDurationDays = form.watch('tripDurationDays');
+
   useEffect(() => {
-    if (tripDurationDaysCounter.groupMembers !== '') {
-      form.setValue('tripDurationDays', tripDurationDaysCounter.groupMembers.toFixed(0));
+    if (!syncedOnce.current && tripDurationDays !== '') {
+      tripDurationDaysCounter.handleChange(tripDurationDays);
+      syncedOnce.current = true;
     }
-  }, [tripDurationDaysCounter.groupMembers, form]);
+  }, [tripDurationDays, tripDurationDaysCounter]);
+
+  useEffect(() => {
+    if (tripDurationDaysCounter.value !== '') {
+      form.setValue('tripDurationDays', tripDurationDaysCounter.value.toFixed(0));
+    }
+  }, [tripDurationDaysCounter.value, form]);
 
   return {
     form,

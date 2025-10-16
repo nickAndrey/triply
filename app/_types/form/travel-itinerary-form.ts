@@ -1,22 +1,5 @@
-export type TravelItineraryForm = {
-  activityIntensity: string;
-  adults?: { adult: number }[];
-  budget: 'Free' | '$' | '$$' | '$$$';
-  children?: { child: number; group: string }[];
-  companions: string;
-  destination: string;
-  destinationSearch?: string;
-  foodPreferences: string[];
-  foodRestrictions?: string;
-  friends?: { friend: number }[];
-  pace: string;
-  perfectDay?: string;
-  placesAvoidToSee?: string;
-  placesToSee?: string;
-  planningStyle: string;
-  season: string;
-  tripDurationDays: string;
-  tripSuccessDefinition?: string;
-  tripVibe: string;
-  toneStyle?: 'Vivid' | 'Historical' | 'Balanced';
-};
+import z from 'zod';
+
+import { useTripPlanFormSteps } from '@components/trip-plan-form-steps/hooks/use-trip-plan-form-steps';
+
+export type TravelItineraryForm = z.infer<ReturnType<typeof useTripPlanFormSteps>['mergedFormsShapes']> & {};

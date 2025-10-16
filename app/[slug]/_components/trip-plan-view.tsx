@@ -9,12 +9,13 @@ import { TravelLoader } from '@components/travel-loader';
 
 import { ResizableLayer } from '@/app/[slug]/_components/resizable-layer';
 import { useDuplicateItinerary } from '@/app/_hooks/use-duplicate-itinerary';
-import { useItineraryDelete } from '@/app/_hooks/use-itinerary-delete';
 import { TravelItineraryRow } from '@/app/_types/db/travel-itinerary-row';
 import { ItineraryAction } from '@/app/_types/itinerary-action';
 
 import { buildGoogleMapsLink } from '../_utils/build-google-maps-link';
+import { ActionDialog } from './action-dialog';
 import { ItineraryActionsPanel } from './itinerary-actions-panel';
+import { ItineraryPromptForm } from './itinerary-prompt-form';
 import { TripOverview } from './trip-overview';
 
 type Props = {
@@ -35,12 +36,18 @@ export function TripPlanView({ dbItinerary }: Props) {
 
   const [isEditMode, setIsEditMode] = useState(false);
 
-  const { handleItineraryDelete } = useItineraryDelete();
   const { onDuplicateItinerary } = useDuplicateItinerary();
 
   return (
     <main>
-      <ResizableLayer aside={isEditMode ? 'test' : <TripOverview itinerary={itineraryDataSrc} />}>
+      <ResizableLayer
+        aside={
+          <>
+            <TripOverview itinerary={itineraryDataSrc} />
+            <ItineraryPromptForm itineraryForm={itineraryDataSrc.form} open={isEditMode} onOpenChange={setIsEditMode} />
+          </>
+        }
+      >
         <article className="h-full overflow-y-auto px-4 py-4 prose dark:prose-invert !max-w-none">
           <h1>{trip_core.articleTitle}</h1>
           <h4>{trip_core.tripSummary}</h4>
@@ -49,22 +56,24 @@ export function TripPlanView({ dbItinerary }: Props) {
             onClick={async (key) => {
               switch (key) {
                 case 'delete':
-                // return handleItineraryDelete
+                  return setAction({ key: 'delete', id: Date.now() });
                 case 'duplicate':
                   return await onDuplicateItinerary(itineraryDataSrc.id);
-
                 case 'rename':
+                  return setAction({ key: 'rename', id: Date.now() });
                 case 'export':
+                  return false;
                 case 'edit_prompt':
+                  return setIsEditMode((prev) => !prev);
               }
             }}
           />
 
-          {/* <ActionDialog
+          <ActionDialog
             action={action}
             itinerary={itineraryDataSrc}
             editPromptActionButtonClick={() => setIsEditMode((prev) => !prev)}
-          /> */}
+          />
 
           <ScrollToTopButton />
 

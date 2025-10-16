@@ -1,12 +1,14 @@
 'use client';
 
-import { useFormStep1 } from '../steps/step-1/use-form-step-1';
-import { useFormStep2 } from '../steps/step-2/use-form-step-2';
-import { useFormStep3 } from '../steps/step-3/use-form-step-3';
-import { useFormStep4 } from '../steps/step-4/use-form-step-4';
-import { useFormStep5 } from '../steps/step-5/use-form-step-5';
-import { useFormStep6 } from '../steps/step-6/use-form-step-6';
-import { useFormStep7 } from '../steps/step-7/use-form-step-7';
+import z from 'zod';
+
+import { schema as schemaFormStep1, useFormStep1 } from '../steps/step-1/use-form-step-1';
+import { schema as schemaFormStep2, useFormStep2 } from '../steps/step-2/use-form-step-2';
+import { schema as schemaFormStep3, useFormStep3 } from '../steps/step-3/use-form-step-3';
+import { schema as schemaFormStep4, useFormStep4 } from '../steps/step-4/use-form-step-4';
+import { schema as schemaFormStep5, useFormStep5 } from '../steps/step-5/use-form-step-5';
+import { schema as schemaFormStep6, useFormStep6 } from '../steps/step-6/use-form-step-6';
+import { schema as schemaFormStep7, useFormStep7 } from '../steps/step-7/use-form-step-7';
 
 export function useTripPlanFormSteps() {
   const formStep1 = useFormStep1();
@@ -16,6 +18,24 @@ export function useTripPlanFormSteps() {
   const formStep5 = useFormStep5();
   const formStep6 = useFormStep6();
   const formStep7 = useFormStep7();
+
+  /**
+   * @description
+   * `mergedFormsShapes` combines the `.shape` of all step schemas into a single Zod object.
+   * This serves as the canonical schema for the complete travel itinerary form.
+   *
+   * ⚠️ Note: It is required for accurate `z.infer` typing across all steps.
+   * Even if not directly used for validation in this hook, it must remain defined.
+   */
+  const mergedFormsShapes = z.object({
+    ...schemaFormStep1.shape,
+    ...schemaFormStep2.shape,
+    ...schemaFormStep3.shape,
+    ...schemaFormStep4.shape,
+    ...schemaFormStep5.shape,
+    ...schemaFormStep6.shape,
+    ...schemaFormStep7.shape,
+  });
 
   const processFormSteps = () => {
     const mergedSteps = {
@@ -52,6 +72,7 @@ export function useTripPlanFormSteps() {
 
   return {
     forms: [formStep1, formStep2, formStep3, formStep4, formStep5, formStep6, formStep7] as const,
+    mergedFormsShapes,
     processFormSteps,
   };
 }

@@ -10,7 +10,7 @@ import { useCounter } from '@components/counter/use-counter';
 type Props = ReturnType<typeof useCounter>;
 
 export function Counter({
-  groupMembers,
+  value,
   isInputActive,
   inputRef,
   setIsInputActive,
@@ -20,7 +20,7 @@ export function Counter({
 }: Props) {
   return (
     <div className="flex gap-3">
-      <Button type="button" size="icon" className="rounded-full" onClick={handleDecrease} disabled={groupMembers === 0}>
+      <Button type="button" size="icon" className="rounded-full" onClick={handleDecrease} disabled={value === 0}>
         <Minus />
       </Button>
 
@@ -29,7 +29,7 @@ export function Counter({
           ref={inputRef}
           type="number"
           min={0}
-          value={groupMembers}
+          value={value}
           onChange={(e) => handleChange(e.target.value)}
           onBlur={() => setIsInputActive(false)}
           className="w-16"
@@ -39,7 +39,7 @@ export function Counter({
           className="border w-16 text-sm rounded-sm cursor-pointer dark:bg-input/30 flex items-center justify-center leading-none"
           onClick={() => setIsInputActive(true)}
         >
-          {groupMembers}
+          {value}
         </div>
       )}
 

@@ -6,6 +6,12 @@ import { requireUser } from '@features/auth/utils/require-user';
 
 import { DB_TABLES } from '@/app/_constants/db-tables';
 
+function makeDuplicateSlug(originalSlug: string): string {
+  const baseSlug = originalSlug.replace(/(-copy(-[a-f0-9]+)?)$/i, '');
+  const uniqueSuffix = crypto.randomUUID().split('-')[0];
+  return `${baseSlug}-copy-${uniqueSuffix}`;
+}
+
 export async function duplicateItinerary(tripId: string) {
   const { supabase, user } = await requireUser();
 
@@ -30,7 +36,7 @@ export async function duplicateItinerary(tripId: string) {
     trip_core: {
       ...itineraryToDuplicate.trip_core,
       navTitle: `${itineraryToDuplicate.trip_core.navTitle} (Copy)`,
-      slug: `${itineraryToDuplicate.trip_core.slug}-copy`,
+      slug: makeDuplicateSlug(itineraryToDuplicate.trip_core.slug),
     },
   };
 

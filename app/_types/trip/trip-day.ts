@@ -12,6 +12,6 @@ export type Day = {
 export type Activity = {
   name: string;
   description: string;
-  budget: 'Free' | '$' | '$$' | '$$$';
+  budget: '$' | '$$' | '$$$';
   type: 'activity' | 'restaurant' | 'cafe' | 'bar';
 };

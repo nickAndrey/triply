@@ -29,9 +29,12 @@ export function ResizableLayer({ children, aside }: Props) {
   }
 
   return (
-    <ResizablePanelGroup direction="horizontal" className="!h-[100dvh] px-4 xl:max-w-7/8 bg-accent m-auto">
+    <ResizablePanelGroup
+      direction="horizontal"
+      className="!h-[100dvh] overflow-hidden px-4 xl:max-w-[80%] bg-accent mx-auto"
+    >
       {/* ASIDE PANEL */}
-      <ResizablePanel className="px-2 py-4 overflow-y-auto" defaultSize={25} maxSize={isSmallScreen ? 80 : 35}>
+      <ResizablePanel className="px-2 py-4 overflow-hidden" defaultSize={25} maxSize={isSmallScreen ? 80 : 35}>
         <div className="h-full overflow-y-auto">{aside}</div>
       </ResizablePanel>
 
