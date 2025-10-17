@@ -60,10 +60,10 @@ export function SupabaseMessageFactory() {
               : 'Generating your daily itinerary...'}
           </p>
 
-          {currentDay && currentDay >= 1 && slug && (
+          {currentDay && currentDay >= 1 && itinerary?.id && (
             <>
               <p className="mt-2">You can already start exploring!</p>
-              <Link href={`/${slug}`} className="underline text-primary">
+              <Link href={`/${itinerary.id}`} className="underline text-primary">
                 View itinerary
               </Link>
             </>
@@ -76,8 +76,8 @@ export function SupabaseMessageFactory() {
       description: (
         <p>
           Your trip is ready to explore!{' '}
-          {slug && (
-            <a href={`/${slug}`} className="text-primary underline">
+          {itinerary?.id && (
+            <a href={`/${itinerary.id}`} className="text-primary underline">
               View itinerary
             </a>
           )}

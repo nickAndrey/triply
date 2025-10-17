@@ -25,8 +25,7 @@ type Props = {
 export function TripPlanView({ dbItinerary }: Props) {
   const { itinerary } = useItineraryGenerationSubscriber();
 
-  const itineraryDataSrc =
-    itinerary && window.location.pathname.includes(itinerary.trip_core.slug) ? itinerary : dbItinerary;
+  const itineraryDataSrc = itinerary && window.location.pathname.includes(itinerary.id) ? itinerary : dbItinerary;
 
   const { trip_core, trip_days, trip_status } = itineraryDataSrc;
   const isLive = trip_status !== 'completed' && trip_status !== 'failed';
