@@ -4,6 +4,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import z from 'zod';
 
+import { TravelItineraryForm } from '@/app/_types/form/travel-itinerary-form';
+
 export const enums = {
   foodPreferencesEnum: z.enum([
     'LocalSpecialties',
@@ -24,12 +26,16 @@ export type FormFields = z.infer<typeof schema>;
 
 export type FoodPreferencesEnum = z.infer<typeof enums.foodPreferencesEnum>;
 
-export function useFormStep5() {
+type Args = {
+  initialValues?: TravelItineraryForm;
+};
+
+export function useFormStep5({ initialValues }: Args = {}) {
   const form = useForm<FormFields>({
     resolver: zodResolver(schema),
     defaultValues: {
-      foodPreferences: [],
-      foodRestrictions: '',
+      foodPreferences: initialValues?.foodPreferences || [],
+      foodRestrictions: initialValues?.foodRestrictions || '',
     },
   });
 

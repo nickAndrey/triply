@@ -1,12 +1,14 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import z from 'zod';
 
 import { useCounter } from '@components/counter/use-counter';
+
+import { TravelItineraryForm } from '@/app/_types/form/travel-itinerary-form';
 
 export const schema = z.object({
   tripDurationDays: z
@@ -18,22 +20,36 @@ export const schema = z.object({
 
 export type FormFields = z.infer<typeof schema>;
 
-export function useFormStep2() {
+type Args = {
+  initialValues?: TravelItineraryForm;
+};
+
+export function useFormStep2({ initialValues }: Args = {}) {
   const form = useForm<FormFields>({
     resolver: zodResolver(schema),
     defaultValues: {
-      tripDurationDays: '',
-      season: 'Spring',
+      tripDurationDays: initialValues?.tripDurationDays || '',
+      season: initialValues?.season || 'Spring',
     },
   });
 
   const tripDurationDaysCounter = useCounter();
 
+  const syncedOnce = useRef(false);
+  const tripDurationDays = form.watch('tripDurationDays');
+
   useEffect(() => {
-    if (tripDurationDaysCounter.groupMembers !== '') {
-      form.setValue('tripDurationDays', tripDurationDaysCounter.groupMembers.toFixed(0));
+    if (!syncedOnce.current && tripDurationDays !== '') {
+      tripDurationDaysCounter.handleChange(tripDurationDays);
+      syncedOnce.current = true;
     }
-  }, [tripDurationDaysCounter.groupMembers, form]);
+  }, [tripDurationDays, tripDurationDaysCounter]);
+
+  useEffect(() => {
+    if (tripDurationDaysCounter.value !== '') {
+      form.setValue('tripDurationDays', tripDurationDaysCounter.value.toFixed(0));
+    }
+  }, [tripDurationDaysCounter.value, form]);
 
   return {
     form,

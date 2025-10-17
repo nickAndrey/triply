@@ -23,7 +23,8 @@ export function FormStep2({ form, tripDurationDaysCounter }: Props) {
 
   return (
     <Form {...form}>
-      <form className="flex flex-col gap-6 max-w-lg w-full">
+      {/* max width lg */}
+      <form className="flex flex-col gap-6 w-full">
         <FormField
           control={form.control}
           name="tripDurationDays"

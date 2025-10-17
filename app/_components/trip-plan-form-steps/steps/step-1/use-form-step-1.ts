@@ -8,6 +8,7 @@ import { useForm, useWatch } from 'react-hook-form';
 import { useDebounceValue } from 'usehooks-ts';
 import z from 'zod';
 
+import { TravelItineraryForm } from '@/app/_types/form/travel-itinerary-form';
 import { NominatimResult } from '@/app/_types/place';
 import { removeDuplicatesFromArray } from '@/app/_utils/remove-duplicates-from-array';
 
@@ -20,12 +21,16 @@ export const schema = z.object({
 
 export type FormFields = z.infer<typeof schema>;
 
-export function useFormStep1() {
+interface UseFormStep1Args {
+  initialValues?: TravelItineraryForm;
+}
+
+export function useFormStep1({ initialValues }: UseFormStep1Args = {}) {
   const form = useForm<FormFields>({
     resolver: zodResolver(schema),
     defaultValues: {
-      destinationSearch: '',
-      destination: '',
+      destinationSearch: initialValues?.destinationSearch || '',
+      destination: initialValues?.destination || '',
     },
   });
 

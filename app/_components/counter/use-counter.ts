@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 
 export function useCounter() {
-  const [groupMembers, setGroupMembers] = useState<number | ''>(0);
+  const [value, setValue] = useState<number | ''>(0);
   const [isInputActive, setIsInputActive] = useState(false);
 
   const inputRef = useRef<HTMLInputElement>(null);
@@ -15,29 +15,29 @@ export function useCounter() {
   }, [isInputActive]);
 
   const handleDecrease = () => {
-    setGroupMembers((prev) => {
+    setValue((prev) => {
       if (prev === '' || prev <= 0) return 0;
       return prev - 1;
     });
   };
 
   const handleIncrease = () => {
-    setGroupMembers((prev) => (prev === '' ? 1 : prev + 1));
+    setValue((prev) => (prev === '' ? 1 : prev + 1));
   };
 
   const handleChange = (value: string) => {
     if (value === '') {
-      setGroupMembers('');
+      setValue('');
     } else {
       const parsed = parseInt(value, 10);
       if (!isNaN(parsed) && parsed >= 0) {
-        setGroupMembers(parsed);
+        setValue(parsed);
       }
     }
   };
 
   return {
-    groupMembers,
+    value,
     isInputActive,
     inputRef,
     setIsInputActive,

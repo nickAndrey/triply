@@ -4,6 +4,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import z from 'zod';
 
+import { TravelItineraryForm } from '@/app/_types/form/travel-itinerary-form';
+
 export const schema = z.object({
   tripVibe: z.enum(['Beach', 'City', 'Nature']),
   pace: z.enum(['Slow', 'Balanced', 'Fast']),
@@ -13,14 +15,18 @@ export const schema = z.object({
 
 export type FormFields = z.infer<typeof schema>;
 
-export function useFormStep4() {
+type Args = {
+  initialValues?: TravelItineraryForm;
+};
+
+export function useFormStep4({ initialValues }: Args = {}) {
   const form = useForm<FormFields>({
     resolver: zodResolver(schema),
     defaultValues: {
-      tripVibe: undefined,
-      pace: undefined,
-      activityIntensity: undefined,
-      planningStyle: undefined,
+      tripVibe: initialValues?.tripVibe,
+      pace: initialValues?.pace,
+      activityIntensity: initialValues?.activityIntensity,
+      planningStyle: initialValues?.planningStyle,
     },
   });
 

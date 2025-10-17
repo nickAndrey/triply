@@ -45,10 +45,7 @@ export function useUpdatePasswordForm() {
     });
 
     if (result.success) {
-      finish({
-        message: 'Password has been updated successfully, you will be redirected to login page in 5 seconds',
-      });
-
+      finish('Password has been updated successfully, you will be redirected to login page in 5 seconds');
       setTimeout(() => router.push('/login'), 5000);
     } else {
       fail(result?.error?.message || 'Failed to update password.');

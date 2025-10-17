@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 import { useRouter } from 'next/navigation';
 
-import { deleteTrip } from '@features/itinerary/actions/delete-trip';
+import { deleteItinerary } from '@features/itinerary/actions/delete-itinerary';
 import { renameTrip } from '@features/itinerary/actions/rename-trip';
 
 import { useRequest } from '@providers/request-context';
@@ -57,7 +57,7 @@ export function useTripActions() {
 
     try {
       await renameTrip(id, newValue);
-      finish({ message: 'Item has been renamed successfully' });
+      finish('Item has been renamed successfully');
       setEditingItemId(null);
     } catch (err) {
       fail((err as Error).message);
@@ -66,16 +66,11 @@ export function useTripActions() {
 
   const handleDelete = async (id: string, slug: string) => {
     try {
-      await deleteTrip(id);
-      finish({ message: 'The trip has been removed successfully' });
+      await deleteItinerary(id);
+      finish('The trip has been removed successfully');
 
       if (window.location.pathname.includes(slug)) {
-        setTimeout(() => {
-          router.push('/');
-          router.refresh();
-        }, 800);
-      } else {
-        router.refresh();
+        setTimeout(() => router.push('/'), 800);
       }
     } catch (err) {
       fail((err as Error).message);
@@ -124,22 +119,6 @@ export function useTripActions() {
       label: 'Export',
       action: (params) => {
         console.log('Export', params);
-      },
-    },
-    {
-      id: 4,
-      label: 'Edit Prompt',
-      action: (params) => {
-        setAlertDialogProps((prev) => ({
-          ...prev,
-          type: 'edit',
-          open: true,
-          title: 'Confirm Changes',
-          description: 'Would you like to replace the existing prompt with your new version, or keep both versions?',
-          action() {
-            console.log(params.id);
-          },
-        }));
       },
     },
   ];

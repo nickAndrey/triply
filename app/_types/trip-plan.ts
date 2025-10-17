@@ -22,7 +22,7 @@ export type TripPlan = {
     | 'WineAndBars'
   )[];
   foodRestrictions: string; // e.g. "Vegetarian", "Halal", or "none"
-  budget: 'Free' | '$' | '$$' | '$$$';
+  budget: '$' | '$$' | '$$$';
   placesToSee: string | 'none';
   placesAvoidToSee: string | 'none';
   tripSuccessDefinition: string | 'not specified';
@@ -67,6 +67,6 @@ export type Day = {
 export type Activity = {
   name: string;
   description: string;
-  budget: 'Free' | '$' | '$$' | '$$$';
+  budget: '$' | '$$' | '$$$';
   type: 'activity' | 'restaurant' | 'cafe' | 'bar';
 };

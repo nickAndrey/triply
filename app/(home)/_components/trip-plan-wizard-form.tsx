@@ -2,10 +2,8 @@
 
 import { useState } from 'react';
 
-import axios from 'axios';
 import { LoaderCircle } from 'lucide-react';
 
-import { useItineraryGenerationSubscriber } from '@providers/itinerary-generation-subscriber-context';
 import { useRequest } from '@providers/request-context';
 
 import { Button } from '@chadcn/components/ui/button';
@@ -22,32 +20,21 @@ import { FormStep5 } from '@components/trip-plan-form-steps/steps/step-5/form-st
 import { FormStep6 } from '@components/trip-plan-form-steps/steps/step-6/form-step-6';
 import { FormStep7 } from '@components/trip-plan-form-steps/steps/step-7/form-step-7';
 
+import { useCreateItineraryFromPrompt } from '@/app/_hooks/use-create-itinerary-from-prompt';
+
 export function TripPlanWizardForm() {
   const { forms, processFormSteps } = useTripPlanFormSteps();
-  const { setInitialItineraryId } = useItineraryGenerationSubscriber();
 
-  const { isPending, start, fail } = useRequest();
+  const { onCreateItineraryFromPrompt } = useCreateItineraryFromPrompt();
+
+  const { isPending } = useRequest();
 
   const [step, setStep] = useState(0);
 
   const handleSubmit = async () => {
     const processedForm = processFormSteps();
-
-    try {
-      start();
-      const { data } = await axios.post(
-        '/api/suggestion/generate',
-        { form: processedForm },
-        { headers: { 'Content-Type': 'application/json' } }
-      );
-
-      setStep(0);
-      setInitialItineraryId(data.itineraryId);
-    } catch (error) {
-      console.error('Error occurred attempting to generate suggestion');
-      fail((error as Error).message);
-      throw error;
-    }
+    await onCreateItineraryFromPrompt(processedForm);
+    setStep(0);
   };
 
   return (
@@ -59,6 +46,7 @@ export function TripPlanWizardForm() {
 
       <CardContent>
         <Stepper
+          className="max-w-xl"
           steps={[
             { element: <FormStep1 {...forms[0]} /> },
             { element: <FormStep2 {...forms[1]} /> },

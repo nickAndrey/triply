@@ -9,10 +9,11 @@ import { cn } from '@chadcn/lib/utils';
 
 type Props = {
   steps: { element: ReactNode }[];
+  className?: string;
   renderNavigationButtons?: (params: { helpers: ReturnType<typeof useStep>['1']; currentStep: number }) => ReactNode;
 };
 
-export function Stepper({ steps, renderNavigationButtons }: Props) {
+export function Stepper({ steps, className, renderNavigationButtons }: Props) {
   const [currentStep, helpers] = useStep(steps.length);
 
   const stepToRender = steps[currentStep - 1]?.element;
@@ -28,7 +29,7 @@ export function Stepper({ steps, renderNavigationButtons }: Props) {
         ))}
       </div>
 
-      {stepToRender}
+      <div className={className}>{stepToRender}</div>
 
       {renderNavigationButtons?.({ helpers, currentStep }) || (
         <div className="flex items-center gap-3">

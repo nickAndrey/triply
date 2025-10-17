@@ -27,48 +27,61 @@ export function NavItems({ navbarItems, actions }: Props) {
 
   const searchProps = useSearchBox({ navbarItems, ulRef });
 
+  const grouped = Object.groupBy(searchProps.filteredNavbarItems, ({ trip_core }) => trip_core.destination);
+
   return (
-    <ul className="flex flex-col gap-1 px-3 pb-4 w-full overflow-auto" ref={ulRef}>
+    <ul className="flex flex-col gap-3 px-3 pb-4 w-full overflow-auto" ref={ulRef}>
       <li className="py-2 sticky top-0 z-10 bg-background">
         <SearchBox {...searchProps} />
       </li>
 
-      {searchProps.filteredNavbarItems.map((navBarItem) => {
-        const { id, trip_core } = navBarItem;
-
-        if (!trip_core) return null;
-
-        const navTitle = trip_core?.navTitle;
-        const duration = `${trip_core.tripDurationDays}-day`;
-        const subtitle = `${duration} ${trip_core.companions.type.toLowerCase()} trip • ${trip_core.season.toLowerCase()}`;
-
+      {Object.entries(grouped).map(([groupKey, values]) => {
         return (
-          <li key={id}>
-            <ContextMenu>
-              <ContextMenuTrigger>
-                <NavLink
-                  href={`/${trip_core.slug}`}
-                  label={navTitle}
-                  subtitle={subtitle}
-                  actions={actions}
-                  navBarItem={navBarItem}
-                  icon={<Plane className="w-4 h-4" />}
-                />
-              </ContextMenuTrigger>
-              <ContextMenuContent onCloseAutoFocus={(e) => e.preventDefault()}>
-                {actions.actionsConfig.map((item) => (
-                  <ContextMenuItem
-                    key={item.id}
-                    onClick={() => item.action(navBarItem)}
-                    className={cn(
-                      item.label === 'Delete' && 'text-destructive hover:!bg-destructive/20 hover:!text-destructive'
-                    )}
-                  >
-                    {item.label}
-                  </ContextMenuItem>
-                ))}
-              </ContextMenuContent>
-            </ContextMenu>
+          <li key={groupKey} className="not-last:border-b-1 pb-2">
+            <h4 className="mb-1 font-semibold">{groupKey}</h4>
+
+            <ul>
+              {values?.map((navBarItem) => {
+                const { id, trip_core } = navBarItem;
+
+                if (!trip_core) return null;
+
+                const navTitle = trip_core?.navTitle;
+                const duration = `${trip_core.tripDurationDays}-day`;
+                const subtitle = `${duration} ${trip_core.companions.type.toLowerCase()} trip • ${trip_core.season.toLowerCase()}`;
+
+                return (
+                  <li key={navBarItem.id}>
+                    <ContextMenu>
+                      <ContextMenuTrigger>
+                        <NavLink
+                          href={`/${id}`}
+                          label={navTitle}
+                          subtitle={subtitle}
+                          actions={actions}
+                          navBarItem={navBarItem}
+                          icon={<Plane className="w-4 h-4" />}
+                        />
+                      </ContextMenuTrigger>
+                      <ContextMenuContent onCloseAutoFocus={(e) => e.preventDefault()}>
+                        {actions.actionsConfig.map((item) => (
+                          <ContextMenuItem
+                            key={item.id}
+                            onClick={() => item.action(navBarItem)}
+                            className={cn(
+                              item.label === 'Delete' &&
+                                'text-destructive hover:!bg-destructive/20 hover:!text-destructive'
+                            )}
+                          >
+                            {item.label}
+                          </ContextMenuItem>
+                        ))}
+                      </ContextMenuContent>
+                    </ContextMenu>
+                  </li>
+                );
+              })}
+            </ul>
           </li>
         );
       })}

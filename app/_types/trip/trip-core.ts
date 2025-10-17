@@ -19,7 +19,7 @@ export type TripCore = {
     | 'WineAndBars'
   )[];
   foodRestrictions: string;
-  budget: 'Free' | '$' | '$$' | '$$$';
+  budget: '$' | '$$' | '$$$';
   placesToSee: string | 'none';
   placesAvoidToSee: string | 'none';
   tripSuccessDefinition: string | 'not specified';

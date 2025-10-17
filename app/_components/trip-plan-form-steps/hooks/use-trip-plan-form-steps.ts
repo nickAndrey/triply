@@ -1,5 +1,7 @@
 'use client';
 
+import { TravelItineraryForm } from '@/app/_types/form/travel-itinerary-form';
+
 import { useFormStep1 } from '../steps/step-1/use-form-step-1';
 import { useFormStep2 } from '../steps/step-2/use-form-step-2';
 import { useFormStep3 } from '../steps/step-3/use-form-step-3';
@@ -8,14 +10,18 @@ import { useFormStep5 } from '../steps/step-5/use-form-step-5';
 import { useFormStep6 } from '../steps/step-6/use-form-step-6';
 import { useFormStep7 } from '../steps/step-7/use-form-step-7';
 
-export function useTripPlanFormSteps() {
-  const formStep1 = useFormStep1();
-  const formStep2 = useFormStep2();
-  const formStep3 = useFormStep3();
-  const formStep4 = useFormStep4();
-  const formStep5 = useFormStep5();
-  const formStep6 = useFormStep6();
-  const formStep7 = useFormStep7();
+type Args = {
+  initialValues?: TravelItineraryForm;
+};
+
+export function useTripPlanFormSteps({ initialValues }: Args = {}) {
+  const formStep1 = useFormStep1({ initialValues });
+  const formStep2 = useFormStep2({ initialValues });
+  const formStep3 = useFormStep3({ initialValues });
+  const formStep4 = useFormStep4({ initialValues });
+  const formStep5 = useFormStep5({ initialValues });
+  const formStep6 = useFormStep6({ initialValues });
+  const formStep7 = useFormStep7({ initialValues });
 
   const processFormSteps = () => {
     const mergedSteps = {

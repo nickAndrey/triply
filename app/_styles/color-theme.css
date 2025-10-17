@@ -1,4 +1,4 @@
-@import './rose-theme.css';
+@import './default-theme.css';
 
 @theme inline {
   --color-background: var(--background);

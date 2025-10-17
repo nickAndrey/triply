@@ -1,6 +1,5 @@
 import Link from 'next/link';
 
-import { compareDesc, parseISO } from 'date-fns';
 import { Home } from 'lucide-react';
 
 import { requireUser } from '@features/auth/utils/require-user';
@@ -21,18 +20,17 @@ export async function Header() {
   const { data: tripDetails } = await supabase
     .from(DB_TABLES.travel_itineraries)
     .select('trip_core, id, created_at, form')
-    .eq('user_id', user.id);
+    .eq('user_id', user.id)
+    .order('created_at', { ascending: false });
 
-  const navbarItems = tripDetails
-    ?.map((item) => {
-      return {
-        trip_core: item.trip_core as TripCore,
-        form: item.form as TravelItineraryForm,
-        createdAt: item.created_at,
-        id: item.id,
-      };
-    })
-    .sort((a, b) => compareDesc(parseISO(a.createdAt), parseISO(b.createdAt)));
+  const navbarItems = tripDetails?.map((item) => {
+    return {
+      trip_core: item.trip_core as TripCore,
+      form: item.form as TravelItineraryForm,
+      createdAt: item.created_at,
+      id: item.id,
+    };
+  });
 
   const homeLink = (
     <Link href="/">

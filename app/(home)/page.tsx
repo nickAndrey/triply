@@ -2,8 +2,6 @@ import { Suspense } from 'react';
 
 import { Metadata } from 'next';
 
-import { SupabaseMessageFactory } from '@components/supabase-message-factory';
-
 import { SuggestionSkeleton } from '@/app/(home)/_components/suggestions-carousel/suggestion-skeleton';
 import { SuggestionsCarousel } from '@/app/(home)/_components/suggestions-carousel/suggestions-carousel';
 import { TripPlanWizardForm } from '@/app/(home)/_components/trip-plan-wizard-form';
@@ -20,7 +18,6 @@ export default function HomePage() {
         <SuggestionsCarousel />
       </Suspense>
       <TripPlanWizardForm />
-      <SupabaseMessageFactory />
     </main>
   );
 }

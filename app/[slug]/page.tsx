@@ -21,7 +21,7 @@ export default async function TravelSuggestionPage({ params }: { params: Promise
     .from(DB_TABLES.travel_itineraries)
     .select('*')
     .eq('user_id', user.id)
-    .filter('trip_core->>slug', 'eq', slug)
+    .eq('id', slug)
     .single<TravelItineraryRow>();
 
   if (!data) return notFound();

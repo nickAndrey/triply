@@ -29,10 +29,13 @@ export function ResizableLayer({ children, aside }: Props) {
   }
 
   return (
-    <ResizablePanelGroup direction={isSmallScreen ? 'vertical' : 'horizontal'} className="!h-[100dvh] bg-card">
+    <ResizablePanelGroup
+      direction="horizontal"
+      className="!h-[100dvh] overflow-hidden px-4 xl:max-w-[80%] bg-accent mx-auto"
+    >
       {/* ASIDE PANEL */}
-      <ResizablePanel className="px-4 py-4 overflow-y-auto" defaultSize={25} maxSize={isSmallScreen ? 80 : 35}>
-        <div className="h-full pr-2 overflow-y-auto">{aside}</div>
+      <ResizablePanel className="px-2 py-4 overflow-hidden" defaultSize={25} maxSize={isSmallScreen ? 80 : 35}>
+        <div className="h-full overflow-y-auto">{aside}</div>
       </ResizablePanel>
 
       <ResizableHandle withHandle />

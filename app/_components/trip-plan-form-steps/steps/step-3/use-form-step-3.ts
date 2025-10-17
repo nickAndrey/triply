@@ -8,6 +8,8 @@ import z from 'zod';
 
 import { useCounter } from '@components/counter/use-counter';
 
+import { TravelItineraryForm } from '@/app/_types/form/travel-itinerary-form';
+
 function syncArray<T>(
   fields: { fields: T[]; append: (value: T) => void; remove: (index: number) => void },
   targetLength: number | '',
@@ -51,14 +53,18 @@ export const schema = z.object({
 
 export type FormFields = z.infer<typeof schema>;
 
-export function useFormStep3() {
+type Args = {
+  initialValues?: TravelItineraryForm;
+};
+
+export function useFormStep3({ initialValues }: Args = {}) {
   const form = useForm<FormFields>({
     resolver: zodResolver(schema),
     defaultValues: {
-      companions: 'Solo',
-      children: [],
-      adults: [],
-      friends: [],
+      companions: initialValues?.companions || 'Solo',
+      children: initialValues?.children || [],
+      adults: initialValues?.adults || [],
+      friends: initialValues?.friends || [],
     },
   });
 
@@ -82,23 +88,23 @@ export function useFormStep3() {
   const groupCounter_friends = useCounter();
 
   useEffect(() => {
-    syncArray(childrenFormControl, groupCounter_children.groupMembers, (i) => ({
+    syncArray(childrenFormControl, groupCounter_children.value, (i) => ({
       child: i + 1,
       group: '0-3' as const,
     }));
-  }, [groupCounter_children.groupMembers, childrenFormControl]);
+  }, [groupCounter_children.value, childrenFormControl]);
 
   useEffect(() => {
-    syncArray(adultsFormControl, groupCounter_adults.groupMembers, (i) => ({
+    syncArray(adultsFormControl, groupCounter_adults.value, (i) => ({
       adult: i + 1,
     }));
-  }, [groupCounter_adults.groupMembers, adultsFormControl]);
+  }, [groupCounter_adults.value, adultsFormControl]);
 
   useEffect(() => {
-    syncArray(friendsFormControl, groupCounter_friends.groupMembers, (i) => ({
+    syncArray(friendsFormControl, groupCounter_friends.value, (i) => ({
       friend: i + 1,
     }));
-  }, [groupCounter_friends.groupMembers, friendsFormControl]);
+  }, [groupCounter_friends.value, friendsFormControl]);
 
   return {
     form,

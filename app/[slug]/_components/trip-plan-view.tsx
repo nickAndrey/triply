@@ -1,15 +1,21 @@
 'use client';
 
+import { useState } from 'react';
+
 import { useItineraryGenerationSubscriber } from '@providers/itinerary-generation-subscriber-context';
 
 import { ScrollToTopButton } from '@components/scroll-to-top-button';
 import { TravelLoader } from '@components/travel-loader';
 
 import { ResizableLayer } from '@/app/[slug]/_components/resizable-layer';
+import { useDuplicateItinerary } from '@/app/_hooks/use-duplicate-itinerary';
 import { TravelItineraryRow } from '@/app/_types/db/travel-itinerary-row';
+import { ItineraryAction } from '@/app/_types/itinerary-action';
 
 import { buildGoogleMapsLink } from '../_utils/build-google-maps-link';
-import { ItineraryActions } from './itinerary-actions/itinerary-actions';
+import { ActionDialog } from './action-dialog';
+import { ItineraryActionsPanel } from './itinerary-actions-panel';
+import { ItineraryPromptForm } from './itinerary-prompt-form';
 import { TripOverview } from './trip-overview';
 
 type Props = {
@@ -19,20 +25,57 @@ type Props = {
 export function TripPlanView({ dbItinerary }: Props) {
   const { itinerary } = useItineraryGenerationSubscriber();
 
-  const itineraryDataSrc = itinerary ? itinerary : dbItinerary;
+  const itineraryDataSrc = itinerary && window.location.pathname.includes(itinerary.id) ? itinerary : dbItinerary;
 
   const { trip_core, trip_days, trip_status } = itineraryDataSrc;
-
   const isLive = trip_status !== 'completed' && trip_status !== 'failed';
 
-  return (
-    <main className="prose dark:prose-invert min-w-[100dvw] xl:min-w-[90dvw] xl:m-auto">
-      <ResizableLayer aside={<TripOverview itinerary={itineraryDataSrc} />}>
-        <article className="h-full overflow-y-auto px-4 py-4">
-          <h1>{trip_core.articleTitle}</h1>
-          <h3>{trip_core.tripSummary}</h3>
+  const [action, setAction] = useState<{ key: ItineraryAction | null; id: number }>({
+    key: null,
+    id: 0,
+  });
 
-          <ItineraryActions itinerary={itineraryDataSrc} />
+  const [isPromptPanelOpened, setIsPromptPanelOpened] = useState(false);
+
+  const { onDuplicateItinerary } = useDuplicateItinerary();
+
+  return (
+    <main>
+      <ResizableLayer
+        aside={
+          <>
+            <TripOverview itinerary={itineraryDataSrc} />
+            <ItineraryPromptForm
+              itineraryForm={itineraryDataSrc.form}
+              open={isPromptPanelOpened}
+              onOpenChange={setIsPromptPanelOpened}
+            />
+          </>
+        }
+      >
+        <article className="h-full overflow-y-auto px-4 py-4 prose dark:prose-invert !max-w-none">
+          <h1>{trip_core.articleTitle}</h1>
+          <h4>{trip_core.tripSummary}</h4>
+
+          <ItineraryActionsPanel
+            onClick={async (key) => {
+              switch (key) {
+                case 'delete':
+                  return setAction({ key: 'delete', id: Date.now() });
+                case 'duplicate':
+                  return await onDuplicateItinerary(itineraryDataSrc.id);
+                case 'rename':
+                  return setAction({ key: 'rename', id: Date.now() });
+                case 'export':
+                  return false;
+                case 'edit_prompt':
+                  return setIsPromptPanelOpened((prev) => !prev);
+              }
+            }}
+          />
+
+          <ActionDialog action={action} itinerary={itineraryDataSrc} />
+
           <ScrollToTopButton />
 
           {trip_days.map((day) => (

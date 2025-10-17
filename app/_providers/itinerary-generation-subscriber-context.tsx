@@ -98,6 +98,11 @@ export function ItineraryGenerationSubscriberProvider({ children }: Props) {
 
           if (newItinerary && typeof newItinerary === 'object' && 'trip_days' in newItinerary) {
             setItinerary((prev) => ({ ...prev, ...newItinerary }));
+
+            if (newItinerary.trip_status === 'completed' || newItinerary.trip_status === 'failed') {
+              channel.unsubscribe();
+              finish();
+            }
           }
         }
       )
