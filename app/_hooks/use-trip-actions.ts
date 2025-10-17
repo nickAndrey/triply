@@ -121,22 +121,6 @@ export function useTripActions() {
         console.log('Export', params);
       },
     },
-    {
-      id: 4,
-      label: 'Edit Prompt',
-      action: (params) => {
-        setAlertDialogProps((prev) => ({
-          ...prev,
-          type: 'edit',
-          open: true,
-          title: 'Confirm Changes',
-          description: 'Would you like to replace the existing prompt with your new version, or keep both versions?',
-          action() {
-            console.log(params.id);
-          },
-        }));
-      },
-    },
   ];
 
   return {
