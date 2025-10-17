@@ -1,7 +1,5 @@
 'use client';
 
-import { useEffect } from 'react';
-
 import { Button } from '@chadcn/components/ui/button';
 import {
   Sheet,
@@ -31,30 +29,7 @@ type Props = {
 };
 
 export function ItineraryPromptForm({ itineraryForm, open, onOpenChange }: Props) {
-  const { forms } = useTripPlanFormSteps();
-
-  useEffect(() => {
-    forms[0].form.setValue('destinationSearch', itineraryForm.destination);
-    forms[0].form.setValue('destination', itineraryForm.destination);
-    forms[1].form.setValue('season', itineraryForm.season);
-    forms[1].form.setValue('tripDurationDays', itineraryForm.tripDurationDays);
-    forms[2].form.setValue('adults', itineraryForm.adults);
-    forms[2].form.setValue('children', itineraryForm.children);
-    forms[2].form.setValue('companions', itineraryForm.companions);
-    forms[2].form.setValue('friends', itineraryForm.friends);
-    forms[2].form.setValue('groupSize', itineraryForm.groupSize);
-    forms[3].form.setValue('activityIntensity', itineraryForm.activityIntensity);
-    forms[3].form.setValue('pace', itineraryForm.pace);
-    forms[3].form.setValue('planningStyle', itineraryForm.planningStyle);
-    forms[3].form.setValue('tripVibe', itineraryForm.tripVibe);
-    forms[4].form.setValue('foodPreferences', itineraryForm.foodPreferences);
-    forms[4].form.setValue('foodRestrictions', itineraryForm.foodRestrictions);
-    forms[5].form.setValue('budget', itineraryForm.budget);
-    forms[5].form.setValue('placesAvoidToSee', itineraryForm.placesToSee);
-    forms[5].form.setValue('placesToSee', itineraryForm.placesToSee);
-    forms[6].form.setValue('perfectDay', itineraryForm.perfectDay);
-    forms[6].form.setValue('tripSuccessDefinition', itineraryForm.tripSuccessDefinition);
-  }, [itineraryForm]);
+  const { forms } = useTripPlanFormSteps({ initialValues: itineraryForm });
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>

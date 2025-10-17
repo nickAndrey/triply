@@ -8,6 +8,8 @@ import z from 'zod';
 
 import { useCounter } from '@components/counter/use-counter';
 
+import { TravelItineraryForm } from '@/app/_types/form/travel-itinerary-form';
+
 function syncArray<T>(
   fields: { fields: T[]; append: (value: T) => void; remove: (index: number) => void },
   targetLength: number | '',
@@ -51,14 +53,18 @@ export const schema = z.object({
 
 export type FormFields = z.infer<typeof schema>;
 
-export function useFormStep3() {
+type Args = {
+  initialValues?: TravelItineraryForm;
+};
+
+export function useFormStep3({ initialValues }: Args = {}) {
   const form = useForm<FormFields>({
     resolver: zodResolver(schema),
     defaultValues: {
-      companions: 'Solo',
-      children: [],
-      adults: [],
-      friends: [],
+      companions: initialValues?.companions || 'Solo',
+      children: initialValues?.children || [],
+      adults: initialValues?.adults || [],
+      friends: initialValues?.friends || [],
     },
   });
 

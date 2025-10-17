@@ -8,6 +8,8 @@ import z from 'zod';
 
 import { useCounter } from '@components/counter/use-counter';
 
+import { TravelItineraryForm } from '@/app/_types/form/travel-itinerary-form';
+
 export const schema = z.object({
   tripDurationDays: z
     .string()
@@ -18,12 +20,16 @@ export const schema = z.object({
 
 export type FormFields = z.infer<typeof schema>;
 
-export function useFormStep2() {
+type Args = {
+  initialValues?: TravelItineraryForm;
+};
+
+export function useFormStep2({ initialValues }: Args = {}) {
   const form = useForm<FormFields>({
     resolver: zodResolver(schema),
     defaultValues: {
-      tripDurationDays: '',
-      season: 'Spring',
+      tripDurationDays: initialValues?.tripDurationDays || '',
+      season: initialValues?.season || 'Spring',
     },
   });
 
