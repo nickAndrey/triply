@@ -25,7 +25,9 @@ type Props = {
 export function TripPlanView({ dbItinerary }: Props) {
   const { itinerary } = useItineraryGenerationSubscriber();
 
-  const itineraryDataSrc = itinerary ? itinerary : dbItinerary;
+  const itineraryDataSrc =
+    itinerary && window.location.pathname.includes(itinerary.trip_core.slug) ? itinerary : dbItinerary;
+
   const { trip_core, trip_days, trip_status } = itineraryDataSrc;
   const isLive = trip_status !== 'completed' && trip_status !== 'failed';
 
@@ -34,7 +36,7 @@ export function TripPlanView({ dbItinerary }: Props) {
     id: 0,
   });
 
-  const [isEditMode, setIsEditMode] = useState(false);
+  const [isPromptPanelOpened, setIsPromptPanelOpened] = useState(false);
 
   const { onDuplicateItinerary } = useDuplicateItinerary();
 
@@ -44,7 +46,11 @@ export function TripPlanView({ dbItinerary }: Props) {
         aside={
           <>
             <TripOverview itinerary={itineraryDataSrc} />
-            <ItineraryPromptForm itineraryForm={itineraryDataSrc.form} open={isEditMode} onOpenChange={setIsEditMode} />
+            <ItineraryPromptForm
+              itineraryForm={itineraryDataSrc.form}
+              open={isPromptPanelOpened}
+              onOpenChange={setIsPromptPanelOpened}
+            />
           </>
         }
       >
@@ -64,16 +70,12 @@ export function TripPlanView({ dbItinerary }: Props) {
                 case 'export':
                   return false;
                 case 'edit_prompt':
-                  return setIsEditMode((prev) => !prev);
+                  return setIsPromptPanelOpened((prev) => !prev);
               }
             }}
           />
 
-          <ActionDialog
-            action={action}
-            itinerary={itineraryDataSrc}
-            editPromptActionButtonClick={() => setIsEditMode((prev) => !prev)}
-          />
+          <ActionDialog action={action} itinerary={itineraryDataSrc} />
 
           <ScrollToTopButton />
 

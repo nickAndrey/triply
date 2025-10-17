@@ -1,9 +1,12 @@
 'use client';
 
+import { LoaderCircle } from 'lucide-react';
+
+import { useRequest } from '@providers/request-context';
+
 import { Button } from '@chadcn/components/ui/button';
 import {
   Sheet,
-  SheetClose,
   SheetContent,
   SheetDescription,
   SheetFooter,
@@ -20,6 +23,7 @@ import { FormStep5 } from '@components/trip-plan-form-steps/steps/step-5/form-st
 import { FormStep6 } from '@components/trip-plan-form-steps/steps/step-6/form-step-6';
 import { FormStep7 } from '@components/trip-plan-form-steps/steps/step-7/form-step-7';
 
+import { useCreateItineraryFromPrompt } from '@/app/_hooks/use-create-itinerary-from-prompt';
 import { TravelItineraryForm } from '@/app/_types/form/travel-itinerary-form';
 
 type Props = {
@@ -29,7 +33,15 @@ type Props = {
 };
 
 export function ItineraryPromptForm({ itineraryForm, open, onOpenChange }: Props) {
-  const { forms } = useTripPlanFormSteps({ initialValues: itineraryForm });
+  const { forms, processFormSteps } = useTripPlanFormSteps({ initialValues: itineraryForm });
+  const { onCreateItineraryFromPrompt } = useCreateItineraryFromPrompt();
+
+  const { isPending } = useRequest();
+
+  const onSubmit = async () => {
+    const processedForm = processFormSteps();
+    await onCreateItineraryFromPrompt(processedForm);
+  };
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
@@ -59,10 +71,16 @@ export function ItineraryPromptForm({ itineraryForm, open, onOpenChange }: Props
         </div>
 
         <SheetFooter>
-          <Button variant="default">Update Prompt</Button>
-          <SheetClose asChild>
-            <Button variant="outline">Cancel</Button>
-          </SheetClose>
+          <Button variant="default" className="w-full" onClick={onSubmit}>
+            {isPending ? (
+              <>
+                <LoaderCircle className="animate-spin" />
+                <span>Creating new itinerary...</span>
+              </>
+            ) : (
+              <span>Save as New</span>
+            )}
+          </Button>
         </SheetFooter>
       </SheetContent>
     </Sheet>

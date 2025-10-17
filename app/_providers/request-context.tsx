@@ -19,19 +19,19 @@ export function RequestProvider({ children }: { children: ReactNode }) {
   const [status, setStatus] = useState<'idle' | 'pending' | 'success' | 'error'>('idle');
 
   const start = (message?: ReactNode) => {
-    setIsPending(true);
+    message && toast.info(message);
     setStatus('pending');
-    toast.info(message);
+    setIsPending(true);
   };
   const finish = (message?: ReactNode) => {
-    setIsPending(false);
+    message && toast.success(message);
     setStatus('success');
-    toast.success(message);
+    setIsPending(false);
   };
   const fail = (message?: ReactNode) => {
+    message && toast.error(message);
     setIsPending(false);
     setStatus('error');
-    toast.error(message);
   };
 
   return (

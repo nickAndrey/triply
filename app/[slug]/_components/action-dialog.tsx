@@ -30,11 +30,9 @@ type Props = {
     id: number;
   };
   itinerary: TravelItineraryRow | null;
-} & {
-  editPromptActionButtonClick?: () => void;
 };
 
-export function ActionDialog({ action, itinerary, editPromptActionButtonClick }: Props) {
+export function ActionDialog({ action, itinerary }: Props) {
   const { isPending } = useRequest();
 
   const { handleItineraryDelete } = useItineraryDelete();
@@ -49,7 +47,7 @@ export function ActionDialog({ action, itinerary, editPromptActionButtonClick }:
   if (!itinerary || !action.key) return null;
 
   const dialogConfig: Record<
-    ItineraryAction,
+    string,
     {
       title: string;
       description: string;
@@ -135,25 +133,6 @@ export function ActionDialog({ action, itinerary, editPromptActionButtonClick }:
       actionButton: {
         label: 'Export',
         onClick: () => {},
-      },
-    },
-
-    edit_prompt: {
-      title: 'Switch to Edit Mode',
-      description: 'Modify the prompt that generated this itinerary.',
-      content: (
-        <div>
-          You’re about to edit your trip’s prompt. When you continue, the sidebar will switch to the{' '}
-          <strong>Prompt Editor</strong>, replacing your current trip overview.
-          <br />
-          <br />
-          <em>Tip:</em> You can adjust destinations, tone, or preferences here — then regenerate the itinerary when
-          ready.
-        </div>
-      ),
-      actionButton: {
-        label: 'Switch to edit mode',
-        onClick: () => editPromptActionButtonClick?.(),
       },
     },
   };

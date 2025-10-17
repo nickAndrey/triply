@@ -18,8 +18,6 @@ export function ScrollToTopButton() {
 
     scrollContainerRef.current = container as HTMLElement;
 
-    console.log(container.scrollTop);
-
     const handleScroll = () => {
       setIsVisible(container.scrollTop > 200);
     };
