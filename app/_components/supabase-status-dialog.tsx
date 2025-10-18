@@ -27,13 +27,13 @@ export function SupabaseStatusDialog() {
 
   // Automatically open/close modal based on subscription status
   useEffect(() => {
-    if (!userDismissed) {
-      setIsDialogVisible(true);
-    }
-
     if (!itinerary) return;
 
     const { trip_status, trip_days } = itinerary;
+
+    if (!userDismissed) {
+      setIsDialogVisible(true);
+    }
 
     setStatus(trip_status);
     setCurrentDay((trip_days?.length || 0) + 1);
