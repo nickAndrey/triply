@@ -2,25 +2,28 @@ import Link from 'next/link';
 
 import { Home } from 'lucide-react';
 
-import { requireUser } from '@features/auth/utils/require-user';
-
 import { Button } from '@chadcn/components/ui/button';
 
 import { DB_TABLES } from '@/app/_constants/db-tables';
 import { TravelItineraryForm } from '@/app/_types/form/travel-itinerary-form';
 import { TripCore } from '@/app/_types/trip/trip-core';
+import { createClient } from '@/utils/supabase/server';
 
 import { NavBar } from './nav-bar/nav-bar';
 import { ThemeSwitcher } from './theme-switcher';
 import { UserMenu } from './user-menu';
 
 export async function Header() {
-  const { user, supabase } = await requireUser();
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
   const { data: tripDetails } = await supabase
     .from(DB_TABLES.travel_itineraries)
     .select('trip_core, id, created_at, form')
-    .eq('user_id', user.id)
+    .eq('user_id', user?.id)
     .order('created_at', { ascending: false });
 
   const navbarItems = tripDetails?.map((item) => {

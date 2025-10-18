@@ -1,7 +1,6 @@
-import { requireUser } from '@features/auth/utils/require-user';
-
 import { DB_TABLES } from '@/app/_constants/db-tables';
 import { TripCore } from '@/app/_types/trip/trip-core';
+import { createClient } from '@/utils/supabase/server';
 
 type Args = {
   tripId: string;
@@ -9,7 +8,7 @@ type Args = {
 };
 
 export async function dbSaveCore({ tripId, tripCore }: Args) {
-  const { supabase } = await requireUser();
+  const supabase = await createClient();
 
   try {
     const { error: updateError } = await supabase

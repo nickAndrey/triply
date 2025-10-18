@@ -13,12 +13,16 @@ import { useRequest } from './request-context';
 
 type Params = {
   itinerary: TravelItineraryRow | null;
+  isProgressDialog: { open: boolean; userDismissed: boolean };
+  onProgressDialogChange: (params: { open?: boolean; userDismissed?: boolean }) => void;
   setInitialItineraryId: (id: string) => void;
   handleResume: (incompleteItinerary: TravelItineraryRow | null) => Promise<void>;
 };
 
 const ItineraryGenerationSubscriberContext = createContext<Params>({
   itinerary: null,
+  isProgressDialog: { open: false, userDismissed: false },
+  onProgressDialogChange: () => {},
   setInitialItineraryId: () => {},
   handleResume: async () => {},
 });
@@ -31,7 +35,13 @@ export function ItineraryGenerationSubscriberProvider({ children }: Props) {
   const { start, finish } = useRequest();
   const [initialItineraryId, setInitialItineraryId] = useState<string | undefined>();
 
+  const [isProgressDialog, setIsProgressDialog] = useState({ open: false, userDismissed: false });
+
   const [itinerary, setItinerary] = useState<TravelItineraryRow | null>(null);
+
+  const onProgressDialogChange = (params: { open?: boolean; userDismissed?: boolean }) => {
+    setIsProgressDialog((prev) => ({ ...prev, ...params }));
+  };
 
   const handleResume = useCallback(
     async (incompleteItinerary: TravelItineraryRow | null) => {
@@ -88,7 +98,7 @@ export function ItineraryGenerationSubscriberProvider({ children }: Props) {
       .on(
         'postgres_changes',
         {
-          event: '*',
+          event: 'UPDATE',
           schema: 'public',
           table: DB_TABLES.travel_itineraries,
           filter: `id=eq.${itinerary.id}`,
@@ -116,6 +126,8 @@ export function ItineraryGenerationSubscriberProvider({ children }: Props) {
   const value = useMemo(
     () => ({
       itinerary,
+      isProgressDialog,
+      onProgressDialogChange,
       setInitialItineraryId,
       handleResume,
     }),

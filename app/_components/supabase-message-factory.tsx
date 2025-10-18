@@ -16,11 +16,9 @@ import { ProgressModal } from '@components/progress-modal';
 import { TravelItineraryRow } from '../_types/db/travel-itinerary-row';
 
 export function SupabaseMessageFactory() {
-  const { itinerary, handleResume } = useItineraryGenerationSubscriber();
+  const { itinerary, isProgressDialog, onProgressDialogChange, handleResume } = useItineraryGenerationSubscriber();
   const { isPending } = useRequest();
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const [slug, setSlug] = useState('');
   const [currentDay, setCurrentDay] = useState(0);
   const [status, setStatus] = useState<TravelItineraryRow['trip_status'] | 'pending'>('pending');
 
@@ -28,13 +26,15 @@ export function SupabaseMessageFactory() {
   useEffect(() => {
     if (!itinerary) return;
 
-    const { trip_status, trip_core, trip_days } = itinerary;
+    const { trip_status, trip_days } = itinerary;
 
-    setIsDialogOpen(true);
+    if (!isProgressDialog.userDismissed) {
+      onProgressDialogChange({ open: true });
+    }
+
     setStatus(trip_status);
-    setSlug(trip_core.slug);
     setCurrentDay((trip_days?.length || 0) + 1);
-  }, [itinerary]);
+  }, [itinerary, isProgressDialog]);
 
   const dialogData = {
     pending: {
@@ -120,5 +120,11 @@ export function SupabaseMessageFactory() {
     },
   } satisfies Record<typeof status, ComponentProps<typeof ProgressModal>['data']>;
 
-  return <ProgressModal open={isDialogOpen} onOpenChange={setIsDialogOpen} data={dialogData[status]} />;
+  return (
+    <ProgressModal
+      open={isProgressDialog.open}
+      onOpenChange={(isOpen) => onProgressDialogChange({ open: isOpen, userDismissed: true })}
+      data={dialogData[status]}
+    />
+  );
 }

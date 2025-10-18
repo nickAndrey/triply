@@ -1,10 +1,9 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import { requireUser } from '@features/auth/utils/require-user';
-
 import { TripPlanView } from '@/app/[slug]/_components/trip-plan-view';
 import { DB_TABLES } from '@/app/_constants/db-tables';
+import { createClient } from '@/utils/supabase/server';
 
 import { TravelItineraryRow } from '../_types/db/travel-itinerary-row';
 
@@ -15,12 +14,16 @@ export const metadata: Metadata = {
 
 export default async function TravelSuggestionPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const { supabase, user } = await requireUser();
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
   const { data } = await supabase
     .from(DB_TABLES.travel_itineraries)
     .select('*')
-    .eq('user_id', user.id)
+    .eq('user_id', user?.id)
     .eq('id', slug)
     .single<TravelItineraryRow>();
 
