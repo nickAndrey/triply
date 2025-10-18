@@ -13,16 +13,16 @@ import { useRequest } from './request-context';
 
 type Params = {
   itinerary: TravelItineraryRow | null;
-  isProgressDialog: { open: boolean; userDismissed: boolean };
-  onProgressDialogChange: (params: { open?: boolean; userDismissed?: boolean }) => void;
+  userDismissed: boolean;
+  setUserDismissed: (value: boolean) => void;
   setInitialItineraryId: (id: string) => void;
   handleResume: (incompleteItinerary: TravelItineraryRow | null) => Promise<void>;
 };
 
 const ItineraryGenerationSubscriberContext = createContext<Params>({
   itinerary: null,
-  isProgressDialog: { open: false, userDismissed: false },
-  onProgressDialogChange: () => {},
+  userDismissed: false,
+  setUserDismissed: () => {},
   setInitialItineraryId: () => {},
   handleResume: async () => {},
 });
@@ -35,13 +35,8 @@ export function ItineraryGenerationSubscriberProvider({ children }: Props) {
   const { start, finish } = useRequest();
   const [initialItineraryId, setInitialItineraryId] = useState<string | undefined>();
 
-  const [isProgressDialog, setIsProgressDialog] = useState({ open: false, userDismissed: false });
-
+  const [userDismissed, setUserDismissed] = useState(false);
   const [itinerary, setItinerary] = useState<TravelItineraryRow | null>(null);
-
-  const onProgressDialogChange = (params: { open?: boolean; userDismissed?: boolean }) => {
-    setIsProgressDialog((prev) => ({ ...prev, ...params }));
-  };
 
   const handleResume = useCallback(
     async (incompleteItinerary: TravelItineraryRow | null) => {
@@ -98,7 +93,7 @@ export function ItineraryGenerationSubscriberProvider({ children }: Props) {
       .on(
         'postgres_changes',
         {
-          event: 'UPDATE',
+          event: '*',
           schema: 'public',
           table: DB_TABLES.travel_itineraries,
           filter: `id=eq.${itinerary.id}`,
@@ -107,7 +102,16 @@ export function ItineraryGenerationSubscriberProvider({ children }: Props) {
           const newItinerary = payload.new;
 
           if (newItinerary && typeof newItinerary === 'object' && 'trip_days' in newItinerary) {
-            setItinerary((prev) => ({ ...prev, ...newItinerary }));
+            setItinerary((prev) => {
+              const prevDays = prev?.trip_days ?? [];
+              const newDays = newItinerary.trip_days ?? [];
+
+              return {
+                ...prev,
+                ...newItinerary,
+                trip_days: newDays.length > prevDays.length ? newDays : prevDays,
+              };
+            });
 
             if (newItinerary.trip_status === 'completed' || newItinerary.trip_status === 'failed') {
               channel.unsubscribe();
@@ -126,12 +130,12 @@ export function ItineraryGenerationSubscriberProvider({ children }: Props) {
   const value = useMemo(
     () => ({
       itinerary,
-      isProgressDialog,
-      onProgressDialogChange,
+      userDismissed,
+      setUserDismissed,
       setInitialItineraryId,
       handleResume,
     }),
-    [itinerary, handleResume]
+    [itinerary, userDismissed, handleResume]
   );
 
   return (

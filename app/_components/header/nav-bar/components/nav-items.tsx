@@ -48,7 +48,7 @@ export function NavItems({ navbarItems, actions }: Props) {
 
                 const navTitle = trip_core?.navTitle;
                 const duration = `${trip_core.tripDurationDays}-day`;
-                const subtitle = `${duration} ${trip_core.companions.type.toLowerCase()} trip • ${trip_core.season.toLowerCase()}`;
+                const subtitle = `${duration}`;
 
                 return (
                   <li key={navBarItem.id}>

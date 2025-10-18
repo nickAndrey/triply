@@ -9,7 +9,7 @@ import { Toaster } from '@chadcn/components/ui/sonner';
 import { ThemeProvider } from '@chadcn/components/ui/theme-provider';
 
 import { Header } from '@components/header/header';
-import { SupabaseMessageFactory } from '@components/supabase-message-factory';
+import { SupabaseStatusDialog } from '@components/supabase-status-dialog';
 
 import './_styles/globals.css';
 
@@ -32,7 +32,7 @@ export default function RootLayout({ children }: Props) {
               {children}
               <Header />
               <Toaster position="top-right" richColors expand />
-              <SupabaseMessageFactory />
+              <SupabaseStatusDialog />
             </ThemeProvider>
           </ItineraryGenerationSubscriberProvider>
         </RequestProvider>
