@@ -106,11 +106,13 @@ export function ItineraryGenerationSubscriberProvider({ children }: Props) {
               const prevDays = prev?.trip_days ?? [];
               const newDays = newItinerary.trip_days ?? [];
 
-              return {
+              const merged = {
                 ...prev,
                 ...newItinerary,
                 trip_days: newDays.length > prevDays.length ? newDays : prevDays,
               };
+
+              return structuredClone(merged);
             });
 
             if (newItinerary.trip_status === 'completed' || newItinerary.trip_status === 'failed') {

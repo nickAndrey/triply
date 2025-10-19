@@ -2,8 +2,6 @@
 
 import { ComponentProps, useEffect, useState } from 'react';
 
-import Link from 'next/link';
-
 import { LoaderCircle } from 'lucide-react';
 
 import { useItineraryGenerationSubscriber } from '@providers/itinerary-generation-subscriber-context';
@@ -39,76 +37,42 @@ export function SupabaseStatusDialog() {
     setCurrentDay((trip_days?.length || 0) + 1);
   }, [itinerary, userDismissed]);
 
-  const dialogData = {
+  const dialogData: Record<typeof status, ComponentProps<typeof ProgressModal>['data']> = {
     pending: {
-      title: 'Waiting to start',
-      description: 'Preparing your adventure...',
+      title: 'Preparing your trip',
+      description: 'We’re getting everything ready to start building your adventure.',
       icon: '🕓',
     },
     core_generating: {
       title: 'Starting your journey ✈️',
-      description: 'We’re gathering inspiration and travel data to begin crafting your itinerary.',
+      description: 'Collecting inspiration and data to design your travel core.',
     },
     core_ready: {
-      title: 'Core generated 🌍',
-      description: 'We’ve created the base structure for your adventure — now refining daily details.',
+      title: 'Trip core ready 🌍',
+      description: 'The main structure is set — refining daily details next.',
     },
     days_generating: {
       title: 'Building your days 📅',
-      description: (
-        <>
-          <p>
-            {currentDay && currentDay > 1
-              ? `Currently generating day ${currentDay} of your ${itinerary?.trip_core.tripDurationDays}-day trip.`
-              : 'Generating your daily itinerary...'}
-          </p>
-
-          {currentDay && currentDay >= 1 && itinerary?.id && (
-            <>
-              <p className="mt-2">You can already start exploring!</p>
-              <Link href={`/${itinerary.id}`} className="underline text-primary">
-                View itinerary
-              </Link>
-            </>
-          )}
-        </>
-      ),
+      description:
+        currentDay && currentDay > 1
+          ? `Creating day ${currentDay} of your ${itinerary?.trip_core.tripDurationDays}-day itinerary.`
+          : 'Generating your daily schedule...',
+      sublink: currentDay >= 1 && itinerary?.id ? { label: 'View itinerary', href: `/${itinerary.id}` } : undefined,
     },
     completed: {
       title: 'All done 🎉',
-      description: (
-        <p>
-          Your trip is ready to explore!{' '}
-          {itinerary?.id && (
-            <a href={`/${itinerary.id}`} className="text-primary underline">
-              View itinerary
-            </a>
-          )}
-        </p>
-      ),
+      description: 'Your trip is ready — have a look!',
+      sublink: itinerary?.id ? { label: 'Open itinerary', href: `/${itinerary.id}` } : undefined,
     },
     failed: {
-      title: 'Generation interrupted ⚠️',
-      description: (
-        <>
-          <p>
-            Your itinerary generation stopped{' '}
-            {itinerary?.trip_days?.length ? `after day ${itinerary.trip_days.length}` : 'before it could start'}.
-          </p>
-          <p className="mt-2 text-sm text-muted-foreground">
-            You can try to resume where it left off, or cancel this trip and start a new one.
-          </p>
-        </>
-      ),
-      footerContent: (
+      title: 'Something went wrong ⚠️',
+      description: itinerary?.trip_days?.length
+        ? `Generation stopped after day ${itinerary.trip_days.length}. You can resume or start over.`
+        : 'Generation stopped before it could begin.',
+      footerButtons: (
         <>
           <Button variant="secondary">Cancel</Button>
-          <Button
-            onClick={() => {
-              handleResume(itinerary);
-            }}
-            disabled={isPending}
-          >
+          <Button onClick={() => handleResume(itinerary)} disabled={isPending}>
             {isPending ? (
               <>
                 <LoaderCircle className="animate-spin" />
@@ -121,16 +85,16 @@ export function SupabaseStatusDialog() {
         </>
       ),
     },
-  } satisfies Record<typeof status, ComponentProps<typeof ProgressModal>['data']>;
+  };
 
   return (
     <>
-      {userDismissed && (
+      {userDismissed && isPending && (
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
               variant="link"
-              className="rounded-full fixed right-8 top-10 z-10 h-[50px] w-[50px]"
+              className="rounded-full fixed right-6 top-10 z-10 h-9 w-9"
               onClick={() => setUserDismissed(false)}
             >
               <TravelLoader size={45} />

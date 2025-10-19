@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 
-import { PanelRight, Plane, X } from 'lucide-react';
+import { PanelRight, Plane } from 'lucide-react';
 
 import { useRequest } from '@providers/request-context';
 
@@ -19,7 +19,7 @@ import {
 import { Badge } from '@chadcn/components/ui/badge';
 import { Button } from '@chadcn/components/ui/button';
 import { DialogDescription, DialogTitle } from '@chadcn/components/ui/dialog';
-import { Sheet, SheetClose, SheetContent, SheetHeader, SheetTrigger } from '@chadcn/components/ui/sheet';
+import { Sheet, SheetContent, SheetHeader, SheetTrigger } from '@chadcn/components/ui/sheet';
 
 import { NavItems } from '@components/header/nav-bar/components/nav-items';
 import { NavBarItem } from '@components/header/nav-bar/types/nav-bar-item';
@@ -61,18 +61,6 @@ export function NavBar({ navbarItems }: NavBarProps) {
                 : 'Start exploring — plan your first trip today!'}
             </DialogDescription>
           </div>
-
-          <SheetClose asChild>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="rounded-full hover:bg-muted transition-colors"
-              aria-label="Close drawer"
-              autoFocus
-            >
-              <X className="w-4 h-4" />
-            </Button>
-          </SheetClose>
         </SheetHeader>
 
         <NavItems navbarItems={navbarItems} actions={actions} />
