@@ -1,6 +1,5 @@
-import { requireUser } from '@features/auth/utils/require-user';
-
 import { DB_TABLES } from '@/app/_constants/db-tables';
+import { createClient } from '@/utils/supabase/server';
 
 import { aiGenerateDay } from '../ai/ai-generate-day';
 import { buildTripDayPrompt } from '../prompts/build-trip-day-prompt';
@@ -14,7 +13,7 @@ type Args = {
 };
 
 export async function dbSaveDays({ tripId, form, startFromDay }: Args) {
-  const { supabase } = await requireUser();
+  const supabase = await createClient();
 
   const totalDays = Number(form.tripDurationDays);
 

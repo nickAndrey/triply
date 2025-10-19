@@ -13,12 +13,16 @@ import { useRequest } from './request-context';
 
 type Params = {
   itinerary: TravelItineraryRow | null;
+  userDismissed: boolean;
+  setUserDismissed: (value: boolean) => void;
   setInitialItineraryId: (id: string) => void;
   handleResume: (incompleteItinerary: TravelItineraryRow | null) => Promise<void>;
 };
 
 const ItineraryGenerationSubscriberContext = createContext<Params>({
   itinerary: null,
+  userDismissed: false,
+  setUserDismissed: () => {},
   setInitialItineraryId: () => {},
   handleResume: async () => {},
 });
@@ -31,6 +35,7 @@ export function ItineraryGenerationSubscriberProvider({ children }: Props) {
   const { start, finish } = useRequest();
   const [initialItineraryId, setInitialItineraryId] = useState<string | undefined>();
 
+  const [userDismissed, setUserDismissed] = useState(false);
   const [itinerary, setItinerary] = useState<TravelItineraryRow | null>(null);
 
   const handleResume = useCallback(
@@ -97,7 +102,18 @@ export function ItineraryGenerationSubscriberProvider({ children }: Props) {
           const newItinerary = payload.new;
 
           if (newItinerary && typeof newItinerary === 'object' && 'trip_days' in newItinerary) {
-            setItinerary((prev) => ({ ...prev, ...newItinerary }));
+            setItinerary((prev) => {
+              const prevDays = prev?.trip_days ?? [];
+              const newDays = newItinerary.trip_days ?? [];
+
+              const merged = {
+                ...prev,
+                ...newItinerary,
+                trip_days: newDays.length > prevDays.length ? newDays : prevDays,
+              };
+
+              return structuredClone(merged);
+            });
 
             if (newItinerary.trip_status === 'completed' || newItinerary.trip_status === 'failed') {
               channel.unsubscribe();
@@ -116,10 +132,12 @@ export function ItineraryGenerationSubscriberProvider({ children }: Props) {
   const value = useMemo(
     () => ({
       itinerary,
+      userDismissed,
+      setUserDismissed,
       setInitialItineraryId,
       handleResume,
     }),
-    [itinerary, handleResume]
+    [itinerary, userDismissed, handleResume]
   );
 
   return (

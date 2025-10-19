@@ -2,9 +2,8 @@
 
 import { revalidatePath } from 'next/cache';
 
-import { requireUser } from '@features/auth/utils/require-user';
-
 import { DB_TABLES } from '@/app/_constants/db-tables';
+import { createClient } from '@/utils/supabase/server';
 
 function makeDuplicateSlug(originalSlug: string): string {
   const baseSlug = originalSlug.replace(/(-copy(-[a-f0-9]+)?)$/i, '');
@@ -13,12 +12,16 @@ function makeDuplicateSlug(originalSlug: string): string {
 }
 
 export async function duplicateItinerary(tripId: string) {
-  const { supabase, user } = await requireUser();
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
   const { data: itineraryToDuplicate, error } = await supabase
     .from(DB_TABLES.travel_itineraries)
     .select('*')
-    .eq('user_id', user.id)
+    .eq('user_id', user?.id)
     .eq('id', tripId)
     .single();
 
@@ -30,7 +33,7 @@ export async function duplicateItinerary(tripId: string) {
 
   const newItinerary = {
     ...rest,
-    user_id: user.id,
+    user_id: user?.id,
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
     trip_core: {
