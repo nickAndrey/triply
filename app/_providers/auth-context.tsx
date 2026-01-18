@@ -71,6 +71,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         if (!error) setError('NETWORK_ERROR');
         setUser(null);
         setAccessToken(null);
+        router.push('/login');
       } finally {
         setLoading(false);
       }
