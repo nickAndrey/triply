@@ -2,6 +2,7 @@ import { ReactNode } from 'react';
 
 import { Geist } from 'next/font/google';
 
+import { AuthProvider } from '@providers/auth-context';
 import { ItineraryGenerationSubscriberProvider } from '@providers/itinerary-generation-subscriber-context';
 import { RequestProvider } from '@providers/request-context';
 
@@ -27,14 +28,16 @@ export default function RootLayout({ children }: Props) {
       <head />
       <body className={geist.className}>
         <RequestProvider>
-          <ItineraryGenerationSubscriberProvider>
-            <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-              {children}
-              <Header />
-              <Toaster position="top-right" richColors expand />
-              <SupabaseStatusDialog />
-            </ThemeProvider>
-          </ItineraryGenerationSubscriberProvider>
+          <AuthProvider>
+            <ItineraryGenerationSubscriberProvider>
+              <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+                {children}
+                <Header />
+                <Toaster position="top-right" richColors expand />
+                <SupabaseStatusDialog />
+              </ThemeProvider>
+            </ItineraryGenerationSubscriberProvider>
+          </AuthProvider>
         </RequestProvider>
       </body>
     </html>

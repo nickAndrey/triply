@@ -1,39 +1,34 @@
+'use client';
+
 import Link from 'next/link';
 
 import { Home } from 'lucide-react';
 
-import { Button } from '@chadcn/components/ui/button';
+import { useAuth } from '@providers/auth-context';
 
-import { DB_TABLES } from '@/app/_constants/db-tables';
-import { TravelItineraryForm } from '@/app/_types/form/travel-itinerary-form';
-import { TripCore } from '@/app/_types/trip/trip-core';
-import { createClient } from '@/utils/supabase/server';
+import { Button } from '@chadcn/components/ui/button';
 
 import { NavBar } from './nav-bar/nav-bar';
 import { ThemeSwitcher } from './theme-switcher';
 import { UserMenu } from './user-menu';
 
-export async function Header() {
-  const supabase = await createClient();
+export function Header() {
+  const { user } = useAuth();
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  // const { data: tripDetails } = await supabase
+  //   .from(DB_TABLES.travel_itineraries)
+  //   .select('trip_core, id, created_at, form')
+  //   .eq('user_id', user?.id)
+  //   .order('created_at', { ascending: false });
 
-  const { data: tripDetails } = await supabase
-    .from(DB_TABLES.travel_itineraries)
-    .select('trip_core, id, created_at, form')
-    .eq('user_id', user?.id)
-    .order('created_at', { ascending: false });
-
-  const navbarItems = tripDetails?.map((item) => {
-    return {
-      trip_core: item.trip_core as TripCore,
-      form: item.form as TravelItineraryForm,
-      createdAt: item.created_at,
-      id: item.id,
-    };
-  });
+  // const navbarItems = tripDetails?.map((item) => {
+  //   return {
+  //     trip_core: item.trip_core as TripCore,
+  //     form: item.form as TravelItineraryForm,
+  //     createdAt: item.created_at,
+  //     id: item.id,
+  //   };
+  // });
 
   const homeLink = (
     <Link href="/">
@@ -48,7 +43,7 @@ export async function Header() {
       {user && (
         <>
           {homeLink}
-          <NavBar navbarItems={navbarItems || []} />
+          <NavBar navbarItems={[]} />
           <UserMenu />
         </>
       )}

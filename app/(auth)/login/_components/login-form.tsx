@@ -14,7 +14,7 @@ import { InputPassword } from '@components/input-password';
 import { useLoginForm } from '@/app/(auth)/login/_components/use-login-form';
 
 export function LoginForm() {
-  const { form, isPending, generalError, handleSubmit } = useLoginForm();
+  const { form, generalError, isPending, handleSubmit } = useLoginForm();
 
   return (
     <Form {...form}>
@@ -57,7 +57,7 @@ export function LoginForm() {
             <AlertDescription>Please check your email and password and try again</AlertDescription>
           </Alert>
         )}
-        <Button type="submit" className="py-5 flex items-center gap-3" disabled={isPending}>
+        <Button type="submit" className="py-5 flex items-center gap-3">
           {isPending ? (
             <>
               <LoaderCircle className="animate-spin" />
