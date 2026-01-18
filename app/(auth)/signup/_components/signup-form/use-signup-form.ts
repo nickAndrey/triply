@@ -2,13 +2,15 @@
 
 import { FormEventHandler } from 'react';
 
+import { useRouter } from 'next/navigation';
+
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import { signup } from '@server-actions/signup';
-
 import { useRequest } from '@providers/request-context';
+
+import { api, API_PATHS } from '@/utils/api';
 
 const schema = z
   .object({
@@ -41,40 +43,35 @@ export function useSignupForm() {
   });
 
   const { start, fail, isPending } = useRequest();
+  const router = useRouter();
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
-    e.preventDefault();
+    try {
+      e.preventDefault();
 
-    const isValid = await form.trigger();
-    if (!isValid) return;
+      const isValid = await form.trigger();
+      if (!isValid) return;
 
-    start('Creating your account, please wait…');
+      start('Creating your account, please wait…');
 
-    const result = await signup(form.getValues());
+      const validatedFields = schema.safeParse(form.getValues());
 
-    if (result.errors) {
-      fail('Sign up failed. Please check the highlighted fields and try again.');
-
-      if ('username' in result.errors) {
-        form.setError('username', {
-          type: 'server',
-          message: result.errors.username?.errors[0],
-        });
+      if (!validatedFields.success) {
+        return {
+          success: false,
+          errors: z.treeifyError(validatedFields.error).properties,
+        };
       }
 
-      if ('email' in result.errors) {
-        form.setError('email', {
-          type: 'server',
-          message: result.errors.email?.errors[0],
-        });
-      }
+      await api.post(API_PATHS.auth.register, {
+        name: validatedFields.data.username,
+        email: validatedFields.data.email,
+        password: validatedFields.data.password,
+      });
 
-      if ('password' in result.errors) {
-        form.setError('password', {
-          type: 'server',
-          message: result.errors.password?.errors[0],
-        });
-      }
+      router.push('/signup?confirmation_sent=true');
+    } catch (error) {
+      console.error(error);
     }
   };
 

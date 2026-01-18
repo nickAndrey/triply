@@ -3,6 +3,7 @@ import Link from 'next/link';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@chadcn/components/ui/card';
 
+import { EmailVerification } from '@/app/(auth)/login/_components/email-verification';
 import { LoginForm } from '@/app/(auth)/login/_components/login-form';
 
 export const metadata: Metadata = {
@@ -10,7 +11,23 @@ export const metadata: Metadata = {
   description: 'Triply — AI-Powered Travel Planner',
 };
 
-export default function LoginPage() {
+type Props = {
+  searchParams: Promise<{
+    emailVerificationToken?: string;
+  }>;
+};
+
+export default async function LoginPage({ searchParams }: Props) {
+  const { emailVerificationToken } = await searchParams;
+
+  if (emailVerificationToken) {
+    return (
+      <main className="flex items-center px-4 justify-center min-h-screen">
+        <EmailVerification token={emailVerificationToken} />
+      </main>
+    );
+  }
+
   return (
     <main className="flex items-center px-4 justify-center min-h-screen">
       <Card className="w-md">
