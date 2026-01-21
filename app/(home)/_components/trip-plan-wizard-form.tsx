@@ -4,6 +4,7 @@ import { useState } from 'react';
 
 import { LoaderCircle } from 'lucide-react';
 
+import { useAuth } from '@providers/auth-context';
 import { useRequest } from '@providers/request-context';
 
 import { Button } from '@chadcn/components/ui/button';
@@ -20,21 +21,31 @@ import { FormStep5 } from '@components/trip-plan-form-steps/steps/step-5/form-st
 import { FormStep6 } from '@components/trip-plan-form-steps/steps/step-6/form-step-6';
 import { FormStep7 } from '@components/trip-plan-form-steps/steps/step-7/form-step-7';
 
-import { useCreateItineraryFromPrompt } from '@/app/_hooks/use-create-itinerary-from-prompt';
+import { api, API_PATHS } from '@/utils/api';
 
 export function TripPlanWizardForm() {
   const { forms, processFormSteps } = useTripPlanFormSteps();
-
-  const { onCreateItineraryFromPrompt } = useCreateItineraryFromPrompt();
+  const { accessToken } = useAuth();
 
   const { isPending } = useRequest();
 
   const [step, setStep] = useState(0);
 
   const handleSubmit = async () => {
-    const processedForm = processFormSteps();
-    await onCreateItineraryFromPrompt(processedForm);
-    setStep(0);
+    try {
+      const response = await api.post(
+        API_PATHS.itinerary.create,
+        { form: processFormSteps() },
+        {
+          Authorization: `Bearer ${accessToken}`,
+        }
+      );
+    } catch (error) {
+      console.error({ error });
+    } finally {
+      setStep(0);
+    }
+    // const processedForm = processFormSteps();
   };
 
   return (

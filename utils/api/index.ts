@@ -1,5 +1,10 @@
 import { ApiClient } from './api-client';
 
-export { API_PATHS } from './api-paths';
+const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
+if (!baseUrl) {
+  throw new Error('NEXT_PUBLIC_BACKEND_URL is not defined');
+}
 
-export const api = new ApiClient();
+export const api = new ApiClient(baseUrl);
+
+export { API_PATHS } from './api-paths';

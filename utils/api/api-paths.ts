@@ -9,6 +9,8 @@ export const API_PATHS = {
   },
   users: {
     me: '/user',
-    profile: '/users/profile',
+  },
+  itinerary: {
+    create: '/itinerary/create',
   },
 } as const;

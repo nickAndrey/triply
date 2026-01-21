@@ -1,18 +1,59 @@
-type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
+// utils/api/api-client.ts
+import { API_PATHS } from '@/utils/api/api-paths';
 
-interface ApiClientOptions {
-  baseUrl?: string;
-}
+type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 
 export class ApiClient {
   private baseUrl: string;
+  private accessToken: string | null = null;
+  private refreshPromise: Promise<string> | null = null;
+  private onUnauthorized?: () => void;
 
-  constructor(options?: ApiClientOptions) {
-    const envUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
-    if (!envUrl) {
-      throw new Error('NEXT_PUBLIC_BACKEND_URL is not defined');
+  constructor(baseUrl: string) {
+    this.baseUrl = baseUrl;
+  }
+
+  // Public method to set token
+  setAccessToken(token: string | null) {
+    this.accessToken = token;
+  }
+
+  // Public method to get token
+  getAccessToken(): string | null {
+    return this.accessToken;
+  }
+
+  // Public method to set unauthorized callback
+  setUnauthorizedCallback(callback: () => void) {
+    this.onUnauthorized = callback;
+  }
+
+  private async refreshAccessToken(): Promise<string> {
+    if (this.refreshPromise) {
+      return this.refreshPromise;
     }
-    this.baseUrl = options?.baseUrl ?? envUrl;
+
+    this.refreshPromise = (async () => {
+      try {
+        const response = await fetch(`${this.baseUrl}${API_PATHS.auth.refresh}`, {
+          method: 'POST',
+          credentials: 'include',
+          headers: { 'Content-Type': 'application/json' },
+        });
+
+        if (!response.ok) {
+          throw new Error('Refresh failed');
+        }
+
+        const data = await response.json();
+        this.accessToken = data.accessToken;
+        return data.accessToken;
+      } finally {
+        this.refreshPromise = null;
+      }
+    })();
+
+    return this.refreshPromise;
   }
 
   private async request<T>(params: {
@@ -20,16 +61,36 @@ export class ApiClient {
     method: HttpMethod;
     body?: unknown;
     headers?: Record<string, string>;
+    isRetry?: boolean;
   }): Promise<T> {
+    // Automatically add token if available
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json',
+      ...params.headers,
+    };
+
+    if (this.accessToken) {
+      headers.Authorization = `Bearer ${this.accessToken}`;
+    }
+
     const response = await fetch(`${this.baseUrl}${params.path}`, {
       method: params.method,
       credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-        ...params.headers,
-      },
+      headers,
       body: params.body ? JSON.stringify(params.body) : undefined,
     });
+
+    // Handle 401 - refresh and retry
+    if (response.status === 401 && !params.isRetry && params.path !== API_PATHS.auth.refresh) {
+      try {
+        await this.refreshAccessToken();
+        return this.request<T>({ ...params, isRetry: true });
+      } catch (error) {
+        this.accessToken = null;
+        this.onUnauthorized?.();
+        throw new Error('Session expired. Please log in again.');
+      }
+    }
 
     if (!response.ok) {
       const error = await response.json().catch(() => null);
@@ -53,7 +114,7 @@ export class ApiClient {
     return this.request<T>({ path, method: 'GET', headers });
   }
 
-  post<T>(path: string, body?: unknown) {
-    return this.request<T>({ path, method: 'POST', body });
+  post<T>(path: string, body?: unknown, headers?: Record<string, string>) {
+    return this.request<T>({ path, method: 'POST', body, headers });
   }
 }

@@ -35,10 +35,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<AuthError>(null);
 
+  // Configure the API client once
+  useEffect(() => {
+    api.setUnauthorizedCallback(() => {
+      setUser(null);
+      setAccessToken(null);
+      router.push('/login');
+    });
+  }, [router]);
+
   const handleLogOut = async () => {
     try {
       start();
       await api.post(API_PATHS.auth.logout);
+      api.setAccessToken(null);
+      setAccessToken(null);
+      setUser(null);
       setTimeout(() => router.push('/login'), 2000);
     } catch (error) {
       console.error(error);
@@ -55,22 +67,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       try {
         let token = accessToken;
 
-        // Refresh token if missing
         if (!token) {
           const refreshResponse = await api.post<{ accessToken: string }>(API_PATHS.auth.refresh);
-          setAccessToken(refreshResponse.accessToken);
           token = refreshResponse.accessToken;
+          api.setAccessToken(token);
+          setAccessToken(token);
         }
 
-        // Fetch user
-        const userResponse = await api.get<{ data: { user: User } }>(API_PATHS.users.me, {
-          Authorization: `Bearer ${token}`,
-        });
+        const userResponse = await api.get<{ data: { user: User } }>(API_PATHS.users.me);
         setUser(userResponse.data.user);
       } catch (err) {
         if (!error) setError('NETWORK_ERROR');
         setUser(null);
         setAccessToken(null);
+        api.setAccessToken(null);
         router.push('/login');
       } finally {
         setLoading(false);
@@ -78,7 +88,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     };
 
     initAuth();
-  }, [accessToken]);
+  }, []);
 
   return (
     <AuthContext.Provider
@@ -87,7 +97,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         accessToken,
         loading,
         error,
-        setAccessToken,
+        setAccessToken: (token) => {
+          setAccessToken(token);
+          api.setAccessToken(token);
+        },
         handleLogOut,
       }}
     >
