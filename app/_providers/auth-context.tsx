@@ -16,27 +16,48 @@ export type User = {
 type AuthContextState = {
   user: User | null;
   loading: boolean;
-  error: 'NETWORK_ERROR' | null;
   handleLogOut: () => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextState | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const { start, fail, finish } = useRequest();
   const router = useRouter();
+  const { start, fail, finish } = useRequest();
 
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<AuthContextState['error']>(null);
 
-  // Called when refresh fails or session is revoked
+  // Runtime unauthorized (refresh failed, token revoked, etc.)
   useEffect(() => {
     api.setUnauthorizedCallback(() => {
       setUser(null);
       router.push('/login');
     });
   }, [router]);
+
+  // Bootstrap auth (on page load)
+  useEffect(() => {
+    const loadUser = async () => {
+      try {
+        const res = await api.get<{ data: { user: User } }>(API_PATHS.users.me);
+        setUser(res.data.user);
+      } catch {
+        setUser(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadUser();
+  }, []);
+
+  // Redirect AFTER auth resolution
+  useEffect(() => {
+    if (!loading && !user) {
+      router.push('/login');
+    }
+  }, [loading, user, router]);
 
   const handleLogOut = async () => {
     try {
@@ -51,42 +72,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  useEffect(() => {
-    const loadUser = async () => {
-      try {
-        const response = await api.get<{ data: { user: User } }>(API_PATHS.users.me);
-        setUser(response.data.user);
-      } catch {
-        setError('NETWORK_ERROR');
-        router.push('/login');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadUser();
-  }, [router]);
-
-  useEffect(() => {
-    if (!loading && !user) {
-      router.push('/login');
-    }
-  }, [loading, user, router]);
-
   if (loading) return null;
 
-  return (
-    <AuthContext.Provider
-      value={{
-        user,
-        loading,
-        error,
-        handleLogOut,
-      }}
-    >
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={{ user, loading, handleLogOut }}>{children}</AuthContext.Provider>;
 }
 
 export function useAuth() {
