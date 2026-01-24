@@ -40,8 +40,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const loadUser = async () => {
       try {
-        const res = await api.get<{ data: { user: User } }>(API_PATHS.users.me);
-        setUser(res.data.user);
+        const res = await api.get<{ user: User }>(API_PATHS.users.me);
+        setUser(res.user);
       } catch {
         setUser(null);
       } finally {
