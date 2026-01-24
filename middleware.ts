@@ -5,22 +5,17 @@ const PUBLIC_PATHS = new Set(['/login', '/signup', '/forgot-password', '/update-
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Allow auth APIs
-  if (pathname.startsWith('/api/auth')) {
-    return NextResponse.next();
-  }
-
   // Allow public pages
   if (PUBLIC_PATHS.has(pathname)) {
     return NextResponse.next();
   }
 
-  // Check refresh token (HttpOnly cookie)
-  const hasRefreshToken = request.cookies.has('refreshToken');
-  if (!hasRefreshToken) {
-    return NextResponse.redirect(new URL('/login', request.url));
+  // Allow API routes
+  if (pathname.startsWith('/api')) {
+    return NextResponse.next();
   }
 
+  // Let the app decide auth state
   return NextResponse.next();
 }
 

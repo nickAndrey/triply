@@ -8,7 +8,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import { useAuth } from '@providers/auth-context';
 import { useRequest } from '@providers/request-context';
 
 import { api, API_PATHS } from '@/utils/api';
@@ -32,7 +31,6 @@ export function useLoginForm() {
   const { isPending, start, finish, fail } = useRequest();
 
   const [generalError, setGeneralError] = useState('');
-  const { setAccessToken } = useAuth();
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
@@ -49,9 +47,8 @@ export function useLoginForm() {
         return fail('Login failed. Please check credentials and try again.');
       }
 
-      const response = await api.post<{ accessToken: string }>(API_PATHS.auth.login, validatedFields.data);
+      await api.post(API_PATHS.auth.login, validatedFields.data);
       finish('Login successful! Redirecting…');
-      setAccessToken?.(response.accessToken);
       setTimeout(() => router.push('/'), 2000);
     } catch (error) {
       setGeneralError('Unable to login. Please try again later.');

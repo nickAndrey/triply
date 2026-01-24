@@ -1,11 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { LoaderCircle } from 'lucide-react';
 
-import { useAuth } from '@providers/auth-context';
 import { useRequest } from '@providers/request-context';
+import { SocketEvent, useSocket } from '@providers/socket-context';
 
 import { Button } from '@chadcn/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@chadcn/components/ui/card';
@@ -24,8 +24,9 @@ import { FormStep7 } from '@components/trip-plan-form-steps/steps/step-7/form-st
 import { api, API_PATHS } from '@/utils/api';
 
 export function TripPlanWizardForm() {
+  const { socket, connect, disconnect, joinItinerary } = useSocket();
+
   const { forms, processFormSteps } = useTripPlanFormSteps();
-  const { accessToken } = useAuth();
 
   const { isPending } = useRequest();
 
@@ -33,20 +34,37 @@ export function TripPlanWizardForm() {
 
   const handleSubmit = async () => {
     try {
-      const response = await api.post(
-        API_PATHS.itinerary.create,
-        { form: processFormSteps() },
-        {
-          Authorization: `Bearer ${accessToken}`,
-        }
-      );
+      await connect();
+
+      const response = await api.post<{ itineraryId: string }>(API_PATHS.itinerary.create, {
+        form: processFormSteps(),
+      });
+
+      joinItinerary(response.itineraryId);
     } catch (error) {
       console.error({ error });
-    } finally {
-      setStep(0);
+      disconnect();
     }
-    // const processedForm = processFormSteps();
   };
+
+  useEffect(() => {
+    if (!socket) return;
+
+    socket.on(SocketEvent.ITINERARY_UPDATED, (data) => {
+      console.log('Progress:', data);
+    });
+
+    socket.on(SocketEvent.ITINERARY_FAILED, (data) => {
+      // Todo!: add logger to track errors
+      console.error('Failed:', data);
+      disconnect();
+    });
+
+    return () => {
+      socket.off(SocketEvent.ITINERARY_UPDATED);
+      socket.off(SocketEvent.ITINERARY_FAILED);
+    };
+  }, [socket]);
 
   return (
     <Card>

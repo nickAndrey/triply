@@ -1,34 +1,33 @@
-// utils/api/api-client.ts
 import { API_PATHS } from '@/utils/api/api-paths';
 
 type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 
+type InternalRequestParams = {
+  path: string;
+  method: HttpMethod;
+  body?: unknown;
+  isRetry?: boolean;
+  skipRefresh?: boolean;
+};
+
+type PublicRequestOptions = {
+  skipRefresh?: boolean;
+};
+
 export class ApiClient {
   private baseUrl: string;
-  private accessToken: string | null = null;
-  private refreshPromise: Promise<string> | null = null;
+  private refreshPromise: Promise<void> | null = null;
   private onUnauthorized?: () => void;
 
   constructor(baseUrl: string) {
     this.baseUrl = baseUrl;
   }
 
-  // Public method to set token
-  setAccessToken(token: string | null) {
-    this.accessToken = token;
-  }
-
-  // Public method to get token
-  getAccessToken(): string | null {
-    return this.accessToken;
-  }
-
-  // Public method to set unauthorized callback
   setUnauthorizedCallback(callback: () => void) {
     this.onUnauthorized = callback;
   }
 
-  private async refreshAccessToken(): Promise<string> {
+  private async refreshSession(): Promise<void> {
     if (this.refreshPromise) {
       return this.refreshPromise;
     }
@@ -38,16 +37,11 @@ export class ApiClient {
         const response = await fetch(`${this.baseUrl}${API_PATHS.auth.refresh}`, {
           method: 'POST',
           credentials: 'include',
-          headers: { 'Content-Type': 'application/json' },
         });
 
         if (!response.ok) {
           throw new Error('Refresh failed');
         }
-
-        const data = await response.json();
-        this.accessToken = data.accessToken;
-        return data.accessToken;
       } finally {
         this.refreshPromise = null;
       }
@@ -56,39 +50,28 @@ export class ApiClient {
     return this.refreshPromise;
   }
 
-  private async request<T>(params: {
-    path: string;
-    method: HttpMethod;
-    body?: unknown;
-    headers?: Record<string, string>;
-    isRetry?: boolean;
-  }): Promise<T> {
-    // Automatically add token if available
-    const headers: Record<string, string> = {
-      'Content-Type': 'application/json',
-      ...params.headers,
-    };
-
-    if (this.accessToken) {
-      headers.Authorization = `Bearer ${this.accessToken}`;
-    }
-
+  private async request<T>(params: InternalRequestParams): Promise<T> {
     const response = await fetch(`${this.baseUrl}${params.path}`, {
       method: params.method,
       credentials: 'include',
-      headers,
+      headers: {
+        'Content-Type': 'application/json',
+      },
       body: params.body ? JSON.stringify(params.body) : undefined,
     });
 
-    // Handle 401 - refresh and retry
-    if (response.status === 401 && !params.isRetry && params.path !== API_PATHS.auth.refresh) {
+    const isAllowedRefreshSession =
+      response.status === 401 && !params.isRetry && !params.skipRefresh && params.path !== API_PATHS.auth.refresh;
+
+    if (isAllowedRefreshSession) {
       try {
-        await this.refreshAccessToken();
+        await this.refreshSession();
         return this.request<T>({ ...params, isRetry: true });
-      } catch (error) {
-        this.accessToken = null;
-        this.onUnauthorized?.();
-        throw new Error('Session expired. Please log in again.');
+      } catch {
+        if (!params.skipRefresh) {
+          this.onUnauthorized?.();
+        }
+        throw new Error('Session expired');
       }
     }
 
@@ -102,7 +85,6 @@ export class ApiClient {
     }
 
     const contentType = response.headers.get('content-type');
-
     if (contentType?.includes('application/json')) {
       return response.json();
     }
@@ -110,11 +92,20 @@ export class ApiClient {
     return undefined as T;
   }
 
-  get<T>(path: string, headers?: Record<string, string>) {
-    return this.request<T>({ path, method: 'GET', headers });
+  get<T>(path: string, options?: PublicRequestOptions) {
+    return this.request<T>({
+      path,
+      method: 'GET',
+      skipRefresh: options?.skipRefresh,
+    });
   }
 
-  post<T>(path: string, body?: unknown, headers?: Record<string, string>) {
-    return this.request<T>({ path, method: 'POST', body, headers });
+  post<T>(path: string, body?: unknown, options?: PublicRequestOptions) {
+    return this.request<T>({
+      path,
+      method: 'POST',
+      body,
+      skipRefresh: options?.skipRefresh,
+    });
   }
 }
