@@ -54,9 +54,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const loadUser = async () => {
       try {
-        const response = await api.get<{ data: { user: User } }>(API_PATHS.users.me, {
-          skipRefresh: true,
-        });
+        const response = await api.get<{ data: { user: User } }>(API_PATHS.users.me);
         setUser(response.data.user);
       } catch {
         setError('NETWORK_ERROR');
@@ -68,6 +66,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     loadUser();
   }, [router]);
+
+  useEffect(() => {
+    if (!loading && !user) {
+      router.push('/login');
+    }
+  }, [loading, user, router]);
+
+  if (loading) return null;
 
   return (
     <AuthContext.Provider
