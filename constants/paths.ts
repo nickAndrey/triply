@@ -8,7 +8,8 @@ export const API_PATHS = {
     refresh: '/auth/refresh',
     verifyEmail: '/auth/verify-email',
     resendEmail: '/auth/resend-email',
-    forgotPassword: '/auth/forgot-password',
+    requestPasswordReset: '/auth/request-password-reset',
+    resetPassword: '/auth/reset-password',
   },
   users: {
     me: '/user',

@@ -36,10 +36,18 @@ export function useForgotPasswordForm() {
     try {
       start('Sending reset password email...');
 
-      await api.post<{ message: string }>(API_PATHS.auth.forgotPassword, form.getValues());
+      const response = await api.post<{ message?: string; error?: string }>(
+        API_PATHS.auth.requestPasswordReset,
+        form.getValues()
+      );
+
+      if (response.error) {
+        throw new Error(response.error);
+      }
 
       finish('Password reset email sent');
     } catch (error) {
+      console.error((error as Error).message);
       fail('Failed to send reset email. Please try again later.');
     }
   };

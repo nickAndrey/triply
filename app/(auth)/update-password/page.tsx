@@ -6,7 +6,7 @@ import { AlertCircleIcon, SquareArrowOutUpRight } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@chadcn/components/ui/alert';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@chadcn/components/ui/card';
 
-import { UpdatePasswordForm } from '@/app/(auth)/update-password/_components/update-password-form';
+import { UpdatePasswordForm } from './_components/UpdatePasswordForm';
 
 export const metadata: Metadata = {
   title: 'Triply | Update Password',

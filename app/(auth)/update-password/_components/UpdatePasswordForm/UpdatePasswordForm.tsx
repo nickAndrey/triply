@@ -7,7 +7,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 
 import { InputPassword } from '@components/input-password';
 
-import { useUpdatePasswordForm } from '@/app/(auth)/update-password/_components/use-update-password-form';
+import { useUpdatePasswordForm } from './hooks/useUpdatePasswordForm';
 
 export function UpdatePasswordForm() {
   const { form, isPending, handleSubmit } = useUpdatePasswordForm();
