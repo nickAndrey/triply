@@ -1,4 +1,4 @@
-import { API_PATHS } from '@/utils/api/api-paths';
+import { API_PATHS } from '@/constants/paths';
 
 type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 

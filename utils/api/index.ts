@@ -6,5 +6,3 @@ if (!baseUrl) {
 }
 
 export const api = new ApiClient(baseUrl);
-
-export { API_PATHS } from './api-paths';

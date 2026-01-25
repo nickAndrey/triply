@@ -12,7 +12,8 @@ import { Alert, AlertDescription, AlertTitle } from '@chadcn/components/ui/alert
 import { Button } from '@chadcn/components/ui/button';
 import { Input } from '@chadcn/components/ui/input';
 
-import { api, API_PATHS } from '@/utils/api';
+import { API_PATHS } from '@/constants/paths';
+import { api } from '@/utils/api';
 
 type EmailVerificationProps = {
   token: string;

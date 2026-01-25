@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@chadcn/components/ui/card';
 
-import { ForgotPasswordForm } from '@/app/(auth)/forgot-password/_components/forgot-password-form';
+import { ForgotPasswordForm } from './_components/ForgotPasswordForm';
 
 export const metadata: Metadata = {
   title: 'Triply | Forgot Password',

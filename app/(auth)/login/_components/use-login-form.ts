@@ -10,7 +10,8 @@ import { z } from 'zod';
 
 import { useRequest } from '@providers/request-context';
 
-import { api, API_PATHS } from '@/utils/api';
+import { API_PATHS } from '@/constants/paths';
+import { api } from '@/utils/api';
 
 const schema = z.object({
   email: z.email('Invalid email'),

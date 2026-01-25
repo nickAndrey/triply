@@ -21,7 +21,8 @@ import { FormStep5 } from '@components/trip-plan-form-steps/steps/step-5/form-st
 import { FormStep6 } from '@components/trip-plan-form-steps/steps/step-6/form-step-6';
 import { FormStep7 } from '@components/trip-plan-form-steps/steps/step-7/form-step-7';
 
-import { api, API_PATHS } from '@/utils/api';
+import { API_PATHS } from '@/constants/paths';
+import { api } from '@/utils/api';
 
 export function TripPlanWizardForm() {
   const { socket, connect, disconnect, joinItinerary } = useSocket();
