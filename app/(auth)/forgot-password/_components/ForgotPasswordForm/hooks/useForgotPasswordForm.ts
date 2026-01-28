@@ -9,7 +9,7 @@ import { z } from 'zod';
 import { useRequest } from '@providers/request-context';
 
 import { API_PATHS } from '@/constants/paths';
-import { api } from '@/utils/api';
+import { browserApiClient } from '@/utils/api/api-client-browser';
 
 const schema = z.object({
   email: z.email('Invalid email.'),
@@ -36,7 +36,7 @@ export function useForgotPasswordForm() {
     try {
       start('Sending reset password email...');
 
-      const response = await api.post<{ message?: string; error?: string }>(
+      const response = await browserApiClient.post<{ message?: string; error?: string }>(
         API_PATHS.auth.requestPasswordReset,
         form.getValues()
       );

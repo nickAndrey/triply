@@ -13,7 +13,7 @@ import { Button } from '@chadcn/components/ui/button';
 import { Input } from '@chadcn/components/ui/input';
 
 import { API_PATHS } from '@/constants/paths';
-import { api } from '@/utils/api';
+import { browserApiClient } from '@/utils/api/api-client-browser';
 
 type EmailVerificationProps = {
   token: string;
@@ -32,7 +32,7 @@ export function EmailVerification({ token }: EmailVerificationProps) {
     const verifyEmail = async () => {
       try {
         start();
-        const response = await api.post<{ message: string }>(API_PATHS.auth.verifyEmail, {
+        const response = await browserApiClient.post<{ message: string }>(API_PATHS.auth.verifyEmail, {
           emailVerificationToken: token,
         });
 
@@ -52,7 +52,7 @@ export function EmailVerification({ token }: EmailVerificationProps) {
   const handleResendEmail = async () => {
     try {
       start();
-      const response = await api.post<{ message: string }>(API_PATHS.auth.resendEmail, { email });
+      const response = await browserApiClient.post<{ message: string }>(API_PATHS.auth.resendEmail, { email });
 
       setMessage(response.message);
       setStatus('resend-success');

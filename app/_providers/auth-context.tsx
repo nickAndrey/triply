@@ -7,7 +7,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useRequest } from '@providers/request-context';
 
 import { API_PATHS, PUBLIC_PATHS } from '@/constants/paths';
-import { api } from '@/utils/api';
+import { browserApiClient } from '@/utils/api/api-client-browser';
 
 export type User = {
   name: string;
@@ -32,7 +32,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   // Runtime unauthorized (refresh failed)
   useEffect(() => {
-    api.setUnauthorizedCallback(() => {
+    browserApiClient.setUnauthorizedCallback(() => {
       setUser(null);
 
       if (!PUBLIC_PATHS.has(pathname)) {
@@ -45,7 +45,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const loadUser = async () => {
       try {
-        const res = await api.get<{ data: { user: User } }>(API_PATHS.users.me);
+        const res = await browserApiClient.get<{ data: { user: User } }>(API_PATHS.users.me);
         setUser(res.data.user);
       } catch {
         setUser(null);
@@ -60,7 +60,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const handleLogOut = async () => {
     try {
       start();
-      await api.post(API_PATHS.auth.logout);
+      await browserApiClient.post(API_PATHS.auth.logout);
       setUser(null);
       router.push('/login');
     } catch {

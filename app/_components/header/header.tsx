@@ -8,27 +8,31 @@ import { useAuth } from '@providers/auth-context';
 
 import { Button } from '@chadcn/components/ui/button';
 
+import { TravelItineraryRow } from '@/app/_types/db/travel-itinerary-row';
+import { TravelItineraryForm } from '@/app/_types/form/travel-itinerary-form';
+import { TripCore } from '@/app/_types/trip/trip-core';
+
 import { NavBar } from './nav-bar/nav-bar';
 import { ThemeSwitcher } from './theme-switcher';
 import { UserMenu } from './user-menu';
 
-export function Header() {
+type HeaderProps = {
+  itineraries: TravelItineraryRow[];
+};
+
+export function Header({ itineraries }: HeaderProps) {
   const { user } = useAuth();
 
-  // const { data: tripDetails } = await supabase
-  //   .from(DB_TABLES.travel_itineraries)
-  //   .select('trip_core, id, created_at, form')
-  //   .eq('user_id', user?.id)
-  //   .order('created_at', { ascending: false });
+  const navbarItems = itineraries?.map((item) => {
+    return {
+      trip_core: item.trip_core as TripCore,
+      form: item.form as TravelItineraryForm,
+      createdAt: item.created_at,
+      id: item._id || item.id,
+    };
+  });
 
-  // const navbarItems = tripDetails?.map((item) => {
-  //   return {
-  //     trip_core: item.trip_core as TripCore,
-  //     form: item.form as TravelItineraryForm,
-  //     createdAt: item.created_at,
-  //     id: item.id,
-  //   };
-  // });
+  console.log(itineraries);
 
   const homeLink = (
     <Link href="/">
@@ -43,7 +47,7 @@ export function Header() {
       {user && (
         <>
           {homeLink}
-          <NavBar navbarItems={[]} />
+          <NavBar navbarItems={navbarItems} />
           <UserMenu />
         </>
       )}

@@ -11,7 +11,7 @@ import { z } from 'zod';
 import { useRequest } from '@providers/request-context';
 
 import { API_PATHS } from '@/constants/paths';
-import { api } from '@/utils/api';
+import { browserApiClient } from '@/utils/api/api-client-browser';
 
 const schema = z.object({
   email: z.email('Invalid email'),
@@ -48,7 +48,7 @@ export function useLoginForm() {
         return fail('Login failed. Please check credentials and try again.');
       }
 
-      await api.post(API_PATHS.auth.login, validatedFields.data);
+      await browserApiClient.post(API_PATHS.auth.login, validatedFields.data);
       finish('Login successful! Redirecting…');
       setTimeout(() => router.push('/'), 2000);
     } catch (error) {

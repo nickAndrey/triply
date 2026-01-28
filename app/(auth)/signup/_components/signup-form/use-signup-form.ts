@@ -11,7 +11,7 @@ import { z } from 'zod';
 import { useRequest } from '@providers/request-context';
 
 import { API_PATHS } from '@/constants/paths';
-import { api } from '@/utils/api';
+import { browserApiClient } from '@/utils/api/api-client-browser';
 
 const schema = z
   .object({
@@ -64,7 +64,7 @@ export function useSignupForm() {
         };
       }
 
-      await api.post(API_PATHS.auth.register, {
+      await browserApiClient.post(API_PATHS.auth.register, {
         name: validatedFields.data.username,
         email: validatedFields.data.email,
         password: validatedFields.data.password,

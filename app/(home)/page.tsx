@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   description: 'Triply — AI-Powered Travel Planner',
 };
 
-export default function HomePage() {
+export default async function HomePage() {
   return (
     <main className="flex flex-col gap-6 min-h-[100dvh] max-w-6xl m-auto px-4 py-5">
       <Suspense fallback={<SuggestionSkeleton />}>

@@ -14,7 +14,7 @@ type PublicRequestOptions = {
   skipRefresh?: boolean;
 };
 
-export class ApiClient {
+class BrowserApiClient {
   private baseUrl: string;
   private refreshPromise: Promise<void> | null = null;
   private onUnauthorized?: () => void;
@@ -108,4 +108,37 @@ export class ApiClient {
       skipRefresh: options?.skipRefresh,
     });
   }
+
+  put<T>(path: string, body?: unknown, options?: PublicRequestOptions) {
+    return this.request<T>({
+      path,
+      method: 'PUT',
+      body,
+      skipRefresh: options?.skipRefresh,
+    });
+  }
+
+  patch<T>(path: string, body?: unknown, options?: PublicRequestOptions) {
+    return this.request<T>({
+      path,
+      method: 'PATCH',
+      body,
+      skipRefresh: options?.skipRefresh,
+    });
+  }
+
+  delete<T>(path: string, options?: PublicRequestOptions) {
+    return this.request<T>({
+      path,
+      method: 'DELETE',
+      skipRefresh: options?.skipRefresh,
+    });
+  }
 }
+
+const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
+if (!baseUrl) {
+  throw new Error('NEXT_PUBLIC_BACKEND_URL is not defined');
+}
+
+export const browserApiClient = new BrowserApiClient(baseUrl);

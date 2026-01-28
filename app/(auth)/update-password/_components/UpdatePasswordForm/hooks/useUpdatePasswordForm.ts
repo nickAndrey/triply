@@ -11,7 +11,7 @@ import { z } from 'zod';
 import { useRequest } from '@providers/request-context';
 
 import { API_PATHS } from '@/constants/paths';
-import { api } from '@/utils/api';
+import { browserApiClient } from '@/utils/api/api-client-browser';
 
 const schema = z
   .object({
@@ -48,7 +48,7 @@ export function useUpdatePasswordForm() {
     try {
       start('Updating Password...');
 
-      const result = await api.post<{ message?: string; error?: string }>(API_PATHS.auth.resetPassword, {
+      const result = await browserApiClient.post<{ message?: string; error?: string }>(API_PATHS.auth.resetPassword, {
         password: form.getValues('password'),
         passwordResetToken: params.get('token'),
       });

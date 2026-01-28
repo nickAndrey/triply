@@ -16,5 +16,6 @@ export const API_PATHS = {
   },
   itinerary: {
     create: '/itinerary/create',
+    getAll: '/itinerary',
   },
 } as const;

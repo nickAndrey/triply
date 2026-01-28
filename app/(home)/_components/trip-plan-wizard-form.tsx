@@ -22,7 +22,7 @@ import { FormStep6 } from '@components/trip-plan-form-steps/steps/step-6/form-st
 import { FormStep7 } from '@components/trip-plan-form-steps/steps/step-7/form-step-7';
 
 import { API_PATHS } from '@/constants/paths';
-import { api } from '@/utils/api';
+import { browserApiClient } from '@/utils/api/api-client-browser';
 
 export function TripPlanWizardForm() {
   const { socket, connect, disconnect, joinItinerary } = useSocket();
@@ -37,11 +37,11 @@ export function TripPlanWizardForm() {
     try {
       await connect();
 
-      const response = await api.post<{ itineraryId: string }>(API_PATHS.itinerary.create, {
+      const response = await browserApiClient.post<{ data: { itineraryId: string } }>(API_PATHS.itinerary.create, {
         form: processFormSteps(),
       });
 
-      joinItinerary(response.itineraryId);
+      joinItinerary(response.data.itineraryId);
     } catch (error) {
       console.error({ error });
       disconnect();

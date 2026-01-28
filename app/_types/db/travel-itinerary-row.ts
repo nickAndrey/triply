@@ -4,6 +4,7 @@ import { Day } from '../trip/trip-day';
 
 export type TravelItineraryRow = {
   id: string;
+  _id?: string;
   user_id: string;
   trip_core: TripCore;
   trip_days: Day[];
